@@ -1,0 +1,20 @@
+Package: mpb2
+Title: Mixed Poisson Beta Distribution
+Version: 1.0
+Author: Kumar Harsha
+Maintainer: Kumar Harsha <kumar.harsha@tum.de>
+Description: Density, distribution function, quantile function and random
+  generation for the mixed poisson-beta distribution. This is basically a
+  poisson distribution where the parameter itself is again beta distributed
+  with parameters alpha and beta and additional scaled on (0, c). In
+  difference to the usual scaling on (0,1).
+License: GPL (>= 2)
+Namespace: mpb2
+Depends:
+    R (>= 2.15.1)
+LazyData: true
+RoxygenNote: 5.0.1
+LinkingTo: Rcpp
+Imports:
+      Rcpp
+Depends: RcppGSL
