@@ -34,10 +34,11 @@ In difference to the usual scaling on (0,1)
 \examples{
  X <- dmpb(x=0:200, alpha=5, beta=3, c=20)
  plot(0:200, X, type='l')
- RV <- rMPB(n = 1000, alpha=5, beta= 3, c=20)
-
+ Y <- dmpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
+ RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)
  plot(0 : 200, X, type="l")
  lines(density(RV), col="red")
+ R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 }
 \keyword{distribution}
 \keyword{mixed}

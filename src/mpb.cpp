@@ -61,12 +61,27 @@ NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
 //'@examples
 //'  X <- dmpb(x=0:200, alpha=5, beta=3, c=20)
 //'  plot(0:200, X, type='l')
+//'  Y <- dmpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 // [[Rcpp::export]]
-NumericVector dmpb(NumericVector x, double alpha, double beta, double c) {
-  int n = x.size();
+NumericVector dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c) {
+  int n = x.size(), type = INPUT_SINGLE;
+  if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
+    type = INPUT_SINGLE;
+  } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
+    type = INPUT_VECTORISED;
+  } else {
+    warning("Dimensions do not match");
+  }
   NumericVector res(n);
   for(int i = 0; i < n; i++) {
-    res[i] = dmpb_(x[i], alpha, beta, c);
+    switch(type) {
+    case INPUT_SINGLE:
+      res[i] = dmpb_(x[i], alpha[0], beta[0], c[0]);
+      break;
+    case INPUT_VECTORISED:
+      res[i] = dmpb_(x[i], alpha[i], beta[i], c[i]);
+      break;
+    }
   }
   return res;
 }
@@ -74,17 +89,30 @@ NumericVector dmpb(NumericVector x, double alpha, double beta, double c) {
 //'@rdname mpb2
 //'@export
 //'@examples
-//'  RV <- rMPB(n = 1000, alpha=5, beta= 3, c=20)
-//'
+//'  RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)
 //'  plot(0 : 200, X, type="l")
 //'  lines(density(RV), col="red")
+//'  R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 // [[Rcpp::export]]
-NumericVector rmpb(int n, double alpha, double beta, double c) {
+NumericVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
     NumericVector res(n);
-    NumericVector poissonParameter = rbeta(n, alpha, beta) * c;
-    for(int i = 0; i < n; i++) {
+
+    if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
+      // single parameters
+      NumericVector poissonParameter = rbeta(n, alpha[0], beta[0]) * c[0];
+      for(int i = 0; i < n; i++) {
         NumericVector t = rpois(1, poissonParameter[i]);
         res[i] = t[0];
+      }
+    } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
+      // vectorised parameters
+      for(int i = 0; i < n; i++) {
+        NumericVector poissonParameter = rbeta(1, alpha[i], beta[i]) * c[i];
+        NumericVector t = rpois(1, poissonParameter[0]);
+        res[i] = t[0];
+      }
+    } else {
+      warning("Dimensions do not match");
     }
     return res;
 }

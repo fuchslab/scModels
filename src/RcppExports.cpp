@@ -20,29 +20,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // dmpb
-NumericVector dmpb(NumericVector x, double alpha, double beta, double c);
+NumericVector dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c);
 RcppExport SEXP mpb2_dmpb(SEXP xSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type c(cSEXP);
     rcpp_result_gen = Rcpp::wrap(dmpb(x, alpha, beta, c));
     return rcpp_result_gen;
 END_RCPP
 }
 // rmpb
-NumericVector rmpb(int n, double alpha, double beta, double c);
+NumericVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c);
 RcppExport SEXP mpb2_rmpb(SEXP nSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type alpha(alphaSEXP);
-    Rcpp::traits::input_parameter< double >::type beta(betaSEXP);
-    Rcpp::traits::input_parameter< double >::type c(cSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type alpha(alphaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type c(cSEXP);
     rcpp_result_gen = Rcpp::wrap(rmpb(n, alpha, beta, c));
     return rcpp_result_gen;
 END_RCPP

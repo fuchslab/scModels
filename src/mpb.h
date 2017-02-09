@@ -9,3 +9,6 @@
 #ifdef __cplusplus
   }
 #endif
+
+#define INPUT_VECTORISED 1
+#define INPUT_SINGLE 2

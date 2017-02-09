@@ -12,6 +12,7 @@ kummer_gsl <- function(x, a, b, lnchf = 0L) {
 #'@examples
 #'  X <- dmpb(x=0:200, alpha=5, beta=3, c=20)
 #'  plot(0:200, X, type='l')
+#'  Y <- dmpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 dmpb <- function(x, alpha, beta, c) {
     .Call('mpb2_dmpb', PACKAGE = 'mpb2', x, alpha, beta, c)
 }
@@ -19,10 +20,10 @@ dmpb <- function(x, alpha, beta, c) {
 #'@rdname mpb2
 #'@export
 #'@examples
-#'  RV <- rMPB(n = 1000, alpha=5, beta= 3, c=20)
-#'
+#'  RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)
 #'  plot(0 : 200, X, type="l")
 #'  lines(density(RV), col="red")
+#'  R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 rmpb <- function(n, alpha, beta, c) {
     .Call('mpb2_rmpb', PACKAGE = 'mpb2', n, alpha, beta, c)
 }

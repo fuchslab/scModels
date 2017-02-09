@@ -45,6 +45,7 @@ function(x, a, b, lnchf = 0, ip = 0)
 
     # Calculate KummerM:
     chm = rep(complex(real = 0, imaginary = 0), length = length(x))
+    result = rep(0, length(x))
     for(i in 1:length(x)) {
       if(Re(x[i]) < 0 && Im(x[i]) == 0) {
         value = .Fortran("chfm",
@@ -76,8 +77,8 @@ function(x, a, b, lnchf = 0, ip = 0)
                          as.integer(ip),
                          PACKAGE = "mpb2")
       }
+      result[i] = complex(real = value[[7]], imaginary = value[[8]])
     }
-    result = complex(real = value[[7]], imaginary = value[[8]])
 
     # Return Value:
     result

@@ -1,6 +1,6 @@
 Package: mpb2
 Title: Mixed Poisson Beta Distribution
-Version: 1.0
+Version: 1.3
 Author: Kumar Harsha
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Description: Density, distribution function, quantile function and random
