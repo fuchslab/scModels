@@ -44,7 +44,7 @@ double dmpb_(double x, double alpha, double beta, double c) {
   }
 }
 
-//'@rdname KummerM
+//'@rdname mpb2
 //'@export
 // [[Rcpp::export]]
 NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
