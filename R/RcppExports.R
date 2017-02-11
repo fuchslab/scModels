@@ -19,6 +19,12 @@ dmpb <- function(x, alpha, beta, c) {
 
 #'@rdname mpb2
 #'@export
+pmpb <- function(q, alpha, beta, c) {
+    .Call('mpb2_pmpb', PACKAGE = 'mpb2', q, alpha, beta, c)
+}
+
+#'@rdname mpb2
+#'@export
 #'@examples
 #'  RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)
 #'  plot(0 : 200, X, type="l")

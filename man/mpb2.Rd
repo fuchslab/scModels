@@ -4,12 +4,15 @@
 \alias{dmpb}
 \alias{kummer_gsl}
 \alias{mpb2}
+\alias{pmpb}
 \alias{rmpb}
 \title{Mixed Poisson-Beta Distribution}
 \usage{
 kummer_gsl(x, a, b, lnchf = 0L)
 
 dmpb(x, alpha, beta, c)
+
+pmpb(q, alpha, beta, c)
 
 rmpb(n, alpha, beta, c)
 }
