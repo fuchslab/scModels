@@ -47,7 +47,7 @@ double dmpb_(double x, double alpha, double beta, double c) {
 double pmpb_(double x, double alpha, double beta, double c) {
   double res = 0;
   for(int i = 0; i <= x; i++) {
-    res += dmpb_(x, alpha, beta, c);
+    res += dmpb_(i, alpha, beta, c);
   }
   return res;
 }
