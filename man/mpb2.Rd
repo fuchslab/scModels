@@ -5,6 +5,7 @@
 \alias{kummer_gsl}
 \alias{mpb2}
 \alias{pmpb}
+\alias{qmpb}
 \alias{rmpb}
 \title{Mixed Poisson-Beta Distribution}
 \usage{
@@ -15,6 +16,8 @@ dmpb(x, alpha, beta, c)
 pmpb(q, alpha, beta, c)
 
 rmpb(n, alpha, beta, c)
+
+qmpb(p, alpha, beta, c)
 }
 \arguments{
 \item{x, q}{vector of quantiles}

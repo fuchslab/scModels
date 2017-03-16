@@ -3,6 +3,7 @@
 export(dmpb)
 export(kummer_gsl)
 export(pmpb)
+export(qmpb)
 export(rmpb)
 importFrom(Rcpp,evalCpp)
 useDynLib(mpb2)

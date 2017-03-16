@@ -12,3 +12,5 @@
 
 #define INPUT_VECTORISED 1
 #define INPUT_SINGLE 2
+
+#define Q_LIMIT 64

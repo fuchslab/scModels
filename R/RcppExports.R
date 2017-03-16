@@ -34,3 +34,9 @@ rmpb <- function(n, alpha, beta, c) {
     .Call('mpb2_rmpb', PACKAGE = 'mpb2', n, alpha, beta, c)
 }
 
+#'@rdname mpb2
+#'@export
+qmpb <- function(p, alpha, beta, c) {
+    .Call('mpb2_qmpb', PACKAGE = 'mpb2', p, alpha, beta, c)
+}
+

@@ -17,7 +17,7 @@ double kummer_(double x, double a, double b, int lnchf) {
   }
 }
 
-double dmpb_(double x, double alpha, double beta, double c) {
+double dmpb_(int x, double alpha, double beta, double c) {
   // double cre, cim;
   // double are = alpha+x, aim = 0.0, bre = alpha+beta+x, bim = 0.0;
   // int n = 1, ip = 0, lnchf = 1;
@@ -52,6 +52,32 @@ double pmpb_(double x, double alpha, double beta, double c) {
   return res;
 }
 
+double* pmpb_(double alpha, double beta, double c) {
+  double res[Q_LIMIT];
+  res[0] = dmpb_(0, alpha, beta, c);
+  for(int i = 1; i < Q_LIMIT; i++) {
+    res[i] = res[i-1] + dmpb_(i, alpha, beta, c);
+  }
+  return res;
+}
+
+int qmpb_(double p, double alpha, double beta, double c) {
+  double* p_distr = pmpb_(alpha, beta, c);
+  int i;
+  if(p > p_distr[Q_LIMIT-1]) {
+    return Q_LIMIT;
+  }
+  if(p < p_distr[0]) {
+    return 0;
+  }
+  for(i = 1; i < Q_LIMIT; i++) {
+    if(p > p_distr[i-1] && p < p_distr[i]) {
+      return i;
+    }
+  }
+  return i;
+}
+
 //'@rdname mpb2
 //'@export
 // [[Rcpp::export]]
@@ -71,7 +97,7 @@ NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
 //'  plot(0:200, X, type='l')
 //'  Y <- dmpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 // [[Rcpp::export]]
-NumericVector dmpb(IntegerVector x, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c) {
   int n = x.size(), type = INPUT_SINGLE;
   if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
     type = INPUT_SINGLE;
@@ -98,7 +124,7 @@ NumericVector dmpb(IntegerVector x, NumericVector alpha, NumericVector beta, Num
 //'@rdname mpb2
 //'@export
 //[[Rcpp::export]]
-NumericVector pmpb(IntegerVector q, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector pmpb(NumericVector q, NumericVector alpha, NumericVector beta, NumericVector c) {
   int n = q.size();
   NumericVector res(n);
 
@@ -127,8 +153,8 @@ NumericVector pmpb(IntegerVector q, NumericVector alpha, NumericVector beta, Num
 //'  lines(density(RV), col="red")
 //'  R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 // [[Rcpp::export]]
-IntegerVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
-    IntegerVector res(n);
+NumericVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
+    NumericVector res(n);
 
     if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
       // single parameters
@@ -143,6 +169,32 @@ IntegerVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector
         NumericVector poissonParameter = rbeta(1, alpha[i], beta[i]) * c[i];
         NumericVector t = rpois(1, poissonParameter[0]);
         res[i] = t[0];
+      }
+    } else {
+      warning("Dimensions do not match");
+    }
+    return res;
+}
+
+
+//'@rdname mpb2
+//'@export
+// [[Rcpp::export]]
+NumericVector qmpb(NumericVector p, NumericVector alpha, NumericVector beta, NumericVector c) {
+    int n = p.size();
+    NumericVector res(n);
+
+    if (1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
+      // single parameters
+      for(int i = 0; i < n; i++) {
+          res[i] = qmpb_(p[i], alpha[0], beta[0], c[0]);
+          res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
+      }
+    } else if (n == alpha.size() && n == beta.size() && n == c.size()) {
+      // vectorised parameters
+      for(int i = 0; i < n; i++) {
+          res[i] = qmpb_(p[i], alpha[i], beta[i], c[i]);
+          res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
       }
     } else {
       warning("Dimensions do not match");
