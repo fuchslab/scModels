@@ -5,6 +5,7 @@
 #include <Rcpp.h>
 #include <cmath>
 #include "mpb.h"
+#include "shared.h"
 using namespace Rcpp;
 
 // kummer series using GSL
@@ -17,15 +18,11 @@ double kummer_(double x, double a, double b, int lnchf) {
   }
 }
 
-double dmpb_(int x, double alpha, double beta, double c) {
-  // double cre, cim;
-  // double are = alpha+x, aim = 0.0, bre = alpha+beta+x, bim = 0.0;
-  // int n = 1, ip = 0, lnchf = 1;
-  // double zre = -c;
-  // double zim = 0;
-  // chfm_(&zre, &zim, &are, &aim, &bre, &bim, &cre, &cim, &n, &lnchf, &ip);
-
+// density function
+double dmpb_(double x, double alpha, double beta, double c) {
   // using gsl
+  if( isInadmissible(x) || !isInteger(x) || traits::is_infinite<REALSXP>(x) )
+    return 0;
   double cre = kummer_(-c, alpha+x, beta+alpha+x, 1);
   if(x <= 0) {
     return exp(cre);
@@ -40,11 +37,15 @@ double dmpb_(int x, double alpha, double beta, double c) {
     num += x * log(c);
     denom += lgamma(x+1);
     return exp(num-denom+cre);
-    // return denom;
   }
 }
 
+// distribution function
 double pmpb_(double x, double alpha, double beta, double c) {
+  if( isInadmissible(x) || !isInteger(x) )
+    return 0;
+  if(traits::is_infinite<REALSXP>(x))
+    return 1;
   double res = 0;
   for(int i = 0; i <= x; i++) {
     res += dmpb_(i, alpha, beta, c);
@@ -52,6 +53,7 @@ double pmpb_(double x, double alpha, double beta, double c) {
   return res;
 }
 
+// distribution function array
 double* pmpb_(double alpha, double beta, double c) {
   double res[Q_LIMIT];
   res[0] = dmpb_(0, alpha, beta, c);
@@ -61,7 +63,10 @@ double* pmpb_(double alpha, double beta, double c) {
   return res;
 }
 
+// quantiles
 int qmpb_(double p, double alpha, double beta, double c) {
+  if(isInadmissible(p) || !validProbability(p))
+    return 0;
   double* p_distr = pmpb_(alpha, beta, c);
   int i;
   if(p > p_distr[Q_LIMIT-1]) {
@@ -187,14 +192,22 @@ NumericVector qmpb(NumericVector p, NumericVector alpha, NumericVector beta, Num
     if (1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
       // single parameters
       for(int i = 0; i < n; i++) {
+        if(p[i] == 1.0) {
+          res[i] = R_PosInf;
+        } else {
           res[i] = qmpb_(p[i], alpha[0], beta[0], c[0]);
           res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
+        }
       }
     } else if (n == alpha.size() && n == beta.size() && n == c.size()) {
       // vectorised parameters
       for(int i = 0; i < n; i++) {
+        if(p[i] == 1.0) {
+          res[i] = R_PosInf;
+        } else {
           res[i] = qmpb_(p[i], alpha[i], beta[i], c[i]);
           res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
+        }
       }
     } else {
       warning("Dimensions do not match");
