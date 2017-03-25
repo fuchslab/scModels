@@ -35,6 +35,7 @@ dmpb <- function(x, alpha, beta, c, log = FALSE) {
 
 #' @rdname mpb2
 #' @export
+#' @examples
 #'  Y <- pmpb(q= 0 :200, alpha=5, beta= 3, c=20)
 #'  plot(0:200, Y, type="l")
 pmpb <- function(q, alpha, beta, c, lower.tail = TRUE, log.p = FALSE) {

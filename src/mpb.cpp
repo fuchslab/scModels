@@ -102,9 +102,13 @@ int qmpb_(double p, double alpha, double beta, double c) {
 }
 
 //' Kummer function for real values
-//'@name kummer
-//'@rdname kummer
-//'@export
+//' @param x vector of parameters
+//' @param a floating point parameter
+//' @param b floating point parameter
+//' @param lnchf 0 or 1; if 1, the log of the value is returned
+//' @name kummer
+//' @rdname kummer
+//' @export
 // [[Rcpp::export]]
 NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
     int n = x.size();

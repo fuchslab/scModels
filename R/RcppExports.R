@@ -2,9 +2,13 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Kummer function for real values
-#'@name kummer
-#'@rdname kummer
-#'@export
+#' @param x vector of parameters
+#' @param a floating point parameter
+#' @param b floating point parameter
+#' @param lnchf 0 or 1; if 1, the log of the value is returned
+#' @name kummer
+#' @rdname kummer
+#' @export
 kummer_gsl <- function(x, a, b, lnchf = 0L) {
     .Call('mpb2_kummer_gsl', PACKAGE = 'mpb2', x, a, b, lnchf)
 }

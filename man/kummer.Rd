@@ -7,6 +7,15 @@
 \usage{
 kummer_gsl(x, a, b, lnchf = 0L)
 }
+\arguments{
+\item{x}{vector of parameters}
+
+\item{a}{floating point parameter}
+
+\item{b}{floating point parameter}
+
+\item{lnchf}{0 or 1; if 1, the log of the value is returned}
+}
 \description{
 Kummer function for real values
 }
