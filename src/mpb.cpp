@@ -101,7 +101,9 @@ int qmpb_(double p, double alpha, double beta, double c) {
   return i;
 }
 
-//'@rdname mpb2
+//' Kummer function for real values
+//'@name kummer
+//'@rdname kummer
 //'@export
 // [[Rcpp::export]]
 NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
@@ -113,14 +115,9 @@ NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
     return res;
 }
 
-//'@rdname mpb2
-//'@export
-//'@examples
-//'  X <- dmpb(x=0:200, alpha=5, beta=3, c=20)
-//'  plot(0:200, X, type='l')
-//'  Y <- dmpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
+
 // [[Rcpp::export]]
-NumericVector dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector cpp_dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c, const bool& log_p = false) {
   int n = x.size(), type = INPUT_SINGLE;
   if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
     type = INPUT_SINGLE;
@@ -140,14 +137,17 @@ NumericVector dmpb(NumericVector x, NumericVector alpha, NumericVector beta, Num
       break;
     }
   }
+
+  if(log_p)
+    res = log(res);
+
   return res;
 }
 
 
-//'@rdname mpb2
-//'@export
+
 //[[Rcpp::export]]
-NumericVector pmpb(NumericVector q, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector cpp_pmpb(NumericVector q, NumericVector alpha, NumericVector beta, NumericVector c, const bool& lower_tail, const bool& log_p) {
   int n = q.size();
   NumericVector res(n);
 
@@ -164,19 +164,19 @@ NumericVector pmpb(NumericVector q, NumericVector alpha, NumericVector beta, Num
   } else {
     warning("Dimensions do not match");
   }
+
+  if(!lower_tail)
+    res = 1.0 - res;
+
+  if(log_p)
+    res = log(res);
+
   return res;
 }
 
 
-//'@rdname mpb2
-//'@export
-//'@examples
-//'  RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)
-//'  plot(0 : 200, X, type="l")
-//'  lines(density(RV), col="red")
-//'  R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 // [[Rcpp::export]]
-NumericVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector cpp_rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
     NumericVector res(n);
 
     if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
@@ -200,12 +200,16 @@ NumericVector rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector
 }
 
 
-//'@rdname mpb2
-//'@export
 // [[Rcpp::export]]
-NumericVector qmpb(NumericVector p, NumericVector alpha, NumericVector beta, NumericVector c) {
+NumericVector cpp_qmpb(NumericVector p, NumericVector alpha, NumericVector beta, NumericVector c, const bool& lower_tail, const bool& log_p) {
     int n = p.size();
     NumericVector res(n);
+
+    if(log_p)
+      p = exp(p);
+
+    if(lower_tail)
+      p = 1.0 - p;
 
     if (1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
       // single parameters
