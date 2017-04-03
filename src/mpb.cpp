@@ -21,9 +21,12 @@ double kummer_(double x, double a, double b, int lnchf) {
 
 // density function
 double dmpb_(double x, double alpha, double beta, double c) {
-  // using gsl
-  if( isInadmissible(x) || !isInteger(x) || traits::is_infinite<REALSXP>(x) )
+  if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
+    return x+alpha+beta+c;
+
+  if( !isInteger(x) || traits::is_infinite<REALSXP>(x) )
     return 0;
+
   double cre = kummer_(-c, alpha+x, beta+alpha+x, 1);
   if(x <= 0) {
     return exp(cre);
@@ -43,7 +46,10 @@ double dmpb_(double x, double alpha, double beta, double c) {
 
 // distribution function
 double pmpb_(double x, double alpha, double beta, double c) {
-  if( isInadmissible(x) || !isInteger(x) )
+  if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
+    return x+alpha+beta+c;
+
+  if( !isInteger(x) )
     return 0;
   if(traits::is_infinite<REALSXP>(x))
     return 1;
@@ -65,7 +71,14 @@ double* pmpb_(double alpha, double beta, double c) {
 }
 
 // quantiles for single parameters
-int qmpb_(double p, double *p_distr) {
+double qmpb_(double p, double *p_distr) {
+  if(isInadmissible(p))
+    return NA_REAL;
+  if(!validProbability(p)){
+    warning("NaNs produced");
+    return R_NaN;
+  }
+
   int i;
   if(p > p_distr[Q_LIMIT-1]) {
     return Q_LIMIT;
@@ -82,10 +95,15 @@ int qmpb_(double p, double *p_distr) {
 }
 
 // quantiles for vectorised parameters
-int qmpb_(double p, double alpha, double beta, double c) {
-  if(isInadmissible(p) || !validProbability(p))
-    return 0;
-  double* p_distr = pmpb_(alpha, beta, c);
+double qmpb_(double p, double alpha, double beta, double c) {
+  if(isInadmissible(p))
+    return NA_REAL;
+  if(!validProbability(p)){
+    warning("NaNs produced");
+    return R_NaN;
+  }
+
+  double *p_distr = pmpb_(alpha, beta, c);
   int i;
   if(p > p_distr[Q_LIMIT-1]) {
     return Q_LIMIT;
@@ -180,27 +198,41 @@ NumericVector cpp_pmpb(NumericVector q, NumericVector alpha, NumericVector beta,
 
 
 // [[Rcpp::export]]
-NumericVector cpp_rmpb(int n, NumericVector alpha, NumericVector beta, NumericVector c) {
-    NumericVector res(n);
+NumericVector cpp_rmpb(double n, NumericVector alpha, NumericVector beta, NumericVector c) {
+  if(isInadmissible(n)) {
+    stop("Error in rmpb : invalid arguments");
+  }
 
-    if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
-      // single parameters
-      NumericVector poissonParameter = rbeta(n, alpha[0], beta[0]) * c[0];
-      for(int i = 0; i < n; i++) {
-        NumericVector t = rpois(1, poissonParameter[i]);
-        res[i] = t[0];
-      }
-    } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
-      // vectorised parameters
-      for(int i = 0; i < n; i++) {
+  NumericVector res((int)n);
+
+  if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
+    // single parameters
+    if(isInadmissible(alpha[0]) || isInadmissible(beta[0]) || isInadmissible(c[0])) {
+      NumericVector na_res((int)n, NA_REAL);
+      warning("NAs produced");
+      return na_res;
+    }
+    NumericVector poissonParameter = rbeta(n, alpha[0], beta[0]) * c[0];
+    for(int i = 0; i < n; i++) {
+      NumericVector t = rpois(1, poissonParameter[i]);
+      res[i] = t[0];
+    }
+  } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
+    // vectorised parameters
+    for(int i = 0; i < n; i++) {
+      if(isInadmissible(alpha[i]) || isInadmissible(beta[i]) || isInadmissible(c[i])) {
+        res[i] = NA_REAL;
+        warning("NAs produced");
+      } else {
         NumericVector poissonParameter = rbeta(1, alpha[i], beta[i]) * c[i];
         NumericVector t = rpois(1, poissonParameter[0]);
         res[i] = t[0];
       }
-    } else {
-      warning("Dimensions do not match");
     }
-    return res;
+  } else {
+    warning("Dimensions do not match");
+  }
+  return res;
 }
 
 
@@ -217,6 +249,11 @@ NumericVector cpp_qmpb(NumericVector p, NumericVector alpha, NumericVector beta,
 
     if (1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
       // single parameters
+      if(isInadmissible(alpha[0]) || isInadmissible(beta[0]) || isInadmissible(c[0])) {
+        NumericVector na_res(n, NA_REAL);
+        return na_res;
+      }
+
       double* p_distr = pmpb_(alpha[0], beta[0], c[0]);
       for(int i = 0; i < n; i++) {
         if(p[i] == 1.0) {

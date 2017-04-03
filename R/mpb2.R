@@ -22,7 +22,7 @@
 
 #' @name mpb2
 #' @useDynLib mpb2
-#' @importFrom Rcpp evalCpp
+#' @importFrom Rcpp evalCpp sourceCpp
 #' @export
 #' @examples
 #'  X <- dmpb(x=0:200, alpha=5, beta=3, c=20)

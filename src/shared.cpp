@@ -28,7 +28,8 @@ bool validProbability(double p) {
 
 bool isInadmissible(double x, bool warn) {
   if(Rcpp::NumericVector::is_na(x) || Rcpp::traits::is_nan<REALSXP>(x)) {
-    Rcpp::warning("NA/NaNs given in input");
+    if(warn)
+      Rcpp::warning("NA/NaNs given in input");
     return true;
   } else {
     return false;
