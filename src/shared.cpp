@@ -1,6 +1,26 @@
 #include <Rcpp.h>
 #include "shared.h"
 
+bool validKummerParameters(double a, double b, bool warn) {
+  if(a < 0) {
+    if(warn) {
+      char msg[55];
+      std::sprintf(msg, "Parameter a is less than zero: %f", a);
+      Rcpp::warning(msg);
+    }
+    return false;
+  }
+  if(b < a) {
+    if(warn) {
+      char msg[55];
+      std::sprintf(msg, "Wrong parameters: b cannot be less than a: %f < %f", b, a);
+      Rcpp::warning(msg);
+    }
+    return false;
+  }
+  return true;
+}
+
 bool isInteger(double x, bool warn) {
   if (ISNAN(x))
     return false;

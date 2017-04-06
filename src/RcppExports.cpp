@@ -6,17 +6,17 @@
 
 using namespace Rcpp;
 
-// kummer_gsl
-NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf);
-RcppExport SEXP mpb2_kummer_gsl(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP, SEXP lnchfSEXP) {
+// chf_1F1_gsl
+NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, const bool& log_v);
+RcppExport SEXP mpb2_chf_1F1_gsl(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP, SEXP log_vSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< double >::type a(aSEXP);
-    Rcpp::traits::input_parameter< double >::type b(bSEXP);
-    Rcpp::traits::input_parameter< int >::type lnchf(lnchfSEXP);
-    rcpp_result_gen = Rcpp::wrap(kummer_gsl(x, a, b, lnchf));
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const bool& >::type log_v(log_vSEXP);
+    rcpp_result_gen = Rcpp::wrap(chf_1F1_gsl(x, a, b, log_v));
     return rcpp_result_gen;
 END_RCPP
 }

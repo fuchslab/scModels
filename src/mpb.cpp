@@ -10,9 +10,12 @@
 using namespace Rcpp;
 
 // kummer series using GSL
-double kummer_(double x, double a, double b, int lnchf) {
+double kummer_(double x, double a, double b, bool log_v) {
+  if(!validKummerParameters(a, b)) {
+    return R_NaN;
+  }
   double res = gsl_sf_hyperg_1F1(a, b, x);
-  if(1 == lnchf) {
+  if(log_v) {
     return log(res);
   } else {
     return res;
@@ -24,7 +27,7 @@ double dmpb_(double x, double alpha, double beta, double c) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
-  if( !isInteger(x) || traits::is_infinite<REALSXP>(x) )
+  if( !isInteger(x) || x < 0  || traits::is_infinite<REALSXP>(x) )
     return 0;
 
   double cre = kummer_(-c, alpha+x, beta+alpha+x, 1);
@@ -119,20 +122,25 @@ double qmpb_(double p, double alpha, double beta, double c) {
   return i;
 }
 
-//' Kummer function for real values
-//' @param x vector of parameters
-//' @param a floating point parameter
-//' @param b floating point parameter
-//' @param lnchf 0 or 1; if 1, the log of the value is returned
+//' Kummer's (confluent hypergeometric) function
+//'
+//' Kummer's (confluent hypergeometric) function of the first kind
+//' for numeric (non-complex) values and input parameters
+//' @param x numeric value or vector
+//' @param a,b numeric parameters of the Kummer function
+//' @param log_v logical; if TRUE, the log of the value is returned
 //' @name kummer
 //' @rdname kummer
 //' @export
 // [[Rcpp::export]]
-NumericVector kummer_gsl(NumericVector x, double a, double b, int lnchf = 0) {
-    int n = x.size();
+NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, const bool& log_v = false) {
+    if(min(NumericVector::create(x.length(), a.length(), b.length())) < 1) {
+      return NumericVector(0);
+    }
+    int n = max(NumericVector::create(x.length(), a.length(), b.length()));
     NumericVector res(n);
     for(int i = 0; i < n; i++) {
-        res[i] = kummer_(x[i], a, b, lnchf);
+        res[i] = kummer_(GETV(x, i), GETV(a, i), GETV(b, i), log_v);
     }
     return res;
 }
