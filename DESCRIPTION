@@ -1,6 +1,6 @@
 Package: mpb2
 Title: Mixed Poisson Beta Distribution
-Version: 0.6
+Version: 0.7
 Author: Kumar Harsha [aut, cre], Lisa Amrhein [aut]
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Authors@R: c(
