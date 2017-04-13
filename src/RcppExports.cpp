@@ -6,6 +6,21 @@
 
 using namespace Rcpp;
 
+// gmRNA
+NumericVector gmRNA(double n, double lambda, double gamma, double r, double mu);
+RcppExport SEXP mpb2_gmRNA(SEXP nSEXP, SEXP lambdaSEXP, SEXP gammaSEXP, SEXP rSEXP, SEXP muSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type r(rSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    rcpp_result_gen = Rcpp::wrap(gmRNA(n, lambda, gamma, r, mu));
+    return rcpp_result_gen;
+END_RCPP
+}
 // chf_1F1_gsl
 NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, const bool& log_v);
 RcppExport SEXP mpb2_chf_1F1_gsl(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP, SEXP log_vSEXP) {

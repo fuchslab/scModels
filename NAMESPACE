@@ -2,6 +2,7 @@
 
 export(chf_1F1_gsl)
 export(dmpb)
+export(gmRNA)
 export(pmpb)
 export(qmpb)
 export(rmpb)
