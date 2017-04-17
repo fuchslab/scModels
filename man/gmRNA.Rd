@@ -13,9 +13,9 @@ gmRNA(n, lambda, gamma, r, mu)
 
 \item{gamma}{polymerase unbinding rate / DNA deactivation rate}
 
-\item{mu}{mRNA degradation rate}
+\item{r}{transcription rate}
 
-\item{r_on}{transcription rate}
+\item{mu}{mRNA degradation rate}
 }
 \description{
 Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription

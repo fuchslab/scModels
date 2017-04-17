@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @param n number of simulations
 //' @param lambda polymerase binding rate / DNA activation rate
 //' @param gamma polymerase unbinding rate / DNA deactivation rate
-//' @param r_on transcription rate
+//' @param r transcription rate
 //' @param mu mRNA degradation rate
 //' @name gmRNA
 //' @rdname gmRNA

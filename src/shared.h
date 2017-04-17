@@ -1,5 +1,9 @@
 #include <Rcpp.h>
 
+// constants
+
+#define Q_LIMIT 64
+
 // functions
 
 bool validKummerParameters(double a, double b, bool warn = true);

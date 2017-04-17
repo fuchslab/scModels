@@ -5,7 +5,6 @@
 #include <Rcpp.h>
 #include <cmath>
 #include <cstdlib>
-#include "mpb.h"
 #include "shared.h"
 using namespace Rcpp;
 
@@ -23,7 +22,7 @@ double kummer_(double x, double a, double b, bool log_v) {
 }
 
 // density function
-double dmpb_(double x, double alpha, double beta, double c) {
+double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
@@ -48,7 +47,7 @@ double dmpb_(double x, double alpha, double beta, double c) {
 }
 
 // distribution function
-double pmpb_(double x, double alpha, double beta, double c) {
+double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
@@ -58,7 +57,7 @@ double pmpb_(double x, double alpha, double beta, double c) {
     return 1;
   double res = 0;
   for(int i = 0; i <= x; i++) {
-    res += dmpb_(i, alpha, beta, c);
+    res += dmpb_(i, alpha, beta, c, throw_warning);
   }
   return res;
 }
@@ -66,9 +65,10 @@ double pmpb_(double x, double alpha, double beta, double c) {
 // distribution function array
 double* pmpb_(double alpha, double beta, double c) {
   double *res = (double *)std::malloc(Q_LIMIT * sizeof(double));
-  res[0] = dmpb_(0, alpha, beta, c);
+  bool throw_warning = false;
+  res[0] = dmpb_(0, alpha, beta, c, throw_warning);
   for(int i = 1; i < Q_LIMIT; i++) {
-    res[i] = res[i-1] + dmpb_(i, alpha, beta, c);
+    res[i] = res[i-1] + dmpb_(i, alpha, beta, c, throw_warning);
   }
   return res;
 }
@@ -82,44 +82,57 @@ double qmpb_(double p, double *p_distr) {
     return R_NaN;
   }
 
-  int i;
-  if(p > p_distr[Q_LIMIT-1]) {
-    return Q_LIMIT;
-  }
-  if(p < p_distr[0]) {
-    return 0;
-  }
-  for(i = 1; i < Q_LIMIT; i++) {
+  if(p == 0.0)
+    return 0.0;
+  if(p == 1.0 || p > p_distr[Q_LIMIT-1])
+    return R_PosInf;
+
+  for(int i = 1; i < Q_LIMIT; i++) {
     if(p > p_distr[i-1] && p < p_distr[i]) {
       return i;
     }
   }
-  return i;
+
+  return R_PosInf;
 }
 
 // quantiles for vectorised parameters
 double qmpb_(double p, double alpha, double beta, double c) {
-  if(isInadmissible(p))
+  if(isInadmissible(p) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c))
     return NA_REAL;
   if(!validProbability(p)){
     warning("NaNs produced");
     return R_NaN;
   }
 
+  if(p == 0.0)
+    return 0.0;
+
   double *p_distr = pmpb_(alpha, beta, c);
-  int i;
-  if(p > p_distr[Q_LIMIT-1]) {
-    return Q_LIMIT;
-  }
-  if(p < p_distr[0]) {
-    return 0;
-  }
-  for(i = 1; i < Q_LIMIT; i++) {
+
+  if(p == 1.0 || p > p_distr[Q_LIMIT-1])
+    return R_PosInf;
+
+  for(int i = 1; i < Q_LIMIT; i++) {
     if(p > p_distr[i-1] && p < p_distr[i]) {
       return i;
     }
   }
-  return i;
+
+  return R_PosInf;
+}
+
+// random number generator
+double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
+  if(isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c)) {
+    throw_warning = true;
+    return NA_REAL;
+  }
+
+  NumericVector poissonParameter = rbeta(1, alpha, beta) * c;
+  NumericVector t = rpois(1, poissonParameter[0]);
+
+  return t[0];
 }
 
 //' Kummer's (confluent hypergeometric) function
@@ -147,142 +160,110 @@ NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, con
 
 
 // [[Rcpp::export]]
-NumericVector cpp_dmpb(NumericVector x, NumericVector alpha, NumericVector beta, NumericVector c, const bool& log_p = false) {
-  int n = x.size(), type = INPUT_SINGLE;
-  if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
-    type = INPUT_SINGLE;
-  } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
-    type = INPUT_VECTORISED;
-  } else {
-    warning("Dimensions do not match");
+NumericVector cpp_dmpb(NumericVector& x, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& log_p = false) {
+  if(std::min({x.length(), alpha.length(), beta.length(), c.length()}) < 1) {
+    return NumericVector(0);
   }
-  NumericVector res(n);
+
+  int n = std::max({x.length(), alpha.length(), beta.length(), c.length()});
+  NumericVector p(n);
+  bool throw_warning = false;
+
   for(int i = 0; i < n; i++) {
-    switch(type) {
-    case INPUT_SINGLE:
-      res[i] = dmpb_(x[i], alpha[0], beta[0], c[0]);
-      break;
-    case INPUT_VECTORISED:
-      res[i] = dmpb_(x[i], alpha[i], beta[i], c[i]);
-      break;
-    }
+    p[i] = dmpb_(GETV(x, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
   }
 
   if(log_p)
-    res = log(res);
+    p = log(p);
 
-  return res;
+  if(throw_warning)
+    warning("NaNs produced");
+
+  return p;
 }
 
 
 
 //[[Rcpp::export]]
-NumericVector cpp_pmpb(NumericVector q, NumericVector alpha, NumericVector beta, NumericVector c, const bool& lower_tail, const bool& log_p) {
-  int n = q.size();
-  NumericVector res(n);
+NumericVector cpp_pmpb(NumericVector& q, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
+  if(std::min({ q.length(), alpha.length(), beta.length(), c.length() }) < 1) {
+    return NumericVector(0);
+  }
 
-  int max_q = max(q);
-  if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
-    // single parameters
-    for(int i = 0; i < n; i++) {
-      res[i] = pmpb_(q[i], alpha[0], beta[0], c[0]);
-    }
-  } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
-    for(int i = 0; i < n; i++) {
-      res[i] = pmpb_(q[i], alpha[i], beta[i], c[i]);
-    }
-  } else {
-    warning("Dimensions do not match");
+  int n = std::max({ q.length(), alpha.length(), beta.length(), c.length() });
+  NumericVector p(n);
+
+  bool throw_warning = false;
+
+  for(int i = 0; i < n; i++) {
+    p[i] = pmpb_(GETV(q, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
   }
 
   if(!lower_tail)
-    res = 1.0 - res;
+    p = 1.0 - p;
 
   if(log_p)
-    res = log(res);
+    p = log(p);
 
-  return res;
+  if(throw_warning)
+    warning("NaNs produced");
+
+  return p;
 }
 
 
 // [[Rcpp::export]]
-NumericVector cpp_rmpb(double n, NumericVector alpha, NumericVector beta, NumericVector c) {
-  if(isInadmissible(n)) {
-    stop("Error in rmpb : invalid arguments");
+NumericVector cpp_rmpb(const int& n, NumericVector& alpha, NumericVector& beta, NumericVector& c) {
+  if(std::min({ alpha.length(), beta.length(), c.length() }) < 1) {
+    warning("NAs produced");
+    return NumericVector(n, NA_REAL);
   }
 
-  NumericVector res((int)n);
+  NumericVector x(n);
+  bool throw_warning = false;
 
-  if(1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
+  for(int i = 0; i < n; i++) {
+    x[i] = rmpb_(GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
+  }
+
+  if(throw_warning)
+    warning("NAs produced");
+
+  return x;
+}
+
+
+// [[Rcpp::export]]
+NumericVector cpp_qmpb(NumericVector& p, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
+  if(std::min({ p.length(), alpha.length(), beta.length(), c.length() }) < 1) {
+    return NumericVector(0);
+  }
+
+  int n = std::max({ p.length(), alpha.length(), beta.length(), c.length()});
+  NumericVector res(n);
+
+  if(log_p)
+    p = exp(p);
+
+  if(lower_tail)
+    p = 1.0 - p;
+
+  if (min(alpha) == max(alpha) && min(beta) == max(beta) && min(c) == max(c)) {
     // single parameters
+    // optmized to compute cdf only once
     if(isInadmissible(alpha[0]) || isInadmissible(beta[0]) || isInadmissible(c[0])) {
-      NumericVector na_res((int)n, NA_REAL);
-      warning("NAs produced");
-      return na_res;
-    }
-    NumericVector poissonParameter = rbeta(n, alpha[0], beta[0]) * c[0];
-    for(int i = 0; i < n; i++) {
-      NumericVector t = rpois(1, poissonParameter[i]);
-      res[i] = t[0];
-    }
-  } else if(n == alpha.size() && n == beta.size() && n == c.size()) {
-    // vectorised parameters
-    for(int i = 0; i < n; i++) {
-      if(isInadmissible(alpha[i]) || isInadmissible(beta[i]) || isInadmissible(c[i])) {
-        res[i] = NA_REAL;
-        warning("NAs produced");
-      } else {
-        NumericVector poissonParameter = rbeta(1, alpha[i], beta[i]) * c[i];
-        NumericVector t = rpois(1, poissonParameter[0]);
-        res[i] = t[0];
+      return NumericVector(n, NA_REAL);
+    } else {
+      double* p_distr = pmpb_(min(na_omit(alpha)), min(na_omit(beta)), min(na_omit(c)));
+      for(int i = 0; i < n; i++) {
+        res[i] = qmpb_(GETV(p, i), p_distr);
       }
     }
   } else {
-    warning("Dimensions do not match");
+    // vectorised parameters
+    for(int i = 0; i < n; i++) {
+      res[i] = qmpb_(GETV(p, i), GETV(alpha, i), GETV(beta, i), GETV(c, i));
+    }
   }
   return res;
-}
-
-
-// [[Rcpp::export]]
-NumericVector cpp_qmpb(NumericVector p, NumericVector alpha, NumericVector beta, NumericVector c, const bool& lower_tail, const bool& log_p) {
-    int n = p.size();
-    NumericVector res(n);
-
-    if(log_p)
-      p = exp(p);
-
-    if(lower_tail)
-      p = 1.0 - p;
-
-    if (1 == alpha.size() && 1 == beta.size() && 1 == c.size()) {
-      // single parameters
-      if(isInadmissible(alpha[0]) || isInadmissible(beta[0]) || isInadmissible(c[0])) {
-        NumericVector na_res(n, NA_REAL);
-        return na_res;
-      }
-
-      double* p_distr = pmpb_(alpha[0], beta[0], c[0]);
-      for(int i = 0; i < n; i++) {
-        if(p[i] == 1.0) {
-          res[i] = R_PosInf;
-        } else {
-          res[i] = qmpb_(p[i], p_distr);
-          res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
-        }
-      }
-    } else if (n == alpha.size() && n == beta.size() && n == c.size()) {
-      // vectorised parameters
-      for(int i = 0; i < n; i++) {
-        if(p[i] == 1.0) {
-          res[i] = R_PosInf;
-        } else {
-          res[i] = qmpb_(p[i], alpha[i], beta[i], c[i]);
-          res[i] = res[i] == Q_LIMIT ? R_PosInf : res[i];
-        }
-      }
-    } else {
-      warning("Dimensions do not match");
-    }
-    return res;
 }
