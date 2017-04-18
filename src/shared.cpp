@@ -35,13 +35,15 @@ bool isInteger(double x, bool warn) {
   return true;
 }
 
-bool validProbability(double p) {
+bool validProbability(double p, bool warn) {
   if (p >= 0.0 && p <= 1.0) {
     return true;
   } else {
-    char msg[55];
-    std::sprintf(msg, "invalid probability: %f", p);
-    Rcpp::warning(msg);
+    if(warn) {
+      char msg[55];
+      std::sprintf(msg, "invalid probability: %f", p);
+      Rcpp::warning(msg);
+    }
     return false;
   }
 }
@@ -50,6 +52,17 @@ bool isInadmissible(double x, bool warn) {
   if(Rcpp::NumericVector::is_na(x) || Rcpp::traits::is_nan<REALSXP>(x)) {
     if(warn)
       Rcpp::warning("NA/NaNs given in input");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool validMpbParameters(double alpha, double beta, double c, bool warn) {
+  if(alpha > 0 && beta > 0 && c > 0) {
+    if(warn) {
+      Rcpp::warning("negative parameters for mpb");
+    }
     return true;
   } else {
     return false;

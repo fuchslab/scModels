@@ -8,8 +8,9 @@
 
 bool validKummerParameters(double a, double b, bool warn = true);
 bool isInteger(double x, bool warn = true);
-bool validProbability(double p);
+bool validProbability(double p, bool warn = false);
 bool isInadmissible(double x, bool warn = false);
+bool validMpbParameters(double alpha, double beta, double c, bool warn = false);
 
 // macros
 #define GETV(x, i)      x[i % x.length()]    // wrapped indexing of vector

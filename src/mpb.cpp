@@ -29,7 +29,15 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
   if( !isInteger(x) || x < 0  || traits::is_infinite<REALSXP>(x) )
     return 0;
 
-  double cre = kummer_(-c, alpha+x, beta+alpha+x, 1);
+  if(!validMpbParameters(alpha, beta, c)) {
+    throw_warning = true;
+    return R_NaN;
+  }
+
+  double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
+  if(isInadmissible(cre))
+    return R_NaN;
+
   if(x <= 0) {
     return exp(cre);
   } else {
@@ -50,6 +58,11 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
 double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
+
+  if(!validMpbParameters(alpha, beta, c)) {
+    throw_warning = true;
+    return R_NaN;
+  }
 
   if( !isInteger(x) )
     return 0;
@@ -77,7 +90,7 @@ double* pmpb_(double alpha, double beta, double c) {
 double qmpb_(double p, double *p_distr) {
   if(isInadmissible(p))
     return NA_REAL;
-  if(!validProbability(p)){
+  if(!validProbability(p) || isInadmissible(p_distr[0])){
     warning("NaNs produced");
     return R_NaN;
   }
@@ -127,6 +140,11 @@ double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
   if(isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c)) {
     throw_warning = true;
     return NA_REAL;
+  }
+
+  if(!validMpbParameters(alpha, beta, c)) {
+    throw_warning = true;
+    return R_NaN;
   }
 
   NumericVector poissonParameter = rbeta(1, alpha, beta) * c;
