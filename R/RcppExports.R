@@ -23,6 +23,7 @@ gmRNA <- function(n, lambda, gamma, r, mu) {
 #' @param log_v logical; if TRUE, the log of the value is returned
 #' @name kummer
 #' @rdname kummer
+#' @importFrom RcppGSL CFlags LdFlags
 #' @export
 chf_1F1_gsl <- function(x, a, b, log_v = FALSE) {
     .Call('mpb2_chf_1F1_gsl', PACKAGE = 'mpb2', x, a, b, log_v)

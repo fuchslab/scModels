@@ -15,6 +15,7 @@ Depends:
     RcppGSL
 LazyData: true
 RoxygenNote: 5.0.1
+Suggests: knitr, rmarkdown, testthat
+VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppGSL
 Imports: Rcpp
-Suggests: testthat

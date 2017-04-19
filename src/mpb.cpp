@@ -162,6 +162,7 @@ double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
 //' @param log_v logical; if TRUE, the log of the value is returned
 //' @name kummer
 //' @rdname kummer
+//' @importFrom RcppGSL CFlags LdFlags
 //' @export
 // [[Rcpp::export]]
 NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, const bool& log_v = false) {
