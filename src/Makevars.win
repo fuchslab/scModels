@@ -2,3 +2,4 @@ INCLUDE_RCPP=`$(R_HOME)/bin/Rscript -e "Rcpp:::CxxFlags()"`
 INCLUDE_RCPPGSL=$(INCLUDE_RCPP)"/../../RcppGSL/include"
 PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -L$(LIB_GSL)/lib/$(R_ARCH) -lgsl -lgslcblas
 PKG_CXXFLAGS=$(INCLUDE_RCPP) -I$(LIB_GSL)/include $(INCLUDE_RCPPGSL)
+CXX_STD = CXX11
