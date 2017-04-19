@@ -160,8 +160,8 @@ double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
 //' @param x numeric value or vector
 //' @param a,b numeric parameters of the Kummer function
 //' @param log_v logical; if TRUE, the log of the value is returned
-//' @name kummer
-//' @rdname kummer
+//' @name chf_1F1_gsl
+//' @rdname chf_1F1_gsl
 //' @importFrom RcppGSL CFlags LdFlags
 //' @export
 // [[Rcpp::export]]
