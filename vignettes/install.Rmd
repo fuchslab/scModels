@@ -5,18 +5,19 @@ vignette: >
   %\VignetteIndexEntry{Installation Manual}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+# output: pdf_document
 ---
 
 
 ## About GSL
 
-The [GNU Scientific Library (GSL)](https://www.gnu.org/software/gsl/) is a numerical library for C and C++ programmers. It is free software under the GNU General Public License.
+The GNU Scientific Library (GSL) ([https://www.gnu.org/software/gsl/](https://www.gnu.org/software/gsl/)) is a numerical library for C and C++ programmers. It is free software under the GNU General Public License.
 
-The library provides a wide range of mathematical routines such as random number generators, special functions and least-squares fitting. There are over 1000 functions in total with an extensive test suite. The implementation of the confluent hypergeometric function is used in this package.
+The library provides a wide range of mathematical routines such as random number generators, special functions and least-squares fitting. There are over 1000 functions in total with an extensive test suite. The implementation of the confluent hypergeometric function of the first kind (gsl_sf_hyperg_1F1) is used in this package.
 
 ## About RcppGSL
 
-The [RcppGSL](http://dirk.eddelbuettel.com/code/rcpp.gsl.html) package provides an easy-to-use interface between GSL data structures and GNU R using concepts from Rcpp which is itself a package that eases the interfaces between R and C++. This package also serves as a prime example of how to build a package that uses 'Rcpp' to connect to another third-party library.
+The RcppGSL ([http://dirk.eddelbuettel.com/code/rcpp.gsl.html](http://dirk.eddelbuettel.com/code/rcpp.gsl.html)) package provides an easy-to-use interface between GSL data structures and GNU R using concepts from Rcpp which is itself a package that eases the interfaces between R and C++. This package also serves as a prime example of how to build a package that uses 'Rcpp' to connect to another third-party library.
 
 ## Why GSL ?
 
@@ -39,7 +40,12 @@ Similarly named packages can be found for other distributions as well.
 
 ### Installation on Mac
 
-GSL is fairly easy to install on a Mac if [Homebrew](https://brew.sh/) is already available.
+GSL can be installed on a Mac with Homebrew ([https://brew.sh/](https://brew.sh/)).
+Installing Homebrew is easy. The following needs to typed at a terminal:
+
+> /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+Once Homebrew is installed, the following command needs to be run:
 
 > brew install gsl
 
@@ -49,7 +55,7 @@ Without a package manager, the library will have to be compiled from source that
 
 Installation on Windows requires building GSL with the recommended toolchain for R.
 
-Pre-compiled libraries have been put together by Prof. Brian Ripley and are available on his [webpage](http://www.stats.ox.ac.uk/pub/Rtools/). The files are under [goodies/multilib](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/) directory. This includes a 'local' tree, named as [local323.zip](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip) at the time this manual was prepared, that contains the headers and static libraries for GSL.
+Pre-compiled libraries have been put together by Prof. Brian Ripley and are available on his webpage ([http://www.stats.ox.ac.uk/pub/Rtools/](http://www.stats.ox.ac.uk/pub/Rtools/)). The files are under goodies/multilib ([http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/)) directory. This includes a 'local' tree, named as local323.zip ([http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip)) at the time this manual was prepared, that contains the headers and static libraries for GSL.
 
 The following instructions are vaild for Windows 8 and above.
 
@@ -70,3 +76,23 @@ The following instructions are vaild for Windows 8 and above.
     ![](windows-7.png)  
 4. Rstudio (or the current R session) has to be restarted so that these environment variables can be read.
 5. The RcppGSL package has to be installed to complete the configuration of GSL development libraries with R. It is worth noting that installing the mpb2 package will take care of this step anyway.
+
+## Verifying GSL installation
+
+To verify proper installation of GSL, the following commands can be run at an R command prompt:
+```{r eval=FALSE}
+RcppGSL::CFlags()
+RcppGSL::LdFlags()
+```
+
+On UNIX-type operating systems (OS X and Linux), the following command on the terminal should display the version of GSL installed:
+
+> gsl-config --version
+
+## Running tests for the package
+
+The package comes with a comprehensive test suite. In order to run the tests, the tarball must be extracted. Once that is done, the following command will run all tests:
+
+```{r eval=FALSE}
+devtools::test("/path/to/mpb2/")
+```
