@@ -1,26 +1,25 @@
 #' Mixed Poisson-Beta Distribution
 #'
-#' Density, distribution function, quantile function and random
-#' generation for the mixed poisson-beta distribution. This is basically a
-#' poisson distribution where the parameter itself is again beta distributed
-#' with parameters alpha, beta and additionally scaled on (0, c)
-#' in contrast to the usual scaling on (0,1).
+#' Density, distribution function, quantile function and random generation
+#' for the mixed Poisson-beta distribution. This represents a Poisson
+#' distribution whose parameter itself follows a beta distribution. This
+#' beta distribution uses the parameters alpha and beta. Additionally this
+#' beta distribution is scaled on (0, c) in contrast to the usual scaling on (0,1).
 #'
 
 
 #' @param x,q  vector of quantiles
 #' @param p  vector of probabilities
 #' @param n  number of observations
-#' @param alpha  first non-negative parameter of the beta distribution (shape1)
-#' @param beta  second non-negative parameter of the beta distribution b(shape2)
-#' @param c  third parameter of the beta distribution (i.e. the standard
-#' beta(alpha,beta) distribution is scaled not on (0, 1), but on (0, c))
+#' @param alpha,beta  non-negative parameters of the beta distribution (shape1 and shape2)
+#' @param c  numeric scaling parameter of the beta distribution
+#'   (i.e. the standard beta(alpha,beta) distribution is scaled not on (0, 1), but on (0, c))
 #' @param log,log.p  logical; if TRUE, probabilities p are given as log(p)
 #' @param lower.tail  logical; if TRUE (default), probabilities are \eqn{P[X \le x]}
 #'                        otherwise, \eqn{P[X > x]}.
 #' @keywords mixed poisson-beta distribution
 
-#' @name mpb2
+#' @name mpb
 #' @useDynLib mpb2
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @export
@@ -33,7 +32,7 @@ dmpb <- function(x, alpha, beta, c, log = FALSE) {
 }
 
 
-#' @rdname mpb2
+#' @rdname mpb
 #' @export
 #' @examples
 #'  Y <- pmpb(q= 0 :200, alpha=5, beta= 3, c=20)
@@ -43,7 +42,7 @@ pmpb <- function(q, alpha, beta, c, lower.tail = TRUE, log.p = FALSE) {
 }
 
 
-#' @rdname mpb2
+#' @rdname mpb
 #' @export
 #' @examples
 #'  Z <- qmpb(p= seq(0,1, by= 0.01), alpha=5, beta= 3, c=20)
@@ -53,7 +52,7 @@ qmpb <- function(p, alpha, beta, c, lower.tail = TRUE, log.p = FALSE) {
 }
 
 
-#' @rdname mpb2
+#' @rdname mpb
 #' @export
 #' @examples
 #'  RV <- rmpb(n = 1000, alpha=5, beta= 3, c=20)

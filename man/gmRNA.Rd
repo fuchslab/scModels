@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{gmRNA}
 \alias{gmRNA}
-\title{Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription}
+\title{Gillespie Algorithm for the mixed-poisson-beta}
 \usage{
 gmRNA(n, lambda, gamma, r, mu)
 }
