@@ -1,6 +1,8 @@
 // [[Rcpp::depends(RcppGSL)]]
 
 #include <RcppGSL.h>
+#include <gsl/gsl_errno.h>
+#include <gsl/gsl_sf_result.h>
 #include <gsl/gsl_sf_hyperg.h>
 #include <Rcpp.h>
 #include <cmath>
@@ -13,11 +15,22 @@ double kummer_(double x, double a, double b, bool log_v) {
   if(!validKummerParameters(a, b)) {
     return R_NaN;
   }
-  double res = gsl_sf_hyperg_1F1(a, b, x);
+
+  gsl_set_error_handler_off();
+  gsl_sf_result gsl_res;
+  int status = gsl_sf_hyperg_1F1_e(a, b, x, &gsl_res);
+  if( status ) {
+    if( status == GSL_EUNDRFLW ){
+      return 0;
+    } else {
+      return NA_REAL;
+    }
+  }
+
   if(log_v) {
-    return log(res);
+    return log(gsl_res.val);
   } else {
-    return res;
+    return gsl_res.val;
   }
 }
 
