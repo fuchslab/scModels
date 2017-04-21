@@ -21,7 +21,7 @@ double kummer_(double x, double a, double b, bool log_v) {
   int status = gsl_sf_hyperg_1F1_e(a, b, x, &gsl_res);
   if( status ) {
     if( status == GSL_EUNDRFLW ){
-      return 0;
+      warning("Underflow occured while computing the Kummer function");
     } else {
       return NA_REAL;
     }
