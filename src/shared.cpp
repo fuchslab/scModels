@@ -68,3 +68,9 @@ bool validMpbParameters(double alpha, double beta, double c, bool warn) {
     return false;
   }
 }
+
+void reportGslError(int status) {
+  char msg[55];
+  std::sprintf(msg, "GSL Error #%d occured", status);
+  Rcpp::warning(msg);
+}

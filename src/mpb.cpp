@@ -18,19 +18,30 @@ double kummer_(double x, double a, double b, bool log_v) {
 
   gsl_set_error_handler_off();
   gsl_sf_result gsl_res;
+  double log_chf;
   int status = gsl_sf_hyperg_1F1_e(a, b, x, &gsl_res);
   if( status ) {
     if( status == GSL_EUNDRFLW ){
-      warning("Underflow occured while computing the Kummer function");
+      int status_transform = gsl_sf_hyperg_1F1_e(b-a, b, -x, &gsl_res);
+      if(status_transform) {
+        warning("Kummer transformation failed!");
+        return R_NaN;
+      } else {
+        log_chf = x + log(gsl_res.val);
+        warning("using transformation");
+      }
     } else {
-      return NA_REAL;
+      reportGslError(status);
+      log_chf = 1;
     }
+  } else {
+    log_chf = log(gsl_res.val);
   }
 
   if(log_v) {
-    return log(gsl_res.val);
+    return log_chf;
   } else {
-    return gsl_res.val;
+    return std::exp(log_chf);
   }
 }
 
@@ -47,6 +58,9 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return R_NaN;
   }
 
+  char msg[55];
+  std::sprintf(msg, "kummer_(-%f, %f, %f, true)", c, alpha+x, beta+alpha+x);
+  warning(msg);
   double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
   if(isInadmissible(cre))
     return R_NaN;
