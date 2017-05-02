@@ -58,9 +58,6 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return R_NaN;
   }
 
-  char msg[55];
-  std::sprintf(msg, "kummer_(-%f, %f, %f, true)", c, alpha+x, beta+alpha+x);
-  warning(msg);
   double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
   if(isInadmissible(cre))
     return R_NaN;
