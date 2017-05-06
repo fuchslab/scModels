@@ -8,6 +8,7 @@
 #include <cmath>
 #include <cstdlib>
 #include "shared.h"
+#include "mpb.h"
 using namespace Rcpp;
 
 // kummer series using GSL
@@ -58,7 +59,19 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return R_NaN;
   }
 
-  double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
+  // double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
+
+  // use the fortran function
+  double cre, cim;
+  double are = beta, aim = 0.0, bre = alpha+beta+x, bim = 0.0;
+  int n = 1, ip = 500, lnchf = 1;
+  double zre = c;
+  double zim = 0;
+  chfm_(&zre, &zim, &are, &aim, &bre, &bim, &cre, &cim, &n, &lnchf, &ip);
+  cre = -c + cre;
+  // end of fortran use
+
+
   if(isInadmissible(cre))
     return R_NaN;
 

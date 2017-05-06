@@ -1,8 +1,24 @@
 #include <Rcpp.h>
 
+// fortran access
+
+#ifdef __cplusplus
+extern"C"{
+#endif
+  void chfm_(double *zre, double *zim,
+             double *are, double *aim,
+             double *bre, double *bim,
+             double *cre, double *cim,
+             int *n, int *lnchf, int *ip);
+#ifdef __cplusplus
+}
+#endif
+
 // constants
 
 #define Q_LIMIT 64
+#define INPUT_VECTORISED 1
+#define INPUT_SINGLE 2
 
 // functions
 
