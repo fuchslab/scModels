@@ -21,7 +21,7 @@ double kummer_(double x, double a, double b, bool log_v) {
   double log_chf;
   int status = gsl_sf_hyperg_1F1_e(a, b, x, &gsl_res);
   if( status ) {
-    if( status == GSL_EUNDRFLW ){
+    if( status == GSL_EUNDRFLW || status == GSL_EOVRFLW ){
       int status_transform = gsl_sf_hyperg_1F1_e(b-a, b, -x, &gsl_res);
       if(status_transform) {
         warning("Kummer transformation failed!");

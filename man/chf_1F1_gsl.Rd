@@ -17,4 +17,3 @@ chf_1F1_gsl(x, a, b, log_v = FALSE)
 Kummer's (confluent hypergeometric) function of the first kind
 for numeric (non-complex) values and input parameters
 }
-

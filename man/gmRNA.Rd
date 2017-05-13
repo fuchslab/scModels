@@ -20,4 +20,3 @@ gmRNA(n, lambda, gamma, r, mu)
 \description{
 Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription
 }
-
