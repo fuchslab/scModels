@@ -1,3 +1,5 @@
+install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libgsl-dev; else brew install gsl; fi
 language: r
 cache: packages
 os:
