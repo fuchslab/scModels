@@ -1,5 +1,7 @@
+sudo: required
+dist: trusty
 install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libgsl-dev; else brew install gsl; fi
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get install libgsl0-dev gsl-bin; else brew install gsl; fi
 language: r
 cache: packages
 os:
