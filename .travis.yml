@@ -1,8 +1,9 @@
 sudo: required
 dist: trusty
-install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0-dev gsl-bin; else brew install gsl; fi
+before_install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev gsl-bin; else brew install gsl; fi
 language: r
+r_binary_packages: knitr
 cache: packages
 os:
     - linux
