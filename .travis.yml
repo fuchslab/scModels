@@ -1,10 +1,13 @@
 sudo: required
 dist: trusty
-before_install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
 language: r
 r_binary_packages: knitr
 cache: packages
 os:
     - linux
     - osx
+before_install:
+  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
+script:
+  - R CMD build .
+  - R CMD check *.tar.gz
