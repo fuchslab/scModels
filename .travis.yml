@@ -1,13 +1,16 @@
 sudo: required
 dist: trusty
 language: r
-r_binary_packages: knitr
+r_binary_packages:
+    - Rcpp
+    - devtools
+    - knitr
+    - testthat
 cache: packages
 os:
     - linux
-    - osx
 before_install:
-  - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
+    - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
 script:
-  - R CMD build .
-  - R CMD check *.tar.gz
+    - R CMD build .
+    - R CMD check *.tar.gz
