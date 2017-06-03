@@ -12,7 +12,7 @@ bool validKummerParameters(double a, double b, bool warn) {
   }
   if(b < a) {
     if(warn) {
-      char msg[55];
+      char msg[256];
       std::sprintf(msg, "Wrong parameters: b cannot be less than a: %f < %f", b, a);
       Rcpp::warning(msg);
     }

@@ -14,4 +14,4 @@ before_install:
     - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
 script:
     - R CMD build .
-    - if [ $TRAVIS_OS_NAME = linux ]; then R CMD check *.tar.gz --no-tests; else R CMD check *.tar.gz; fi
+    - R CMD check *.tar.gz
