@@ -22,13 +22,11 @@ gmRNA <- function(n, lambda, gamma, r, mu) {
 #' for numeric (non-complex) values and input parameters
 #' @param x numeric value or vector
 #' @param a,b numeric parameters of the Kummer function
-#' @param log_v logical; if TRUE, the log of the value is returned
-#' @name chf_1F1_gsl
-#' @rdname chf_1F1_gsl
-#' @importFrom RcppGSL CFlags LdFlags
+#' @name chf_1F1
+#' @rdname chf_1F1
 #' @export
-chf_1F1_gsl <- function(x, a, b, log_v = FALSE) {
-    .Call('mpb2_chf_1F1_gsl', PACKAGE = 'mpb2', x, a, b, log_v)
+chf_1F1 <- function(x, a, b) {
+    .Call('mpb2_chf_1F1', PACKAGE = 'mpb2', x, a, b)
 }
 
 cpp_dmpb <- function(x, alpha, beta, c, log_p = FALSE) {

@@ -1,4 +1,7 @@
 #include <Rcpp.h>
+#include <cmath>
+#include <cstdlib>
+#include "mpreal.h"
 
 // constants
 
