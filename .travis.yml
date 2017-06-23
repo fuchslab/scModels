@@ -11,7 +11,7 @@ os:
     - linux
     - osx
 before_install:
-    - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libgsl0ldbl libgsl0-dev; else brew install gsl; fi
+    - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libmpfr-dev; else brew install mpfr; fi
 script:
     - R CMD build .
     - R CMD check *.tar.gz

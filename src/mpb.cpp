@@ -1,4 +1,5 @@
 #include "shared.h"
+#define N_TERMS(x) (x / 1000 + 1) * 2000
 using namespace Rcpp;
 
 // kummer series using mpfr
@@ -10,7 +11,7 @@ double kummer_(double x, double a, double b) {
   mpfr::mpreal val = 1.0;
   mpfr::mpreal last_term = 1.0;
   mpfr::mpreal x_mp = mpfr::mpreal(-x), a_mp = mpfr::mpreal(b-a), b_mp = mpfr::mpreal(b);
-  for(int i = 0; i < 2000; i++) {
+  for(int i = 0; i < N_TERMS(-x); i++) {
     last_term = (last_term * (a_mp + i) * x_mp) / ((b_mp + i) * (i + 1));
     val += last_term;
   }
