@@ -45,8 +45,8 @@ The following instructions are vaild for Windows 8 and above.
 2. The location of the library needs to be added to the environment variables of the system. There are two ways to get to the list of environment variables:
 
     * One of the ways is to select Computer -> System properties in the Explorer. In the next window, select Advanced system settings.
-    <img src="images/windows-1.png" width=500/>
-    <img src="images/windows-2.png" width=500/>
+    <img src="images/windows-1.png" width=400/>
+    <img src="images/windows-2.png" width=400/>
     
     * Another option is to use the Windows search bar as shown in the picture below:  
     <img src="images/windows-3.png" width=300/>
