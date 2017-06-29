@@ -12,7 +12,7 @@ bool validKummerParameters(double a, double b, bool warn) {
   }
   if(b < a) {
     if(warn) {
-      char msg[55];
+      char msg[256];
       std::sprintf(msg, "Wrong parameters: b cannot be less than a: %f < %f", b, a);
       Rcpp::warning(msg);
     }
@@ -67,4 +67,10 @@ bool validMpbParameters(double alpha, double beta, double c, bool warn) {
   } else {
     return false;
   }
+}
+
+void reportGslError(int status) {
+  char msg[55];
+  std::sprintf(msg, "GSL Error #%d occured", status);
+  Rcpp::warning(msg);
 }

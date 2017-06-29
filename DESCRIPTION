@@ -1,6 +1,6 @@
 Package: mpb2
 Title: Mixed Poisson Beta Distribution
-Version: 0.8
+Version: 0.9
 Author: Lisa Amrhein [aut], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Authors@R: c(
@@ -13,11 +13,10 @@ Description: This package includes the density, distribution function, quantile 
   implementation for the mixed-poisson-beta distribution.
 License: GPL (>= 2)
 Depends:
-    R (>= 3.1.0),
-    RcppGSL
+    R (>= 3.1.0)
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
-LinkingTo: Rcpp, RcppGSL
+LinkingTo: Rcpp
 Imports: Rcpp

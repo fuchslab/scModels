@@ -1,24 +1,22 @@
-// [[Rcpp::depends(RcppGSL)]]
-
-#include <RcppGSL.h>
-#include <gsl/gsl_sf_hyperg.h>
-#include <Rcpp.h>
-#include <cmath>
-#include <cstdlib>
 #include "shared.h"
+#define N_TERMS(x) (x / 1000 + 1) * 2000
 using namespace Rcpp;
 
-// kummer series using GSL
-double kummer_(double x, double a, double b, bool log_v) {
+// kummer series using mpfr
+// returns only logarithmic values
+double kummer_(double x, double a, double b) {
   if(!validKummerParameters(a, b)) {
     return R_NaN;
   }
-  double res = gsl_sf_hyperg_1F1(a, b, x);
-  if(log_v) {
-    return log(res);
-  } else {
-    return res;
+  mpfr::mpreal val = 1.0;
+  mpfr::mpreal last_term = 1.0;
+  mpfr::mpreal x_mp = mpfr::mpreal(-x), a_mp = mpfr::mpreal(b-a), b_mp = mpfr::mpreal(b);
+  for(int i = 0; i < N_TERMS(-x); i++) {
+    last_term = (last_term * (a_mp + i) * x_mp) / ((b_mp + i) * (i + 1));
+    val += last_term;
   }
+  val = x + mpfr::log(val);
+  return val.toDouble();
 }
 
 // density function
@@ -34,7 +32,7 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return R_NaN;
   }
 
-  double cre = kummer_(-c, alpha+x, beta+alpha+x, true);
+  double cre = kummer_(-c, alpha+x, beta+alpha+x);
   if(isInadmissible(cre))
     return R_NaN;
 
@@ -159,20 +157,18 @@ double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
 //' for numeric (non-complex) values and input parameters
 //' @param x numeric value or vector
 //' @param a,b numeric parameters of the Kummer function
-//' @param log_v logical; if TRUE, the log of the value is returned
-//' @name chf_1F1_gsl
-//' @rdname chf_1F1_gsl
-//' @importFrom RcppGSL CFlags LdFlags
+//' @name chf_1F1
+//' @rdname chf_1F1
 //' @export
 // [[Rcpp::export]]
-NumericVector chf_1F1_gsl(NumericVector x, NumericVector a, NumericVector b, const bool& log_v = false) {
+NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b) {
     if(min(NumericVector::create(x.length(), a.length(), b.length())) < 1) {
       return NumericVector(0);
     }
     int n = max(NumericVector::create(x.length(), a.length(), b.length()));
     NumericVector res(n);
     for(int i = 0; i < n; i++) {
-        res[i] = kummer_(GETV(x, i), GETV(a, i), GETV(b, i), log_v);
+      res[i] = kummer_(GETV(x, i), GETV(a, i), GETV(b, i));
     }
     return res;
 }

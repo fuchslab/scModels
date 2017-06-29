@@ -1,8 +1,11 @@
 #include <Rcpp.h>
+#include <cmath>
+#include <cstdlib>
+#include "mpreal.h"
 
 // constants
 
-#define Q_LIMIT 64
+#define Q_LIMIT 256
 
 // functions
 
@@ -11,6 +14,7 @@ bool isInteger(double x, bool warn = true);
 bool validProbability(double p, bool warn = false);
 bool isInadmissible(double x, bool warn = false);
 bool validMpbParameters(double alpha, double beta, double c, bool warn = false);
+void reportGslError(int status);
 
 // macros
 #define GETV(x, i)      x[i % x.length()]    // wrapped indexing of vector
