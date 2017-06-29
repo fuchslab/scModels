@@ -5,7 +5,7 @@
 
 // constants
 
-#define Q_LIMIT 64
+#define Q_LIMIT 256
 
 // functions
 
