@@ -50,7 +50,7 @@ The following instructions are vaild for Windows 8 and above.
     
     * Another option is to use the Windows search bar as shown in the picture below:  
     <img src="images/windows-3.png" width=300/>
-3. The location needs to be added against the variable LIB_GSL.  
+3. The location needs to be added against the variable LIB_MPFR.  
     <img src="images/windows-4.png" width=300/>
     <img src="images/windows-5.png" width=300/>
     <img src="images/windows-6.png" width=300/>
