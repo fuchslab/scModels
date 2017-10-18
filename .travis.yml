@@ -11,7 +11,7 @@ os:
     - linux
     - osx
 before_install:
-    - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libmpfr-dev; else if [ $(brew list | grep mpfr) ]; then brew upgrade mpfr ; else brew install mpfr; fi; fi
+    - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libmpfr-dev; else brew outdated mpfr || brew upgrade mpfr; fi
 script:
     - R CMD build .
     - R CMD check *.tar.gz
