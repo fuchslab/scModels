@@ -14,6 +14,7 @@
 #' @keywords likelihood negative binomial mixed poisson-beta
 #'
 #' @name likelihood-nb-mpb
+#' @importFrom stats dnbinom rnorm
 #' @export
 Loglik_nb <- function(data, par.nb) {
     if (par.nb[1] < 0 || par.nb[2] < 0 ) {return(100000 + (rnorm(1,10000, 20)^2))}
