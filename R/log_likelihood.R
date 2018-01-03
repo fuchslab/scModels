@@ -15,15 +15,20 @@
 
 
 #' @param data The dataset for which the likelihood is computed
+#' @param par.pois Parameters for the Poisson distribution
 #' @param par.nb Parameters for the negative binomial distribution
 #' @param par.mpb Parameters for the mixed-poisson-beta distribution
+#' @param par.pois.zero,par.nb.zero,par.mpb.zero Parameters for the
+#'     respective zero-inflated distributions
+#' @param par.pois2,par.nb2,par.mpb2 Parameters for the respective
+#'     two population distributions
 #'
 #' @keywords likelihood negative binomial mixed poisson-beta
 #'
 #' @name likelihood-nb-mpb
-#' @importFrom stats dnbinom rnorm
+#' @importFrom stats dpois dnbinom rnorm
 #' @export
-Loglik_pois <- function(data, par.pois) {
+nLoglik_pois <- function(data, par.pois) {
   if (par.pois < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
@@ -39,7 +44,7 @@ Loglik_pois <- function(data, par.pois) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_nb <- function(data, par.nb) {
+nLoglik_nb <- function(data, par.nb) {
   if (par.nb[1] < 0 || par.nb[2] < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
@@ -57,7 +62,7 @@ Loglik_nb <- function(data, par.nb) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_mpb <- function(data, par.mpb) {
+nLoglik_mpb <- function(data, par.mpb) {
   if (par.mpb[1] < 0 ||
       par.mpb[2] < 0 || par.mpb[3] < 0 || par.mpb[2] < par.mpb[1]) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -85,20 +90,20 @@ Loglik_mpb <- function(data, par.mpb) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_pois_zero <- function(data, par1_z) {
-  if (par1_z[1] < 0 ||
-      par1_z[2] < 0 ||
-      par1_z[2] > 1) {
+nLoglik_pois_zero <- function(data, par.pois.zero) {
+  if (par.pois.zero[1] < 0 ||
+      par.pois.zero[2] < 0 ||
+      par.pois.zero[2] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par1_z[2] * (data == 0) + (1 - par1_z[2]) * dpois(x = data, lambda = par1_z[1])
+      par.pois.zero[2] * (data == 0) + (1 - par.pois.zero[2]) * dpois(x = data, lambda = par.pois.zero[1])
     )) == -Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par1_z[2] * (data == 0) + (1 - par1_z[2]) * dpois(x = data, lambda = par1_z[1])
+        par.pois.zero[2] * (data == 0) + (1 - par.pois.zero[2]) * dpois(x = data, lambda = par.pois.zero[1])
       )))
     }
   }
@@ -106,24 +111,24 @@ Loglik_pois_zero <- function(data, par1_z) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_nb_zero <- function(data, par.nb) {
-  if (par.nb[1] < 0 ||
-      par.nb[2] < 0 ||
-      par.nb[3] < 0 ||
-      par.nb[3] > 1) {
+nLoglik_nb_zero <- function(data, par.nb.zero) {
+  if (par.nb.zero[1] < 0 ||
+      par.nb.zero[2] < 0 ||
+      par.nb.zero[3] < 0 ||
+      par.nb.zero[3] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par.nb[3] * (data == 0) + (1 - par.nb[3]) * dnbinom(x = data, size = par.nb[1], mu = par.nb[2])
+      par.nb.zero[3] * (data == 0) + (1 - par.nb.zero[3]) * dnbinom(x = data, size = par.nb.zero[1], mu = par.nb.zero[2])
     )) == -Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par.nb[3] * (data == 0) + (1 - par.nb[3]) * dnbinom(
+        par.nb.zero[3] * (data == 0) + (1 - par.nb.zero[3]) * dnbinom(
           x = data,
-          size = par.nb[1],
-          mu = par.nb[2]
+          size = par.nb.zero[1],
+          mu = par.nb.zero[2]
         )
       )))
     }
@@ -133,32 +138,32 @@ Loglik_nb_zero <- function(data, par.nb) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_mpb_zero <- function(data, par.mpb) {
-  if (par.mpb[1] < 0 ||
-      par.mpb[2] < 0 ||
-      par.mpb[2] < par.mpb[1]  ||
-      par.mpb[3] < 0 ||
-      par.mpb[4] < 0 ||
-      par.mpb[4] > 1) {
+nLoglik_mpb_zero <- function(data, par.mpb.zero) {
+  if (par.mpb.zero[1] < 0 ||
+      par.mpb.zero[2] < 0 ||
+      par.mpb.zero[2] < par.mpb.zero[1]  ||
+      par.mpb.zero[3] < 0 ||
+      par.mpb.zero[4] < 0 ||
+      par.mpb.zero[4] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par.mpb[4] * (data == 0) + (1 - par.mpb[4]) * mpb2::dmpb(
+      par.mpb.zero[4] * (data == 0) + (1 - par.mpb.zero[4]) * mpb2::dmpb(
         x = data,
-        alpha = par.mpb[1],
-        beta = par.mpb[2],
-        c = par.mpb[3]
+        alpha = par.mpb.zero[1],
+        beta = par.mpb.zero[2],
+        c = par.mpb.zero[3]
       )
     )) == -Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par.mpb[4] * (data == 0) + (1 - par.mpb[4]) * mpb2::dmpb(
+        par.mpb.zero[4] * (data == 0) + (1 - par.mpb.zero[4]) * mpb2::dmpb(
           x = data,
-          alpha = par.mpb[1],
-          beta = par.mpb[2],
-          c = par.mpb[3]
+          alpha = par.mpb.zero[1],
+          beta = par.mpb.zero[2],
+          c = par.mpb.zero[3]
         )
       )))
     }
@@ -167,21 +172,21 @@ Loglik_mpb_zero <- function(data, par.mpb) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_pois_two <- function(data, par1_2) {
-  if (par1_2[1] < 0 ||
-      par1_2[2] < 0 ||
-      par1_2[3] < 0 ||
-      par1_2[3] > 1) {
+nLoglik_pois_two <- function(data, par.pois2) {
+  if (par.pois2[1] < 0 ||
+      par.pois2[2] < 0 ||
+      par.pois2[3] < 0 ||
+      par.pois2[3] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par1_2[3] * dpois(x = data, lambda = par1_2[1]) + (1 - par1_2[3]) * dpois(x = data, lambda = par1_2[2])
+      par.pois2[3] * dpois(x = data, lambda = par.pois2[1]) + (1 - par.pois2[3]) * dpois(x = data, lambda = par.pois2[2])
     )) == -Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par1_2[3] * dpois(x = data, lambda = par1_2[1]) + (1 - par1_2[3]) * dpois(x = data, lambda = par1_2[2])
+        par.pois2[3] * dpois(x = data, lambda = par.pois2[1]) + (1 - par.pois2[3]) * dpois(x = data, lambda = par.pois2[2])
       )))
     }
   }
@@ -189,30 +194,30 @@ Loglik_pois_two <- function(data, par1_2) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_nb_two <- function(data, par2_2) {
-  if (par2_2[1] < 0 ||
-      par2_2[2] < 0 ||
-      par2_2[3] < 0 ||
-      par2_2[4] < 0 ||
-      par2_2[5] < 0 ||
-      par2_2[5] > 1) {
+nLoglik_nb_two <- function(data, par.nb2) {
+  if (par.nb2[1] < 0 ||
+      par.nb2[2] < 0 ||
+      par.nb2[3] < 0 ||
+      par.nb2[4] < 0 ||
+      par.nb2[5] < 0 ||
+      par.nb2[5] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par2_2[5] * dnbinom(x = data, size = par2_2[1], mu = par2_2[2]) + (1 - par2_2[5]) * dnbinom(x = data, size = par2_2[3], mu = par2_2[4])
+      par.nb2[5] * dnbinom(x = data, size = par.nb2[1], mu = par.nb2[2]) + (1 - par.nb2[5]) * dnbinom(x = data, size = par.nb2[3], mu = par.nb2[4])
     )) == -Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par2_2[5] * dnbinom(
+        par.nb2[5] * dnbinom(
           x = data,
-          size = par2_2[1],
-          mu = par2_2[2]
-        ) + (1 - par2_2[5]) * dnbinom(
+          size = par.nb2[1],
+          mu = par.nb2[2]
+        ) + (1 - par.nb2[5]) * dnbinom(
           x = data,
-          size = par2_2[3],
-          mu = par2_2[4]
+          size = par.nb2[3],
+          mu = par.nb2[4]
         )
       )))
     }
@@ -221,44 +226,44 @@ Loglik_nb_two <- function(data, par2_2) {
 
 #' @rdname likelihood-nb-mpb
 #' @export
-Loglik_mpb_two <- function(data, par3_2) {
-  if (par3_2[7] < 0 ||
-      par3_2[2] < 0 ||
-      par3_2[3] < 0 ||
-      par3_2[4] < 0 ||
-      par3_2[5] < 0 ||
-      par3_2[6] < 0 ||
-      par3_2[1] < 0 ||
-      par3_2[1] > 1) {
+nLoglik_mpb_two <- function(data, par.mpb2) {
+  if (par.mpb2[7] < 0 ||
+      par.mpb2[2] < 0 ||
+      par.mpb2[3] < 0 ||
+      par.mpb2[4] < 0 ||
+      par.mpb2[5] < 0 ||
+      par.mpb2[6] < 0 ||
+      par.mpb2[1] < 0 ||
+      par.mpb2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     if (sum(log(
-      par3_2[1] * mpb2::dmpb(
+      par.mpb2[1] * mpb2::dmpb(
         x = data,
-        alpha = par3_2[2],
-        beta = par3_2[3],
-        c = par3_2[4]
-      ) + (1 - par3_2[1]) * mpb2::dmpb(
+        alpha = par.mpb2[2],
+        beta = par.mpb2[3],
+        c = par.mpb2[4]
+      ) + (1 - par.mpb2[1]) * mpb2::dmpb(
         x = data,
-        alpha = par3_2[5],
-        beta = par3_2[6],
-        c = par3_2[7]
+        alpha = par.mpb2[5],
+        beta = par.mpb2[6],
+        c = par.mpb2[7]
       )
     )) == -Inf)
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(-sum(log(
-        par3_2[1] * mpb2::dmpb(
+        par.mpb2[1] * mpb2::dmpb(
           x = data,
-          alpha = par3_2[2],
-          beta = par3_2[3],
-          c = par3_2[4]
-        ) + (1 - par3_2[1]) * mpb2::dmpb(
+          alpha = par.mpb2[2],
+          beta = par.mpb2[3],
+          c = par.mpb2[4]
+        ) + (1 - par.mpb2[1]) * mpb2::dmpb(
           x = data,
-          alpha = par3_2[5],
-          beta = par3_2[6],
-          c = par3_2[7]
+          alpha = par.mpb2[5],
+          beta = par.mpb2[6],
+          c = par.mpb2[7]
         )
       )))
     }
