@@ -64,7 +64,7 @@ nLoglik_nb <- function(data, par.nb) {
 #' @export
 nLoglik_mpb <- function(data, par.mpb) {
   if (par.mpb[1] < 0 ||
-      par.mpb[2] < 0 || par.mpb[3] < 0 || par.mpb[2] < par.mpb[1]) {
+      par.mpb[2] < 0 || par.mpb[3] < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
     if (sum(log((
