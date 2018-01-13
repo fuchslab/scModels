@@ -32,12 +32,11 @@ nLoglik_pois <- function(data, par.pois) {
   if (par.pois < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    if (sum(log(dpois(x = data, lambda = par.pois))) == -Inf)
+    x <- -sum(dpois(x = data, lambda = par.pois, log = TRUE))
+    if (x == Inf)
       return (100000 + (rnorm(1, 10000, 20) ^ 2))
     else
-      return (-sum(log(dpois(
-        x = data, lambda = data
-      ))))
+      return(x)
   }
 }
 
