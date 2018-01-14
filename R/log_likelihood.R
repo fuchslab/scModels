@@ -48,14 +48,11 @@ nLoglik_nb <- function(data, par.nb) {
   if (par.nb[1] < 0 || par.nb[2] < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    if (sum(log(dnbinom(
-      x = data, size = par.nb[1], mu = par.nb[2]
-    ))) == -Inf)
+    nl <- -sum(dnbinom(x = data, size = par.nb[1], mu = par.nb[2], log = TRUE))
+    if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else
-      return(-sum(log(
-        dnbinom(x = data, size = par.nb[1], mu = par.nb[2])
-      )))
+      return(nl)
   }
 }
 
