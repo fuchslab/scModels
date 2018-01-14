@@ -110,28 +110,26 @@ nLoglik_pois_zero <- function(data, par.pois.zero) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_nb_zero <- function(data, par.nb.zero) {
-  if (par.nb.zero[1] < 0 ||
-      par.nb.zero[2] < 0 ||
+  if (par.nb.zero[2] < 0 ||
       par.nb.zero[3] < 0 ||
-      par.nb.zero[3] > 1) {
+      par.nb.zero[1] < 0 ||
+      par.nb.zero[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    if (sum(log(
-      par.nb.zero[3] * (data == 0) + (1 - par.nb.zero[3]) * dnbinom(x = data, size = par.nb.zero[1], mu = par.nb.zero[2])
-    )) == -Inf)
+    n <- length(data)
+    n0 <- length(c(which(data == 0)))
+    non_zero <- data[-c(which(data == 0))]
+    nl <- n0*log(par.nb.zero[1] + (1 - par.nb.zero[1])*dnbinom(0, size = par.nb.zero[2], mu = par.nb.zero[3])) + (n-n0)*log(1-par.nb.zero[1])+sum(dnbinom(x = non_zero, size = par.nb.zero[2], mu = par.nb.zero[3], log = TRUE))
+    nl <- -nl
+    if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
-      return(-sum(log(
-        par.nb.zero[3] * (data == 0) + (1 - par.nb.zero[3]) * dnbinom(
-          x = data,
-          size = par.nb.zero[1],
-          mu = par.nb.zero[2]
-        )
-      )))
+      return(nl)
     }
   }
 }
+
 
 
 #' @rdname likelihood-nb-mpb
