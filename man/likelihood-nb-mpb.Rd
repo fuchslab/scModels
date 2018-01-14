@@ -41,7 +41,8 @@ nLoglik_mpb_two(data, par.mpb2)
 \item{par.mpb}{Parameters for the mixed-poisson-beta distribution}
 
 \item{par.pois.zero, par.nb.zero, par.mpb.zero}{Parameters for the
-respective zero-inflated distributions}
+respective zero-inflated distributions. The first in the array
+is always the inflation parameter for all cases.}
 
 \item{par.pois2, par.nb2, par.mpb2}{Parameters for the respective
 two population distributions}

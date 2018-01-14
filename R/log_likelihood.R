@@ -19,7 +19,8 @@
 #' @param par.nb Parameters for the negative binomial distribution
 #' @param par.mpb Parameters for the mixed-poisson-beta distribution
 #' @param par.pois.zero,par.nb.zero,par.mpb.zero Parameters for the
-#'     respective zero-inflated distributions
+#'     respective zero-inflated distributions. The first in the array
+#'     is always the inflation parameter for all cases.
 #' @param par.pois2,par.nb2,par.mpb2 Parameters for the respective
 #'     two population distributions
 #'
@@ -90,20 +91,24 @@ nLoglik_mpb <- function(data, par.mpb) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_pois_zero <- function(data, par.pois.zero) {
-  if (par.pois.zero[1] < 0 ||
-      par.pois.zero[2] < 0 ||
-      par.pois.zero[2] > 1) {
+  if (par.pois.zero[2] < 0 ||
+      par.pois.zero[1] < 0 ||
+      par.pois.zero[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    if (sum(log(
-      par.pois.zero[2] * (data == 0) + (1 - par.pois.zero[2]) * dpois(x = data, lambda = par.pois.zero[1])
-    )) == -Inf)
+    n <- length(data)
+    n0 <- length(c(which(data == 0)))
+    non_zero <- data[-c(which(data == 0))]
+    nl <- n0 * log(par.pois.zero[1]
+          + (1 - par.pois.zero[1]) * exp(-par.pois.zero[2]))
+          + (n - n0) * log(1 - par.pois.zero[1])
+          + sum(dpois(x = non_zero, lambda = par.pois.zero[2], log = TRUE))
+    nl <- -nl
+    if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
-      return(-sum(log(
-        par.pois.zero[2] * (data == 0) + (1 - par.pois.zero[2]) * dpois(x = data, lambda = par.pois.zero[1])
-      )))
+      return(nl)
     }
   }
 }
