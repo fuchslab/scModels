@@ -20,7 +20,7 @@ double kummer_(double x, double a, double b) {
 }
 
 // density function
-double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning) {
+double dmpb_(double x, double alpha, double beta, double c, const bool& log_p, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
@@ -48,7 +48,10 @@ double dmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     }
     num += x * log(c);
     denom += lgamma(x+1);
-    return exp(num-denom+cre);
+    if(log_p)
+      return num-denom+cre;
+    else
+      return exp(num-denom+cre);
   }
 }
 
@@ -68,7 +71,7 @@ double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return 1;
   double res = 0;
   for(int i = 0; i <= x; i++) {
-    res += dmpb_(i, alpha, beta, c, throw_warning);
+    res += dmpb_(i, alpha, beta, c, false, throw_warning);
   }
   return res;
 }
@@ -77,9 +80,9 @@ double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
 double* pmpb_(double alpha, double beta, double c) {
   double *res = (double *)std::malloc(Q_LIMIT * sizeof(double));
   bool throw_warning = false;
-  res[0] = dmpb_(0, alpha, beta, c, throw_warning);
+  res[0] = dmpb_(0, alpha, beta, c, false, throw_warning);
   for(int i = 1; i < Q_LIMIT; i++) {
-    res[i] = res[i-1] + dmpb_(i, alpha, beta, c, throw_warning);
+    res[i] = res[i-1] + dmpb_(i, alpha, beta, c, false, throw_warning);
   }
   return res;
 }
@@ -185,11 +188,8 @@ NumericVector cpp_dmpb(NumericVector& x, NumericVector& alpha, NumericVector& be
   bool throw_warning = false;
 
   for(int i = 0; i < n; i++) {
-    p[i] = dmpb_(GETV(x, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
+    p[i] = dmpb_(GETV(x, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), log_p, throw_warning);
   }
-
-  if(log_p)
-    p = log(p);
 
   if(throw_warning)
     warning("NaNs produced");
