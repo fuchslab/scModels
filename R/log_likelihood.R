@@ -82,8 +82,8 @@ nLoglik_pois_zero <- function(data, par.pois.zero) {
   }
   else {
     n <- length(data)
-    n0 <- length(c(which(data == 0)))
-    non_zero <- data[-c(which(data == 0))]
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
     nl <- n0 * log(par.pois.zero[1] + (1 - par.pois.zero[1]) * exp(-par.pois.zero[2])) + (n - n0) * log(1 - par.pois.zero[1]) + sum(dpois(x = non_zero, lambda = par.pois.zero[2], log = TRUE))
     nl <- -nl
     if (nl == Inf)
@@ -105,8 +105,8 @@ nLoglik_nb_zero <- function(data, par.nb.zero) {
   }
   else {
     n <- length(data)
-    n0 <- length(c(which(data == 0)))
-    non_zero <- data[-c(which(data == 0))]
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
     nl <- n0*log(par.nb.zero[1] + (1 - par.nb.zero[1])*dnbinom(0, size = par.nb.zero[2], mu = par.nb.zero[3])) + (n-n0)*log(1-par.nb.zero[1])+sum(dnbinom(x = non_zero, size = par.nb.zero[2], mu = par.nb.zero[3], log = TRUE))
     nl <- -nl
     if (nl == Inf)
@@ -131,8 +131,8 @@ nLoglik_mpb_zero <- function(data, par.mpb.zero) {
   }
   else {
     n <- length(data)
-    n0 <- length(c(which(data == 0)))
-    non_zero <- data[-c(which(data == 0))]
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
     nl <- n0*log(par.mpb.zero[1] + (1 - par.mpb.zero[1])*dmpb(0, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4])) + (n-n0)*log(1-par.mpb.zero[1])+sum(dmpb(x = non_zero, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4], log = TRUE))
     nl <- -nl
     if (nl == Inf)
