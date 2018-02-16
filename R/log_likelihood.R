@@ -146,21 +146,19 @@ nLoglik_mpb_zero <- function(data, par.mpb.zero) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_pois_two <- function(data, par.pois2) {
-  if (par.pois2[1] < 0 ||
-      par.pois2[2] < 0 ||
+  if (par.pois2[2] < 0 ||
       par.pois2[3] < 0 ||
-      par.pois2[3] > 1) {
+      par.pois2[1] < 0 ||
+      par.pois2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    if (sum(log(
-      par.pois2[3] * dpois(x = data, lambda = par.pois2[1]) + (1 - par.pois2[3]) * dpois(x = data, lambda = par.pois2[2])
-    )) == -Inf)
+    nl <- sum(par.pois2[1] * dpois(x = data, lambda = par.pois2[2], log = TRUE) + (1 - par.pois2[1]) * dpois(x = data, lambda = par.pois2[3], log = TRUE))
+    nl <- -nl
+    if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
-      return(-sum(log(
-        par.pois2[3] * dpois(x = data, lambda = par.pois2[1]) + (1 - par.pois2[3]) * dpois(x = data, lambda = par.pois2[2])
-      )))
+      return(nl)
     }
   }
 }
@@ -168,12 +166,12 @@ nLoglik_pois_two <- function(data, par.pois2) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_nb_two <- function(data, par.nb2) {
-  if (par.nb2[1] < 0 ||
-      par.nb2[2] < 0 ||
+  if (par.nb2[2] < 0 ||
       par.nb2[3] < 0 ||
       par.nb2[4] < 0 ||
       par.nb2[5] < 0 ||
-      par.nb2[5] > 1) {
+      par.nb2[1] < 0 ||
+      par.nb2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
@@ -211,34 +209,22 @@ nLoglik_mpb_two <- function(data, par.mpb2) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    if (sum(log(
+    nl <- sum(log(
       par.mpb2[1] * mpb2::dmpb(
         x = data,
         alpha = par.mpb2[2],
         beta = par.mpb2[3],
-        c = par.mpb2[4]
-      ) + (1 - par.mpb2[1]) * mpb2::dmpb(
+        c = par.mpb2[4]) +
+      (1 - par.mpb2[1]) * mpb2::dmpb(
         x = data,
         alpha = par.mpb2[5],
         beta = par.mpb2[6],
-        c = par.mpb2[7]
-      )
-    )) == -Inf)
+        c = par.mpb2[7])))
+    nl <- -nl
+    if (nl == Inf)
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
-      return(-sum(log(
-        par.mpb2[1] * mpb2::dmpb(
-          x = data,
-          alpha = par.mpb2[2],
-          beta = par.mpb2[3],
-          c = par.mpb2[4]
-        ) + (1 - par.mpb2[1]) * mpb2::dmpb(
-          x = data,
-          alpha = par.mpb2[5],
-          beta = par.mpb2[6],
-          c = par.mpb2[7]
-        )
-      )))
+      return(nl)
     }
   }
 }

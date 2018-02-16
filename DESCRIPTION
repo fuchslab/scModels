@@ -1,6 +1,6 @@
 Package: mpb2
 Title: Mixed Poisson Beta Distribution
-Version: 0.10
+Version: 0.11
 Author: Lisa Amrhein [aut], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Authors@R: c(
@@ -19,4 +19,4 @@ RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports: Rcpp, boot
