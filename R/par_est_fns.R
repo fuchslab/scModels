@@ -27,7 +27,7 @@ estimate_mpb_optim_init <- function(x, iter = 200) {
     if (alpha > 0)
       sampled_params <- c(sampled_params, alpha)
   }
-  cm <- c(mean(sampled_params), 0, max(data))
+  cm <- c(mean(sampled_params), 0, max(x))
   cm[2] <- (function(a, c, m) a * c / m - a)(cm[1], cm[3], mean(x))
   return(cm)
 }
