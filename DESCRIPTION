@@ -19,4 +19,4 @@ RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-Imports: Rcpp, boot
+Imports: Rcpp

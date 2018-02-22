@@ -9,11 +9,12 @@
 #' @keywords parameter estimation
 #' @name par-est-fns
 #' @importFrom stats kmeans optim
-#' @importFrom boot boot
 #' @export
 estimate_mpb_optim_init <- function(x, iter = 200) {
-  mpb_alpha <- function(data, i) {
-    d1 <- data[i]
+  sampled_params <- c()
+  n <- length(x)
+  for (i in 1:iter) {
+    d1 <- sample(x, n, replace = TRUE)
     e1 <- mean(d1)
     e2 <- mean(d1 * ( d1 - 1 ))
     e3 <- mean(d1 * (d1 - 1) * (d1 - 2))
@@ -23,12 +24,10 @@ estimate_mpb_optim_init <- function(x, iter = 200) {
     x1 <- r1 * r2 - 2 * r1 * r3 + r2 * r3
     x2 <- r1 - 2 * r2 + r3
     alpha <- 2 * r1 * (r3 - r2) / x1
-    return(alpha)
+    if (alpha > 0)
+      sampled_params <- c(sampled_params, alpha)
   }
-
-  boot_alpha <- boot(data = x, statistic = mpb_alpha, R = iter)
-
-  cm <- c(boot_alpha$t0, 0, max(x))
+  cm <- c(mean(sampled_params), 0, max(data))
   cm[2] <- (function(a, c, m) a * c / m - a)(cm[1], cm[3], mean(x))
   return(cm)
 }
