@@ -33,11 +33,12 @@ double dmpb_(double x, double alpha, double beta, double c, const bool& log_p, b
   }
 
   double cre = kummer_(-c, alpha+x, beta+alpha+x);
+  double res;
   if(isInadmissible(cre))
     return R_NaN;
 
   if(x <= 0) {
-    return exp(cre);
+    res = cre;
   } else {
     int sign = (x-1 < 0) ? -1 : 1;
     int x2 = (x-1 > 0) ? (int)std::floor(x-1) : (int)std::floor(1-x);
@@ -48,11 +49,12 @@ double dmpb_(double x, double alpha, double beta, double c, const bool& log_p, b
     }
     num += x * log(c);
     denom += lgamma(x+1);
-    if(log_p)
-      return num-denom+cre;
-    else
-      return exp(num-denom+cre);
+    res = num-denom+cre;
   }
+  if(log_p)
+    return res;
+  else
+    return exp(res);
 }
 
 // distribution function
