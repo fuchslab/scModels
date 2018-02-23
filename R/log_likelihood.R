@@ -153,7 +153,9 @@ nLoglik_pois_two <- function(data, par.pois2) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    nl <- sum(par.pois2[1] * dpois(x = data, lambda = par.pois2[2], log = TRUE) + (1 - par.pois2[1]) * dpois(x = data, lambda = par.pois2[3], log = TRUE))
+    nl <- sum(
+      par.pois2[1] * dpois(x = data, lambda = par.pois2[2], log = TRUE) +
+        (1 - par.pois2[1]) * dpois(x = data, lambda = par.pois2[3], log = TRUE))
     nl <- -nl
     if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -175,23 +177,14 @@ nLoglik_nb_two <- function(data, par.nb2) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    if (sum(log(
-      par.nb2[5] * dnbinom(x = data, size = par.nb2[1], mu = par.nb2[2]) + (1 - par.nb2[5]) * dnbinom(x = data, size = par.nb2[3], mu = par.nb2[4])
-    )) == -Inf)
+    nl <- sum(
+      par.nb2[1] * dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3], log = TRUE) +
+        (1 - par.nb2[1]) * dnbinom(x = data, size = par.nb2[4], mu = par.nb2[5], log = TRUE) )
+    nl <- -nl
+    if (nl == Inf)
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
-    else{
-      return(-sum(log(
-        par.nb2[5] * dnbinom(
-          x = data,
-          size = par.nb2[1],
-          mu = par.nb2[2]
-        ) + (1 - par.nb2[5]) * dnbinom(
-          x = data,
-          size = par.nb2[3],
-          mu = par.nb2[4]
-        )
-      )))
-    }
+    else
+      return(nl)
   }
 }
 
@@ -209,17 +202,9 @@ nLoglik_mpb_two <- function(data, par.mpb2) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
-    nl <- sum(log(
-      par.mpb2[1] * mpb2::dmpb(
-        x = data,
-        alpha = par.mpb2[2],
-        beta = par.mpb2[3],
-        c = par.mpb2[4]) +
-      (1 - par.mpb2[1]) * mpb2::dmpb(
-        x = data,
-        alpha = par.mpb2[5],
-        beta = par.mpb2[6],
-        c = par.mpb2[7])))
+    nl <- sum(
+      par.mpb2[1] * mpb2::dmpb(x = data, alpha = par.mpb2[2], beta = par.mpb2[3], c = par.mpb2[4], log = TRUE) +
+      (1 - par.mpb2[1]) * mpb2::dmpb(x = data, alpha = par.mpb2[5], beta = par.mpb2[6], c = par.mpb2[7], log = TRUE))
     nl <- -nl
     if (nl == Inf)
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
