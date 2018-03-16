@@ -40,7 +40,7 @@ get_0inf_parameter <- function(x) length(c(which(x == 0))) / length(x)
 
 #' @rdname par-est-fns
 #' @export
-get_fitted_params <- function(x, type) {
+get_fitted_params <- function(x, type, optim_contol = list()) {
   if (type == "pois") {
     p <- c(0)
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois, data = x))
@@ -55,17 +55,22 @@ get_fitted_params <- function(x, type) {
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_zero, data = x))
   } else if (type == "mpb") {
     p <- estimate_mpb_optim_init(x)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = list(reltol = 0.001, maxit = 100)))
+    if(length(optim_contol)){
+      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = list(reltol = 0.001, maxit = 100)))
+    }
   } else if (type == "zimpb") {
     p <- c(get_0inf_parameter(x), estimate_mpb_optim_init(x))
     t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(reltol = 0.001, maxit = 200)))
   } else if (type == "pois2") {
-    k <- kmeans(x, centers = 2)
-    p <- c(length(which(k$cluster == 1))/length(x), 1, 1)
+    p <- c(runif(1), mean(x)/2, mean(x)*2)
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois_two, data = x))
   } else if (type == "nb2") {
-    k <- kmeans(x, centers = 2)
-    p <- c(length(which(k$cluster == 1))/length(x), 1, 1, 1, 1)
+    p <- sort(runif(5,0,100), decreasing = FALSE)
+    p[1] <- runif(1,0,1)
+    p[3] <- mean(x)/2
+    p[5] <- mean(x)*2
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_two, data = x))
   } else if (type == "mpb2") {
     k <- kmeans(x = x, centers = 2)
