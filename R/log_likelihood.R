@@ -30,14 +30,14 @@
 #' @importFrom stats dpois dnbinom rnorm
 #' @export
 nLoglik_pois <- function(data, par.pois) {
-  if (par.pois < 0) {
+  if (par.pois <= 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    x <- -sum(dpois(x = data, lambda = par.pois, log = TRUE))
-    if (x == Inf)
+    nl <- -sum(dpois(x = data, lambda = par.pois, log = TRUE))
+    if (is.infinite(nl))
       return (100000 + (rnorm(1, 10000, 20) ^ 2))
     else
-      return(x)
+      return(nl)
   }
 }
 
@@ -45,11 +45,11 @@ nLoglik_pois <- function(data, par.pois) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_nb <- function(data, par.nb) {
-  if (par.nb[1] < 0 || par.nb[2] < 0) {
+  if (par.nb[1] <= 0 || par.nb[2] < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dnbinom(x = data, size = par.nb[1], mu = par.nb[2], log = TRUE))
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
@@ -61,11 +61,11 @@ nLoglik_nb <- function(data, par.nb) {
 #' @export
 nLoglik_mpb <- function(data, par.mpb) {
   if (par.mpb[1] < 0 ||
-      par.mpb[2] < 0 || par.mpb[3] < 0) {
+      par.mpb[2] < 0 || par.mpb[3] <= 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dmpb(x = data, alpha = par.mpb[1], beta = par.mpb[2], c = par.mpb[3], log = TRUE))
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
@@ -75,7 +75,7 @@ nLoglik_mpb <- function(data, par.mpb) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_pois_zero <- function(data, par.pois.zero) {
-  if (par.pois.zero[2] < 0 ||
+  if (par.pois.zero[2] <= 0 ||
       par.pois.zero[1] < 0 ||
       par.pois.zero[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -86,7 +86,7 @@ nLoglik_pois_zero <- function(data, par.pois.zero) {
     non_zero <- data[which(data != 0)]
     nl <- n0 * log(par.pois.zero[1] + (1 - par.pois.zero[1]) * exp(-par.pois.zero[2])) + (n - n0) * log(1 - par.pois.zero[1]) + sum(dpois(x = non_zero, lambda = par.pois.zero[2], log = TRUE))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
@@ -97,7 +97,7 @@ nLoglik_pois_zero <- function(data, par.pois.zero) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_nb_zero <- function(data, par.nb.zero) {
-  if (par.nb.zero[2] < 0 ||
+  if (par.nb.zero[2] <= 0 ||
       par.nb.zero[3] < 0 ||
       par.nb.zero[1] < 0 ||
       par.nb.zero[1] > 1) {
@@ -109,7 +109,7 @@ nLoglik_nb_zero <- function(data, par.nb.zero) {
     non_zero <- data[which(data != 0)]
     nl <- n0*log(par.nb.zero[1] + (1 - par.nb.zero[1])*dnbinom(0, size = par.nb.zero[2], mu = par.nb.zero[3])) + (n-n0)*log(1-par.nb.zero[1])+sum(dnbinom(x = non_zero, size = par.nb.zero[2], mu = par.nb.zero[3], log = TRUE))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
@@ -124,7 +124,7 @@ nLoglik_nb_zero <- function(data, par.nb.zero) {
 nLoglik_mpb_zero <- function(data, par.mpb.zero) {
   if (par.mpb.zero[2] < 0 ||
       par.mpb.zero[3] < 0 ||
-      par.mpb.zero[4] < 0 ||
+      par.mpb.zero[4] <= 0 ||
       par.mpb.zero[1] < 0 ||
       par.mpb.zero[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -135,7 +135,7 @@ nLoglik_mpb_zero <- function(data, par.mpb.zero) {
     non_zero <- data[which(data != 0)]
     nl <- n0*log(par.mpb.zero[1] + (1 - par.mpb.zero[1])*dmpb(0, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4])) + (n-n0)*log(1-par.mpb.zero[1])+sum(dmpb(x = non_zero, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4], log = TRUE))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
@@ -146,8 +146,8 @@ nLoglik_mpb_zero <- function(data, par.mpb.zero) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_pois_two <- function(data, par.pois2) {
-  if (par.pois2[2] < 0 ||
-      par.pois2[3] < 0 ||
+  if (par.pois2[2] <= 0 ||
+      par.pois2[3] <= 0 ||
       par.pois2[1] < 0 ||
       par.pois2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -157,7 +157,7 @@ nLoglik_pois_two <- function(data, par.pois2) {
       par.pois2[1] * dpois(x = data, lambda = par.pois2[2]) +
         (1 - par.pois2[1]) * dpois(x = data, lambda = par.pois2[3])))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
@@ -168,9 +168,9 @@ nLoglik_pois_two <- function(data, par.pois2) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_nb_two <- function(data, par.nb2) {
-  if (par.nb2[2] < 0 ||
+  if (par.nb2[2] <= 0 ||
       par.nb2[3] < 0 ||
-      par.nb2[4] < 0 ||
+      par.nb2[4] <= 0 ||
       par.nb2[5] < 0 ||
       par.nb2[1] < 0 ||
       par.nb2[1] > 1) {
@@ -181,7 +181,7 @@ nLoglik_nb_two <- function(data, par.nb2) {
       par.nb2[1] * dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3]) +
         (1 - par.nb2[1]) * dnbinom(x = data, size = par.nb2[4], mu = par.nb2[5]) ))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
@@ -191,12 +191,12 @@ nLoglik_nb_two <- function(data, par.nb2) {
 #' @rdname likelihood-nb-mpb
 #' @export
 nLoglik_mpb_two <- function(data, par.mpb2) {
-  if (par.mpb2[7] < 0 ||
-      par.mpb2[2] < 0 ||
+  if (par.mpb2[2] < 0 ||
       par.mpb2[3] < 0 ||
-      par.mpb2[4] < 0 ||
+      par.mpb2[4] <= 0 ||
       par.mpb2[5] < 0 ||
       par.mpb2[6] < 0 ||
+      par.mpb2[7] <= 0 ||
       par.mpb2[1] < 0 ||
       par.mpb2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -206,7 +206,7 @@ nLoglik_mpb_two <- function(data, par.mpb2) {
       par.mpb2[1] * mpb2::dmpb(x = data, alpha = par.mpb2[2], beta = par.mpb2[3], c = par.mpb2[4]) +
       (1 - par.mpb2[1]) * mpb2::dmpb(x = data, alpha = par.mpb2[5], beta = par.mpb2[6], c = par.mpb2[7])))
     nl <- -nl
-    if (nl == Inf)
+    if (is.infinite(nl))
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
