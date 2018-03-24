@@ -5,10 +5,12 @@
 #'     parameters for the mpb
 #' @param type keyword for the distribution the data is to be fitted
 #'     against. Possible values are ("pois", "zip", "nb", "zinb",
-#'     "mpb", "zimpb", "nb2", "mpb2")
+#'     "mpb", "zimpb", "pois2", "nb2", "mpb2")
+#' @param optim_contol list of options to override default settings in
+#'     the optim function; only valid types: mpb, zimpb and mpb2.
 #' @keywords parameter estimation
 #' @name par-est-fns
-#' @importFrom stats kmeans optim
+#' @importFrom stats kmeans optim runif
 #' @export
 estimate_mpb_optim_init <- function(x, iter = 200) {
   sampled_params <- c()
@@ -62,7 +64,11 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     }
   } else if (type == "zimpb") {
     p <- c(get_0inf_parameter(x), estimate_mpb_optim_init(x))
-    t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(reltol = 0.001, maxit = 200)))
+    if(length(optim_contol)){
+      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(reltol = 0.001, maxit = 200)))
+    }
   } else if (type == "pois2") {
     p <- c(runif(1), mean(x)/2, mean(x)*2)
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois_two, data = x))
@@ -80,7 +86,11 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     t2 <- estimate_mpb_optim_init(c2)
     p <- length(c1)/length(x)
     par <- c(p,t1, t2)
-    t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = list(reltol = 0.001, maxit = 500)))
+    if(length(optim_contol)) {
+      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = list(reltol = 0.001, maxit = 500)))
+    }
   } else {
     warning("Invalid distribution type.")
     return(NULL)

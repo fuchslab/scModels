@@ -203,8 +203,8 @@ nLoglik_mpb_two <- function(data, par.mpb2) {
   }
   else {
     nl <- sum(log(
-      par.mpb2[1] * mpb2::dmpb(x = data, alpha = par.mpb2[2], beta = par.mpb2[3], c = par.mpb2[4]) +
-      (1 - par.mpb2[1]) * mpb2::dmpb(x = data, alpha = par.mpb2[5], beta = par.mpb2[6], c = par.mpb2[7])))
+      par.mpb2[1] * dmpb(x = data, alpha = par.mpb2[2], beta = par.mpb2[3], c = par.mpb2[4]) +
+      (1 - par.mpb2[1]) * dmpb(x = data, alpha = par.mpb2[5], beta = par.mpb2[6], c = par.mpb2[7])))
     nl <- -nl
     if (is.infinite(nl))
     return(100000 + (rnorm(1, 10000, 20) ^ 2))

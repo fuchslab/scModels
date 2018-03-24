@@ -11,7 +11,7 @@ estimate_mpb_optim_init(x, iter = 200)
 
 get_0inf_parameter(x)
 
-get_fitted_params(x, type)
+get_fitted_params(x, type, optim_contol = list())
 }
 \arguments{
 \item{x}{Gene expression data as an array}
@@ -21,7 +21,10 @@ parameters for the mpb}
 
 \item{type}{keyword for the distribution the data is to be fitted
 against. Possible values are ("pois", "zip", "nb", "zinb",
-"mpb", "zimpb", "nb2", "mpb2")}
+"mpb", "zimpb", "pois2", "nb2", "mpb2")}
+
+\item{optim_contol}{list of options to override default settings in
+the optim function; only works for types: mpb, zimpb and mpb2.}
 }
 \description{
 Functions to compute parameter estimates
