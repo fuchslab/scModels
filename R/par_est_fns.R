@@ -67,7 +67,7 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     if(length(optim_contol)){
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = optim_contol))
     } else {
-      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(reltol = 0.001, maxit = 200)))
+      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(maxit = 200)))
     }
   } else if (type == "pois2") {
     p <- c(runif(1), mean(x)/2, mean(x)*2)
@@ -89,7 +89,7 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     if(length(optim_contol)) {
       t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = optim_contol))
     } else {
-      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = list(reltol = 0.001, maxit = 500)))
+      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x))
     }
   } else {
     warning("Invalid distribution type.")
