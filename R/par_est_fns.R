@@ -44,16 +44,16 @@ get_0inf_parameter <- function(x) length(c(which(x == 0))) / length(x)
 #' @export
 get_fitted_params <- function(x, type, optim_contol = list()) {
   if (type == "pois") {
-    p <- c(0)
+    p <- mean(x)
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois, data = x))
   } else if (type == "zip") {
-    p <- c(get_0inf_parameter(x), 1)
+    p <- c(get_0inf_parameter(x), mean(x))
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois_zero, data = x))
   } else if (type == "nb") {
     p <- c(1, 1)
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb, data = x))
   } else if (type == "zinb") {
-    p <- c(get_0inf_parameter(x), 1, 1)
+    p <- c(get_0inf_parameter(x), get_fitted_params(x, "nb")$par)
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_zero, data = x))
   } else if (type == "mpb") {
     p <- estimate_mpb_optim_init(x)
