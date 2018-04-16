@@ -45,9 +45,9 @@ get_0inf_parameter <- function(x) length(c(which(x == 0))) / length(x)
 get_fitted_params <- function(x, type, optim_contol = list()) {
   if (type == "pois") {
     p <- mean(x)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_pois, data = x))
+    t <- system.time(o <- optim(par = p, fn = nLoglik_pois, data = x, method = "Brent", lower = p-100, upper = p+100))
   } else if (type == "zip") {
-    p <- c(get_0inf_parameter(x), mean(x))
+    p <- c(get_0inf_parameter(x), 1)
     t <- system.time(o <- optim(par = p, fn = nLoglik_pois_zero, data = x))
   } else if (type == "nb") {
     p <- c(1, 1)
