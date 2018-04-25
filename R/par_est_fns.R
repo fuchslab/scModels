@@ -82,8 +82,18 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     k <- kmeans(x = x, centers = 2)
     c1 <- x[which(k$cluster == 1)]
     c2 <- x[which(k$cluster == 2)]
-    t1 <- estimate_mpb_optim_init(c1)
-    t2 <- estimate_mpb_optim_init(c2)
+    t1 <- tryCatch(
+      estimate_mpb_optim_init(c1),
+      error = function(err) {
+        return(runif(3, 1, 100))
+      }
+    )
+    t2 <- tryCatch(
+      estimate_mpb_optim_init(c2),
+      error = function(err) {
+        return(runif(3, 1, 100))
+      }
+    )
     p <- length(c1)/length(x)
     par <- c(p,t1, t2)
     if(length(optim_contol)) {
