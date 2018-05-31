@@ -3,6 +3,8 @@
 #' @param x Gene expression data as an array
 #' @param iter number of bootstrap replicates to estimate initial
 #'     parameters for the mpb
+#' @param n number of iterations to estimate initial values for
+#'     poisson-beta optimisation
 #' @param type keyword for the distribution the data is to be fitted
 #'     against. Possible values are ("pois", "zip", "nb", "zinb",
 #'     "mpb", "zimpb", "pois2", "nb2", "mpb2")
@@ -37,6 +39,23 @@ estimate_mpb_optim_init <- function(x, iter = 200) {
 
 #' @rdname par-est-fns
 #' @export
+estimate_mpb_optim_init_restarts <- function(x, n = 10, trace = FALSE) {
+  p <- estimate_mpb_optim_init(x)
+  val <- nLoglik_mpb(x, p)
+
+  for (i in 1:n) {
+    p_temp <- estimate_mpb_optim_init(x)
+    val_temp <- nLoglik_mpb(x, p_temp)
+    if(val_temp < val) {
+      p <- p_temp
+      val <- val_temp
+    }
+  }
+  return(p)
+}
+
+#' @rdname par-est-fns
+#' @export
 get_0inf_parameter <- function(x) length(c(which(x == 0))) / length(x)
 
 
@@ -56,14 +75,14 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     p <- c(get_0inf_parameter(x), get_fitted_params(x, "nb")$par)
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_zero, data = x))
   } else if (type == "mpb") {
-    p <- estimate_mpb_optim_init(x)
+    p <- estimate_mpb_optim_init_restarts(x)
     if(length(optim_contol)){
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = optim_contol))
     } else {
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = list(reltol = 0.001, maxit = 100)))
     }
   } else if (type == "zimpb") {
-    p <- c(get_0inf_parameter(x), estimate_mpb_optim_init(x))
+    p <- c(get_0inf_parameter(x), estimate_mpb_optim_init_restarts(x))
     if(length(optim_contol)){
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = optim_contol))
     } else {

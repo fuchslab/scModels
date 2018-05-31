@@ -3,11 +3,14 @@
 \name{par-est-fns}
 \alias{par-est-fns}
 \alias{estimate_mpb_optim_init}
+\alias{estimate_mpb_optim_init_restarts}
 \alias{get_0inf_parameter}
 \alias{get_fitted_params}
 \title{Functions to compute parameter estimates}
 \usage{
 estimate_mpb_optim_init(x, iter = 200)
+
+estimate_mpb_optim_init_restarts(x, n = 10)
 
 get_0inf_parameter(x)
 
@@ -24,7 +27,7 @@ against. Possible values are ("pois", "zip", "nb", "zinb",
 "mpb", "zimpb", "pois2", "nb2", "mpb2")}
 
 \item{optim_contol}{list of options to override default settings in
-the optim function; only works for types: mpb, zimpb and mpb2.}
+the optim function; only valid types: mpb, zimpb and mpb2.}
 }
 \description{
 Functions to compute parameter estimates
