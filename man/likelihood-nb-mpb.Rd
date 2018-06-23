@@ -11,7 +11,7 @@
 \alias{nLoglik_pois_two}
 \alias{nLoglik_nb_two}
 \alias{nLoglik_mpb_two}
-\title{Likelihood functions for negative binomial and mixed poisson-beta}
+\title{Likelihood functions for negative binomial and poisson-beta}
 \usage{
 nLoglik_pois(data, par.pois)
 
@@ -38,7 +38,7 @@ nLoglik_mpb_two(data, par.mpb2)
 
 \item{par.nb}{Parameters for the negative binomial distribution}
 
-\item{par.mpb}{Parameters for the mixed-poisson-beta distribution}
+\item{par.mpb}{Parameters for the poisson-beta distribution}
 
 \item{par.pois.zero, par.nb.zero, par.mpb.zero}{Parameters for the
 respective zero-inflated distributions. The first in the array
@@ -50,18 +50,18 @@ two population distributions}
 \description{
 The likelihood functions are required for optimisation purposes.
 There are functions to compute the likelihood of the negative
-binomial and the mixed poisson-beta distributions with and
+binomial and the poisson-beta distributions with and
 without a zero inflation.
 }
 \details{
 Functions Loglik_pois, Loglik_nb, Loglik_mpb compute the negative
-log-likelihood of poisson, negative binomial and the mixed poisson-beta
+log-likelihood of poisson, negative binomial and the poisson-beta
 distributions against the data.
 Functions Loglik_pois_zero, Loglik_nb_zero, Loglik_mpb_zero compute the
 zero-inflated log-likelihood values.
 }
+\keyword{beta}
 \keyword{binomial}
 \keyword{likelihood}
-\keyword{mixed}
 \keyword{negative}
-\keyword{poisson-beta}
+\keyword{poisson}

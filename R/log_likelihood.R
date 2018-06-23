@@ -1,14 +1,14 @@
-#' Likelihood functions for negative binomial and mixed poisson-beta
+#' Likelihood functions for negative binomial and poisson-beta
 #'
 #' The likelihood functions are required for optimisation purposes.
 #' There are functions to compute the likelihood of the negative
-#' binomial and the mixed poisson-beta distributions with and
+#' binomial and the poisson-beta distributions with and
 #' without a zero inflation.
 #'
 #'
 #' @details
 #' Functions Loglik_pois, Loglik_nb, Loglik_mpb compute the negative
-#' log-likelihood of poisson, negative binomial and the mixed poisson-beta
+#' log-likelihood of poisson, negative binomial and the poisson-beta
 #' distributions against the data.
 #' Functions Loglik_pois_zero, Loglik_nb_zero, Loglik_mpb_zero compute the
 #' zero-inflated log-likelihood values.
@@ -17,14 +17,14 @@
 #' @param data The dataset for which the likelihood is computed
 #' @param par.pois Parameters for the Poisson distribution
 #' @param par.nb Parameters for the negative binomial distribution
-#' @param par.mpb Parameters for the mixed-poisson-beta distribution
+#' @param par.mpb Parameters for the poisson-beta distribution
 #' @param par.pois.zero,par.nb.zero,par.mpb.zero Parameters for the
 #'     respective zero-inflated distributions. The first in the array
 #'     is always the inflation parameter for all cases.
 #' @param par.pois2,par.nb2,par.mpb2 Parameters for the respective
 #'     two population distributions
 #'
-#' @keywords likelihood negative binomial mixed poisson-beta
+#' @keywords likelihood negative binomial poisson beta
 #'
 #' @name likelihood-nb-mpb
 #' @importFrom stats dpois dnbinom rnorm

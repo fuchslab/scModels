@@ -1,7 +1,7 @@
 #' Mixed Poisson-Beta Distribution
 #'
 #' Density, distribution function, quantile function and random generation
-#' for the mixed Poisson-beta distribution. This represents a Poisson
+#' for the poisson-beta distribution. This represents a Poisson
 #' distribution whose parameter itself follows a beta distribution. This
 #' beta distribution uses the parameters alpha and beta. Additionally this
 #' beta distribution is scaled on (0, c) in contrast to the usual scaling on (0,1).
@@ -17,7 +17,7 @@
 #' @param log,log.p  logical; if TRUE, probabilities p are given as log(p)
 #' @param lower.tail  logical; if TRUE (default), probabilities are \eqn{P[X \le x]}
 #'                        otherwise, \eqn{P[X > x]}.
-#' @keywords mixed poisson-beta distribution
+#' @keywords poisson-beta distribution
 
 #' @name mpb
 #' @useDynLib mpb2

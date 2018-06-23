@@ -5,7 +5,7 @@
 mpb2
 ================
 
-mpb2 is an R package for the mixed-poisson-beta distribution. At its current stage, the package has implementations for the density, distribution function, quantile function and random number generation. The package depends on the MPFR/GMP libraries.
+mpb2 is an R package for the poisson-beta distribution. At its current stage, the package has implementations for the density, distribution function, quantile function and random number generation. The package depends on the MPFR/GMP libraries.
 
 
 

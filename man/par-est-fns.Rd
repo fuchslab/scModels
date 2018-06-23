@@ -10,7 +10,7 @@
 \usage{
 estimate_mpb_optim_init(x, iter = 200)
 
-estimate_mpb_optim_init_restarts(x, n = 10)
+estimate_mpb_optim_init_restarts(x, n = 10, trace = FALSE)
 
 get_0inf_parameter(x)
 
@@ -21,6 +21,9 @@ get_fitted_params(x, type, optim_contol = list())
 
 \item{iter}{number of bootstrap replicates to estimate initial
 parameters for the mpb}
+
+\item{n}{number of iterations to estimate initial values for
+poisson-beta optimisation}
 
 \item{type}{keyword for the distribution the data is to be fitted
 against. Possible values are ("pois", "zip", "nb", "zinb",

@@ -1,6 +1,6 @@
 Package: mpb2
-Title: Mixed Poisson Beta Distribution
-Version: 0.13
+Title: Poisson-Beta Distribution
+Version: 0.14
 Author: Lisa Amrhein [aut], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Authors@R: c(
@@ -8,9 +8,9 @@ Authors@R: c(
   person("Kumar", "Harsha", email="kumar.harsha@tum.de", role=c("aut", "cre")),
   person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"))
 Description: This package includes the density, distribution function, quantile function and random
-  generation for the mixed poisson-beta distribution. Also included is a function for 
+  generation for the poisson-beta distribution. Also included is a function for 
   Kummer's (confluent hypergeometric function of the 1st kind) function and a Gillespie algorithm
-  implementation for the mixed-poisson-beta distribution.
+  implementation for the poisson-beta distribution.
 License: GPL (>= 2)
 Depends:
     R (>= 3.1.0)

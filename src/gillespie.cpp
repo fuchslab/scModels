@@ -5,7 +5,7 @@ using namespace Rcpp;
 
 // [[Rcpp::plugins(cpp11)]]
 
-//' Gillespie Algorithm for the mixed-poisson-beta
+//' Gillespie Algorithm for the poisson-beta
 //'
 //' Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription
 //' @param n number of simulations

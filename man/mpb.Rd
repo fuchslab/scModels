@@ -35,7 +35,7 @@ otherwise, \eqn{P[X > x]}.}
 }
 \description{
 Density, distribution function, quantile function and random generation
-for the mixed Poisson-beta distribution. This represents a Poisson
+for the poisson-beta distribution. This represents a Poisson
 distribution whose parameter itself follows a beta distribution. This
 beta distribution uses the parameters alpha and beta. Additionally this
 beta distribution is scaled on (0, c) in contrast to the usual scaling on (0,1).
@@ -54,5 +54,4 @@ beta distribution is scaled on (0, c) in contrast to the usual scaling on (0,1).
  R2 <- rmpb(11, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
 }
 \keyword{distribution}
-\keyword{mixed}
 \keyword{poisson-beta}
