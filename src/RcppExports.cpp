@@ -5,18 +5,18 @@
 
 using namespace Rcpp;
 
-// gmRNA
-NumericVector gmRNA(double n, double lambda, double gamma, double r, double mu);
-RcppExport SEXP mpb2_gmRNA(SEXP nSEXP, SEXP lambdaSEXP, SEXP gammaSEXP, SEXP rSEXP, SEXP muSEXP) {
+// gmRNA_switch
+NumericVector gmRNA_switch(double n, double r_act, double r_deact, double r_on, double r_degr);
+RcppExport SEXP mpb2_gmRNA_switch(SEXP nSEXP, SEXP r_actSEXP, SEXP r_deactSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
-    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
-    Rcpp::traits::input_parameter< double >::type r(rSEXP);
-    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
-    rcpp_result_gen = Rcpp::wrap(gmRNA(n, lambda, gamma, r, mu));
+    Rcpp::traits::input_parameter< double >::type r_act(r_actSEXP);
+    Rcpp::traits::input_parameter< double >::type r_deact(r_deactSEXP);
+    Rcpp::traits::input_parameter< double >::type r_on(r_onSEXP);
+    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
+    rcpp_result_gen = Rcpp::wrap(gmRNA_switch(n, r_act, r_deact, r_on, r_degr));
     return rcpp_result_gen;
 END_RCPP
 }

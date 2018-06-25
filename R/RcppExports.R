@@ -5,15 +5,15 @@
 #'
 #' Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription
 #' @param n number of simulations
-#' @param lambda polymerase binding rate / DNA activation rate
-#' @param gamma polymerase unbinding rate / DNA deactivation rate
-#' @param r transcription rate
-#' @param mu mRNA degradation rate
+#' @param r_act polymerase binding rate / DNA activation rate
+#' @param r_deact polymerase unbinding rate / DNA deactivation rate
+#' @param r_on transcription rate
+#' @param r_degr mRNA degradation rate
 #' @name gmRNA
 #' @rdname gmRNA
 #' @export
-gmRNA <- function(n, lambda, gamma, r, mu) {
-    .Call('mpb2_gmRNA', PACKAGE = 'mpb2', n, lambda, gamma, r, mu)
+gmRNA_switch <- function(n, r_act, r_deact, r_on, r_degr) {
+    .Call('mpb2_gmRNA_switch', PACKAGE = 'mpb2', n, r_act, r_deact, r_on, r_degr)
 }
 
 #' Kummer's (confluent hypergeometric) function

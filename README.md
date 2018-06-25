@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/hkumar6/mpb2.svg?token=oRmho23ZpPzFsxXkFqih&branch=master)](https://travis-ci.com/hkumar6/mpb2)
+[![Build Status](https://travis-ci.com/fuchslab/mpb2.svg?token=oRmho23ZpPzFsxXkFqih&branch=master)](https://travis-ci.com/fuchslab/mpb2)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 

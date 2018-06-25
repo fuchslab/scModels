@@ -2,20 +2,21 @@
 % Please edit documentation in R/RcppExports.R
 \name{gmRNA}
 \alias{gmRNA}
+\alias{gmRNA_switch}
 \title{Gillespie Algorithm for the poisson-beta}
 \usage{
-gmRNA(n, lambda, gamma, r, mu)
+gmRNA_switch(n, r_act, r_deact, r_on, r_degr)
 }
 \arguments{
 \item{n}{number of simulations}
 
-\item{lambda}{polymerase binding rate / DNA activation rate}
+\item{r_act}{polymerase binding rate / DNA activation rate}
 
-\item{gamma}{polymerase unbinding rate / DNA deactivation rate}
+\item{r_deact}{polymerase unbinding rate / DNA deactivation rate}
 
-\item{r}{transcription rate}
+\item{r_on}{transcription rate}
 
-\item{mu}{mRNA degradation rate}
+\item{r_degr}{mRNA degradation rate}
 }
 \description{
 Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription

@@ -9,15 +9,15 @@ using namespace Rcpp;
 //'
 //' Gillespie Algorithm to simulate from basic kinetic model of gene activation and mRNA transcription
 //' @param n number of simulations
-//' @param lambda polymerase binding rate / DNA activation rate
-//' @param gamma polymerase unbinding rate / DNA deactivation rate
-//' @param r transcription rate
-//' @param mu mRNA degradation rate
+//' @param r_act polymerase binding rate / DNA activation rate
+//' @param r_deact polymerase unbinding rate / DNA deactivation rate
+//' @param r_on transcription rate
+//' @param r_degr mRNA degradation rate
 //' @name gmRNA
 //' @rdname gmRNA
 //' @export
 // [[Rcpp::export]]
-NumericVector gmRNA(double n, double lambda, double gamma, double r, double mu) {
+NumericVector gmRNA_switch(double n, double r_act, double r_deact, double r_on, double r_degr) {
   if(!isInteger(n)) {
     return NumericVector(0);
   }
@@ -27,7 +27,7 @@ NumericVector gmRNA(double n, double lambda, double gamma, double r, double mu) 
   int k;
   std::array<double, 3> x0{ {1, 0, 0} };
   std::array<double, 3>x;
-  double lambda1, lambda2, lambda3, lambda4, lambdax;
+  double r_act1, r_act2, r_act3, r_act4, r_actx;
   double tau, tau_stern, u;
 
   for(int i = 0; i < n; i++) {
@@ -35,25 +35,25 @@ NumericVector gmRNA(double n, double lambda, double gamma, double r, double mu) 
     x = x0;
     while(tx < tmax) {
       // step 1
-      lambda1 = lambda * x[0];
-      lambda2 = gamma * x[1];
-      lambda3 = r * x[1];
-      lambda4 = mu * x[2];
-      lambdax = lambda1 + lambda2 + lambda3 + lambda4;
+      r_act1 = r_act * x[0];
+      r_act2 = r_deact * x[1];
+      r_act3 = r_on * x[1];
+      r_act4 = r_degr * x[2];
+      r_actx = r_act1 + r_act2 + r_act3 + r_act4;
 
       // step 2
-      NumericVector tau_vec = rexp(1, lambdax);
+      NumericVector tau_vec = rexp(1, r_actx);
       tau = tau_vec[0];
       tau_stern = min(NumericVector::create(tau, tmax - tx));
 
       // step 3
       NumericVector u_vec = runif(1);
       u = u_vec[0];
-      if(u <= lambda1/lambdax)
+      if(u <= r_act1/r_actx)
         k = 1;
-      else if(u <= (lambda1+lambda2)/lambdax)
+      else if(u <= (r_act1+r_act2)/r_actx)
         k = 2;
-      else if(u <= (lambda1+lambda2+lambda3)/lambdax)
+      else if(u <= (r_act1+r_act2+r_act3)/r_actx)
         k = 3;
       else
         k = 4;
