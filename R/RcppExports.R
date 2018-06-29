@@ -16,6 +16,18 @@ gmRNA_switch <- function(n, r_act, r_deact, r_on, r_degr) {
     .Call('mpb2_gmRNA_switch', PACKAGE = 'mpb2', n, r_act, r_deact, r_on, r_degr)
 }
 
+#' @rdname gmRNA
+#' @export
+gmRNA_burst <- function(n, r_burst, s_burst, r_degr) {
+    .Call('mpb2_gmRNA_burst', PACKAGE = 'mpb2', n, r_burst, s_burst, r_degr)
+}
+
+#' @rdname gmRNA
+#' @export
+gmRNA_basic <- function(n, r_on, r_degr) {
+    .Call('mpb2_gmRNA_basic', PACKAGE = 'mpb2', n, r_on, r_degr)
+}
+
 #' Kummer's (confluent hypergeometric) function
 #'
 #' Kummer's (confluent hypergeometric) function of the first kind

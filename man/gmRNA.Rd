@@ -3,9 +3,15 @@
 \name{gmRNA}
 \alias{gmRNA}
 \alias{gmRNA_switch}
+\alias{gmRNA_burst}
+\alias{gmRNA_basic}
 \title{Gillespie Algorithm for the poisson-beta}
 \usage{
 gmRNA_switch(n, r_act, r_deact, r_on, r_degr)
+
+gmRNA_burst(n, r_burst, s_burst, r_degr)
+
+gmRNA_basic(n, r_on, r_degr)
 }
 \arguments{
 \item{n}{number of simulations}

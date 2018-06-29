@@ -20,6 +20,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// gmRNA_burst
+NumericVector gmRNA_burst(double n, double r_burst, double s_burst, double r_degr);
+RcppExport SEXP mpb2_gmRNA_burst(SEXP nSEXP, SEXP r_burstSEXP, SEXP s_burstSEXP, SEXP r_degrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type r_burst(r_burstSEXP);
+    Rcpp::traits::input_parameter< double >::type s_burst(s_burstSEXP);
+    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
+    rcpp_result_gen = Rcpp::wrap(gmRNA_burst(n, r_burst, s_burst, r_degr));
+    return rcpp_result_gen;
+END_RCPP
+}
+// gmRNA_basic
+NumericVector gmRNA_basic(double n, double r_on, double r_degr);
+RcppExport SEXP mpb2_gmRNA_basic(SEXP nSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type r_on(r_onSEXP);
+    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
+    rcpp_result_gen = Rcpp::wrap(gmRNA_basic(n, r_on, r_degr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // chf_1F1
 NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b);
 RcppExport SEXP mpb2_chf_1F1(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {

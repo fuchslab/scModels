@@ -39,7 +39,7 @@ estimate_mpb_optim_init <- function(x, iter = 200) {
 
 #' @rdname par-est-fns
 #' @export
-estimate_mpb_optim_init_restarts <- function(x, n = 10, trace = FALSE) {
+estimate_mpb_optim_init_restarts <- function(x, n = 10) {
   p <- estimate_mpb_optim_init(x)
   val <- nLoglik_mpb(x, p)
 
@@ -74,14 +74,14 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
   } else if (type == "zinb") {
     p <- c(get_0inf_parameter(x), get_fitted_params(x, "nb")$par)
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_zero, data = x))
-  } else if (type == "mpb") {
+  } else if (type == "pb") {
     p <- estimate_mpb_optim_init_restarts(x)
     if(length(optim_contol)){
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = optim_contol))
     } else {
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = list(reltol = 0.001, maxit = 100)))
     }
-  } else if (type == "zimpb") {
+  } else if (type == "zipb") {
     p <- c(get_0inf_parameter(x), estimate_mpb_optim_init_restarts(x))
     if(length(optim_contol)){
       t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = optim_contol))
@@ -97,7 +97,7 @@ get_fitted_params <- function(x, type, optim_contol = list()) {
     p[3] <- mean(x)/2
     p[5] <- mean(x)*2
     t <- system.time(o <- optim(par = p, fn = nLoglik_nb_two, data = x))
-  } else if (type == "mpb2") {
+  } else if (type == "pb2") {
     k <- kmeans(x = x, centers = 2)
     c1 <- x[which(k$cluster == 1)]
     c2 <- x[which(k$cluster == 2)]

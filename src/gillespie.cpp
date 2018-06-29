@@ -77,9 +77,109 @@ NumericVector gmRNA_switch(double n, double r_act, double r_deact, double r_on, 
       }
 
       // step 5
-      tx = tx + tau_stern;
+      tx += tau_stern;
     }
     res[i] = x[2];
+  }
+  return res;
+}
+
+//' @rdname gmRNA
+//' @export
+// [[Rcpp::export]]
+NumericVector gmRNA_burst(double n, double r_burst, double s_burst, double r_degr) {
+  if(!isInteger(n)) {
+    return NumericVector(0);
+  }
+  NumericVector res((int)n);
+
+  double t0 = 0, x0 = 0, tmax = 200;
+  double x, tx;
+  double lambda1, lambda2, lambdax;
+  double tau, tau_stern, u;
+  int k;
+
+  for(int i = 0; i < n; i++) {
+    x = x0;
+    tx = t0;
+    while(tx < tmax) {
+      // step 1
+      lambda1 = r_burst;
+      lambda2 = r_degr * x;
+      lambdax = lambda1 + lambda2;
+
+      // step 2
+      NumericVector tau_vec = rexp(1, lambdax);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
+
+      // step 3
+      NumericVector u_vec = runif(1);
+      u = u_vec[0];
+      k = (u <= (lambda1/lambdax)) ? 1 : 2;
+
+      // step 4
+      if(tau <= tau_stern) {
+        if(k == 1) {
+          // burst
+          NumericVector r_vec = rgeom(1, 1/(1 + s_burst));
+          x = x + r_vec[0];
+        } else {
+          // degradation
+          x--;
+        }
+      }
+
+      // step 5
+      tx += tau_stern;
+    }
+    res[i] = x;
+  }
+  return res;
+}
+
+
+//' @rdname gmRNA
+//' @export
+// [[Rcpp::export]]
+NumericVector gmRNA_basic(double n, double r_on, double r_degr) {
+  if(!isInteger(n)) {
+    return NumericVector(0);
+  }
+  NumericVector res((int)n);
+
+  double t0 = 0, x0 = 0, tmax = 200;
+  double x, tx;
+  double lambda1, lambda2, lambdax;
+  double tau, tau_stern, u;
+  int k;
+
+  for(int i = 0; i < n; i++) {
+    x = x0;
+    tx = t0;
+    while(tx < tmax) {
+      // step 1
+      lambda1 = r_on;
+      lambda2 = r_degr * x;
+      lambdax = lambda1 + lambda2;
+
+      // step 2
+      NumericVector tau_vec = rexp(1, lambdax);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
+
+      // step 3
+      NumericVector u_vec = runif(1);
+      u = u_vec[0];
+      k = (u <= (lambda1/lambdax)) ? 1 : 2;
+
+      // step 4
+      x = (k == 1) ? x+1 : x-1;
+
+      // step 5
+      tx += tau_stern;
+    }
+    res[i] = x;
   }
   return res;
 }

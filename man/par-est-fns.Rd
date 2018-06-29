@@ -10,7 +10,7 @@
 \usage{
 estimate_mpb_optim_init(x, iter = 200)
 
-estimate_mpb_optim_init_restarts(x, n = 10, trace = FALSE)
+estimate_mpb_optim_init_restarts(x, n = 10)
 
 get_0inf_parameter(x)
 
