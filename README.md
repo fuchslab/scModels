@@ -1,11 +1,11 @@
-[![Build Status](https://travis-ci.com/fuchslab/mpb2.svg?token=oRmho23ZpPzFsxXkFqih&branch=master)](https://travis-ci.com/fuchslab/mpb2)
+[![Build Status](https://travis-ci.com/fuchslab/scModels.svg?token=oRmho23ZpPzFsxXkFqih&branch=master)](https://travis-ci.com/fuchslab/scModels)
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 
-mpb2
+scModels
 ================
 
-mpb2 is an R package for the poisson-beta distribution. At its current stage, the package has implementations for the density, distribution function, quantile function and random number generation. The package depends on the MPFR/GMP libraries.
+scModels is an R package for the poisson-beta distribution. At its current stage, the package has implementations for the density, distribution function, quantile function and random number generation. The package depends on the MPFR/GMP libraries.
 
 
 
@@ -64,5 +64,5 @@ The following instructions are vaild for Windows 8 and above.
 The package comes with a comprehensive test suite. In order to run the tests, the tarball must be extracted. Once that is done, the following command will run all tests:
 
 ```r
-devtools::test("/path/to/mpb2/")
+devtools::test("/path/to/scModels/")
 ```

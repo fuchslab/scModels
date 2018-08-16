@@ -1,16 +1,20 @@
-Package: mpb2
-Title: Poisson-Beta Distribution
-Version: 0.15
+Package: scModels
+Title: Poisson-beta Distribution
+Version: 0.16
 Author: Lisa Amrhein [aut], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Kumar Harsha <kumar.harsha@tum.de>
 Authors@R: c(
   person("Lisa", "Amrhein", email="lisa.amrhein@helmholtz-muenchen.de", role="aut"),
   person("Kumar", "Harsha", email="kumar.harsha@tum.de", role=c("aut", "cre")),
   person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"))
-Description: This package includes the density, distribution function, quantile function and random
-  generation for the poisson-beta distribution. Also included is a function for 
-  Kummer's (confluent hypergeometric function of the 1st kind) function and a Gillespie algorithm
-  implementation for the poisson-beta distribution.
+Description: This is an R package accompanying the paper "Probability distributions for single
+  cell mRNA counts" by Lisa Amrhein and Christiane Fuchs (LINK). Included are all important 
+  functions for the Poisson-beta distribution together with a needed new implementation of 
+  Kummer's function (also: confluent hypergeometric function of the first kind). Three 
+  implemented Gillespie algorithms allow synthetic data simulation via the basic, switching and
+  bursting mRNA generating process, respectively. Finally likelihood functions for one 
+  population and two population mixtures - with and without zero-inflations - allow distribution
+  fittings of the Poisson, negative binomial and the Poisson-beta distribution.
 License: GPL (>= 2)
 Depends:
     R (>= 3.1.0)

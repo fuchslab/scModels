@@ -58,7 +58,7 @@ bool isInadmissible(double x, bool warn) {
   }
 }
 
-bool validMpbParameters(double alpha, double beta, double c, bool warn) {
+bool validPbParameters(double alpha, double beta, double c, bool warn) {
   if(alpha > 0 && beta > 0 && c > 0) {
     if(warn) {
       Rcpp::warning("negative parameters for mpb");

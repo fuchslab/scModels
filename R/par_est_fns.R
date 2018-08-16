@@ -1,20 +1,89 @@
-#' Functions to compute parameter estimates
+#' Functions to fit distributions
 #'
-#' @param x Gene expression data as an array
-#' @param iter number of bootstrap replicates to estimate initial
-#'     parameters for the mpb
-#' @param n number of iterations to estimate initial values for
-#'     poisson-beta optimisation
+#' @param x Vector of count data
 #' @param type keyword for the distribution the data is to be fitted
-#'     against. Possible values are ("pois", "zip", "nb", "zinb",
-#'     "mpb", "zimpb", "pois2", "nb2", "mpb2")
+#'     against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
+#'      "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")
 #' @param optim_contol list of options to override default settings in
-#'     the optim function; only valid types: mpb, zimpb and mpb2.
+#'     the optim function; only valid types: "pb", "pb2", "zipb", "zipb2".
+#'     For more detials, please refer to the 'control' parameter in the
+#'     standard 'optim' function in package 'stats'.
 #' @keywords parameter estimation
-#' @name par-est-fns
+#' @name fit_params
 #' @importFrom stats kmeans optim runif
 #' @export
-estimate_mpb_optim_init <- function(x, iter = 200) {
+fit_params <- function(x, type, optim_contol = list()) {
+  if (type == "pois") {
+    p <- mean(x)
+    t <- system.time(o <- optim(par = p, fn = nlogL_pois, data = x, method = "Brent", lower = p-100, upper = p+100))
+  } else if (type == "zipois") {
+    p <- c(get_0inf_parameter(x), 1)
+    t <- system.time(o <- optim(par = p, fn = nlogL_zipois, data = x))
+  } else if (type == "nb") {
+    p <- c(1, 1)
+    t <- system.time(o <- optim(par = p, fn = nlogL_nb, data = x))
+  } else if (type == "zinb") {
+    p <- c(get_0inf_parameter(x), fit_params(x, "nb")$par)
+    t <- system.time(o <- optim(par = p, fn = nlogL_zinb, data = x))
+  } else if (type == "pb") {
+    p <- estimate_pb_optim_init_restarts(x)
+    if(length(optim_contol)){
+      t <- system.time(o <- optim(par = p, fn = nlogL_pb, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = p, fn = nlogL_pb, data = x, control = list(reltol = 0.001, maxit = 100)))
+    }
+  } else if (type == "zipb") {
+    p <- c(get_0inf_parameter(x), estimate_pb_optim_init_restarts(x))
+    if(length(optim_contol)){
+      t <- system.time(o <- optim(par = p, fn = nlogL_zipb, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = p, fn = nlogL_zipb, data = x, control = list(maxit = 200)))
+    }
+  } else if (type == "pois2") {
+    p <- c(runif(1), mean(x)/2, mean(x)*2)
+    t <- system.time(o <- optim(par = p, fn = nlogL_pois2, data = x))
+  } else if (type == "nb2") {
+    p <- sort(runif(5,0,100), decreasing = FALSE)
+    p[1] <- runif(1,0,1)
+    p[3] <- mean(x)/2
+    p[5] <- mean(x)*2
+    t <- system.time(o <- optim(par = p, fn = nlogL_nb2, data = x))
+  } else if (type == "pb2") {
+    k <- kmeans(x = x, centers = 2)
+    c1 <- x[which(k$cluster == 1)]
+    c2 <- x[which(k$cluster == 2)]
+    t1 <- tryCatch(
+      estimate_pb_optim_init(c1),
+      error = function(err) {
+        return(runif(3, 1, 100))
+      }
+    )
+    t2 <- tryCatch(
+      estimate_pb_optim_init(c2),
+      error = function(err) {
+        return(runif(3, 1, 100))
+      }
+    )
+    p <- length(c1)/length(x)
+    par <- c(p,t1, t2)
+    if(length(optim_contol)) {
+      t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_contol))
+    } else {
+      t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x))
+    }
+  } else {
+    warning("Invalid distribution type.")
+    return(NULL)
+  }
+  fit_param <- o
+  fit_param$time <- t
+  fit_param$AIC <- 2 * length(o$par) + 2 * o$value
+  fit_param$BIC <- log(length(x)) * length(o$par) + 2 * o$value
+  return(fit_param)
+}
+
+
+estimate_pb_optim_init <- function(x, iter = 200) {
   sampled_params <- c()
   n <- length(x)
   for (i in 1:iter) {
@@ -37,15 +106,13 @@ estimate_mpb_optim_init <- function(x, iter = 200) {
 }
 
 
-#' @rdname par-est-fns
-#' @export
-estimate_mpb_optim_init_restarts <- function(x, n = 10) {
-  p <- estimate_mpb_optim_init(x)
-  val <- nLoglik_mpb(x, p)
+estimate_pb_optim_init_restarts <- function(x, n = 10) {
+  p <- estimate_pb_optim_init(x)
+  val <- nlogL_pb(x, p)
 
   for (i in 1:n) {
-    p_temp <- estimate_mpb_optim_init(x)
-    val_temp <- nLoglik_mpb(x, p_temp)
+    p_temp <- estimate_pb_optim_init(x)
+    val_temp <- nlogL_pb(x, p_temp)
     if(val_temp < val) {
       p <- p_temp
       val <- val_temp
@@ -54,79 +121,5 @@ estimate_mpb_optim_init_restarts <- function(x, n = 10) {
   return(p)
 }
 
-#' @rdname par-est-fns
-#' @export
+
 get_0inf_parameter <- function(x) length(c(which(x == 0))) / length(x)
-
-
-#' @rdname par-est-fns
-#' @export
-get_fitted_params <- function(x, type, optim_contol = list()) {
-  if (type == "pois") {
-    p <- mean(x)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_pois, data = x, method = "Brent", lower = p-100, upper = p+100))
-  } else if (type == "zip") {
-    p <- c(get_0inf_parameter(x), 1)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_pois_zero, data = x))
-  } else if (type == "nb") {
-    p <- c(1, 1)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_nb, data = x))
-  } else if (type == "zinb") {
-    p <- c(get_0inf_parameter(x), get_fitted_params(x, "nb")$par)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_nb_zero, data = x))
-  } else if (type == "pb") {
-    p <- estimate_mpb_optim_init_restarts(x)
-    if(length(optim_contol)){
-      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = optim_contol))
-    } else {
-      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb, data = x, control = list(reltol = 0.001, maxit = 100)))
-    }
-  } else if (type == "zipb") {
-    p <- c(get_0inf_parameter(x), estimate_mpb_optim_init_restarts(x))
-    if(length(optim_contol)){
-      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = optim_contol))
-    } else {
-      t <- system.time(o <- optim(par = p, fn = nLoglik_mpb_zero, data = x, control = list(maxit = 200)))
-    }
-  } else if (type == "pois2") {
-    p <- c(runif(1), mean(x)/2, mean(x)*2)
-    t <- system.time(o <- optim(par = p, fn = nLoglik_pois_two, data = x))
-  } else if (type == "nb2") {
-    p <- sort(runif(5,0,100), decreasing = FALSE)
-    p[1] <- runif(1,0,1)
-    p[3] <- mean(x)/2
-    p[5] <- mean(x)*2
-    t <- system.time(o <- optim(par = p, fn = nLoglik_nb_two, data = x))
-  } else if (type == "pb2") {
-    k <- kmeans(x = x, centers = 2)
-    c1 <- x[which(k$cluster == 1)]
-    c2 <- x[which(k$cluster == 2)]
-    t1 <- tryCatch(
-      estimate_mpb_optim_init(c1),
-      error = function(err) {
-        return(runif(3, 1, 100))
-      }
-    )
-    t2 <- tryCatch(
-      estimate_mpb_optim_init(c2),
-      error = function(err) {
-        return(runif(3, 1, 100))
-      }
-    )
-    p <- length(c1)/length(x)
-    par <- c(p,t1, t2)
-    if(length(optim_contol)) {
-      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x, control = optim_contol))
-    } else {
-      t <- system.time(o <- optim(par = par, fn = nLoglik_mpb_two, data = x))
-    }
-  } else {
-    warning("Invalid distribution type.")
-    return(NULL)
-  }
-  fit_param <- o
-  fit_param$time <- t
-  fit_param$AIC <- 2 * length(o$par) + 2 * o$value
-  fit_param$BIC <- log(length(x)) * length(o$par) + 2 * o$value
-  return(fit_param)
-}

@@ -1,35 +1,49 @@
-#' Likelihood functions for negative binomial and poisson-beta
+#' Negative log Likelihood functions for Poisson, negative binomial and
+#' Poisson-beta distributions
 #'
-#' The likelihood functions are required for optimisation purposes.
-#' There are functions to compute the likelihood of the negative
-#' binomial and the poisson-beta distributions with and
-#' without a zero inflation.
+#' The negative log Likelihood functions for Poisson, negative binomial
+#' and Poisson-beta distributions. Mixing two distributions of the same
+#' kind and/or adding zero-inflation allows to take characteristics
+#' of real data into account.
+#' Additionally, one population and two population mixtures - with and
+#' without zero-inflations - allow distribution fittings of the Poisson,
+#'  negative binomial and the Poisson-beta distribution.
 #'
 #'
 #' @details
-#' Functions Loglik_pois, Loglik_nb, Loglik_mpb compute the negative
+#' Functions nlogL_pois, nlogL_nb, nlogL_pb compute the negative
 #' log-likelihood of poisson, negative binomial and the poisson-beta
 #' distributions against the data.
-#' Functions Loglik_pois_zero, Loglik_nb_zero, Loglik_mpb_zero compute the
-#' zero-inflated log-likelihood values.
+#' Functions nlogL_pois2, nlogL_nb2 and nlogL_pb2 compute the negative
+#' log-likelihood values for a bimodal mixture distribution whereas
+#' nlogL_zipois, nlogL_zinb, nlogL_zipb compute the same for the
+#' zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2
+#' and nlogL_zipb2 are for bimodal distributions with zero-inflation.
 
 
-#' @param data The dataset for which the likelihood is computed
-#' @param par.pois Parameters for the Poisson distribution
-#' @param par.nb Parameters for the negative binomial distribution
-#' @param par.mpb Parameters for the poisson-beta distribution
-#' @param par.pois.zero,par.nb.zero,par.mpb.zero Parameters for the
-#'     respective zero-inflated distributions. The first in the array
-#'     is always the inflation parameter for all cases.
-#' @param par.pois2,par.nb2,par.mpb2 Parameters for the respective
-#'     two population distributions
+#' @param data Vector containing the discrete observations
+#' @param par.pois Scalar containing the lambda parameter
+#'     of the Poisson distribution
+#' @param par.nb Vector of length 2, containing the size and the mu
+#'     parameter of the negative binomial distribution
+#' @param par.pb Vector of length 3, containing the alpha, beta
+#'     and c parameter of the Poisson-beta distribution
+#' @param par.pois2,par.nb2,par.pb2 Vector containing the parameters
+#'     of the two mixing distributions. First entry represents the
+#'     fraction of the first distribution, followed by all parameters
+#'     of the first, then all of the second distribution.
+#' @param par.zipois,par.zinb,par.zipb Vector containing the respective
+#'     zero-inflated distribution parameters. The additional first
+#'     entry is the inflation parameter for all cases.
+#' @param par.zipois2 Parameters for the zero-inflated 2 population
+#'     model.
 #'
 #' @keywords likelihood negative binomial poisson beta
 #'
-#' @name likelihood-nb-mpb
+#' @name nlogL
 #' @importFrom stats dpois dnbinom rnorm
 #' @export
-nLoglik_pois <- function(data, par.pois) {
+nlogL_pois <- function(data, par.pois) {
   if (par.pois <= 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
@@ -42,9 +56,9 @@ nLoglik_pois <- function(data, par.pois) {
 }
 
 
-#' @rdname likelihood-nb-mpb
+#' @rdname nlogL
 #' @export
-nLoglik_nb <- function(data, par.nb) {
+nlogL_nb <- function(data, par.nb) {
   if (par.nb[1] <= 0 || par.nb[2] < 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
@@ -57,14 +71,14 @@ nLoglik_nb <- function(data, par.nb) {
 }
 
 
-#' @rdname likelihood-nb-mpb
+#' @rdname nlogL
 #' @export
-nLoglik_mpb <- function(data, par.mpb) {
-  if (par.mpb[1] < 0 ||
-      par.mpb[2] < 0 || par.mpb[3] <= 0) {
+nlogL_pb <- function(data, par.pb) {
+  if (par.pb[1] < 0 ||
+      par.pb[2] < 0 || par.pb[3] <= 0) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    nl <- -sum(dmpb(x = data, alpha = par.mpb[1], beta = par.mpb[2], c = par.mpb[3], log = TRUE))
+    nl <- -sum(dpb(x = data, alpha = par.pb[1], beta = par.pb[2], c = par.pb[3], log = TRUE))
     if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else
@@ -72,80 +86,9 @@ nLoglik_mpb <- function(data, par.mpb) {
   }
 }
 
-#' @rdname likelihood-nb-mpb
+#' @rdname nlogL
 #' @export
-nLoglik_pois_zero <- function(data, par.pois.zero) {
-  if (par.pois.zero[2] <= 0 ||
-      par.pois.zero[1] < 0 ||
-      par.pois.zero[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
-  }
-  else {
-    n <- length(data)
-    n0 <- length(which(data == 0))
-    non_zero <- data[which(data != 0)]
-    nl <- n0 * log(par.pois.zero[1] + (1 - par.pois.zero[1]) * exp(-par.pois.zero[2])) + (n - n0) * log(1 - par.pois.zero[1]) + sum(dpois(x = non_zero, lambda = par.pois.zero[2], log = TRUE))
-    nl <- -nl
-    if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
-    else{
-      return(nl)
-    }
-  }
-}
-
-#' @rdname likelihood-nb-mpb
-#' @export
-nLoglik_nb_zero <- function(data, par.nb.zero) {
-  if (par.nb.zero[2] <= 0 ||
-      par.nb.zero[3] < 0 ||
-      par.nb.zero[1] < 0 ||
-      par.nb.zero[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
-  }
-  else {
-    n <- length(data)
-    n0 <- length(which(data == 0))
-    non_zero <- data[which(data != 0)]
-    nl <- n0*log(par.nb.zero[1] + (1 - par.nb.zero[1])*dnbinom(0, size = par.nb.zero[2], mu = par.nb.zero[3])) + (n-n0)*log(1-par.nb.zero[1])+sum(dnbinom(x = non_zero, size = par.nb.zero[2], mu = par.nb.zero[3], log = TRUE))
-    nl <- -nl
-    if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
-    else{
-      return(nl)
-    }
-  }
-}
-
-
-
-#' @rdname likelihood-nb-mpb
-#' @export
-nLoglik_mpb_zero <- function(data, par.mpb.zero) {
-  if (par.mpb.zero[2] < 0 ||
-      par.mpb.zero[3] < 0 ||
-      par.mpb.zero[4] <= 0 ||
-      par.mpb.zero[1] < 0 ||
-      par.mpb.zero[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
-  }
-  else {
-    n <- length(data)
-    n0 <- length(which(data == 0))
-    non_zero <- data[which(data != 0)]
-    nl <- n0*log(par.mpb.zero[1] + (1 - par.mpb.zero[1])*dmpb(0, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4])) + (n-n0)*log(1-par.mpb.zero[1])+sum(dmpb(x = non_zero, par.mpb.zero[2], par.mpb.zero[3], par.mpb.zero[4], log = TRUE))
-    nl <- -nl
-    if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
-    else{
-      return(nl)
-    }
-  }
-}
-
-#' @rdname likelihood-nb-mpb
-#' @export
-nLoglik_pois_two <- function(data, par.pois2) {
+nlogL_pois2 <- function(data, par.pois2) {
   if (par.pois2[2] <= 0 ||
       par.pois2[3] <= 0 ||
       par.pois2[1] < 0 ||
@@ -165,9 +108,9 @@ nLoglik_pois_two <- function(data, par.pois2) {
   }
 }
 
-#' @rdname likelihood-nb-mpb
+#' @rdname nlogL
 #' @export
-nLoglik_nb_two <- function(data, par.nb2) {
+nlogL_nb2 <- function(data, par.nb2) {
   if (par.nb2[2] <= 0 ||
       par.nb2[3] < 0 ||
       par.nb2[4] <= 0 ||
@@ -188,26 +131,125 @@ nLoglik_nb_two <- function(data, par.nb2) {
   }
 }
 
-#' @rdname likelihood-nb-mpb
+#' @rdname nlogL
 #' @export
-nLoglik_mpb_two <- function(data, par.mpb2) {
-  if (par.mpb2[2] < 0 ||
-      par.mpb2[3] < 0 ||
-      par.mpb2[4] <= 0 ||
-      par.mpb2[5] < 0 ||
-      par.mpb2[6] < 0 ||
-      par.mpb2[7] <= 0 ||
-      par.mpb2[1] < 0 ||
-      par.mpb2[1] > 1) {
+nlogL_pb2 <- function(data, par.pb2) {
+  if (par.pb2[2] < 0 ||
+      par.pb2[3] < 0 ||
+      par.pb2[4] <= 0 ||
+      par.pb2[5] < 0 ||
+      par.pb2[6] < 0 ||
+      par.pb2[7] <= 0 ||
+      par.pb2[1] < 0 ||
+      par.pb2[1] > 1) {
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     nl <- sum(log(
-      par.mpb2[1] * dmpb(x = data, alpha = par.mpb2[2], beta = par.mpb2[3], c = par.mpb2[4]) +
-      (1 - par.mpb2[1]) * dmpb(x = data, alpha = par.mpb2[5], beta = par.mpb2[6], c = par.mpb2[7])))
+      par.pb2[1] * dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4]) +
+      (1 - par.pb2[1]) * dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7])))
     nl <- -nl
     if (is.infinite(nl))
     return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+
+#' @rdname nlogL
+#' @export
+nlogL_zipois <- function(data, par.zipois) {
+  if (par.zipois[2] <= 0 ||
+      par.zipois[1] < 0 ||
+      par.zipois[1] > 1) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0 * log(par.zipois[1] + (1 - par.zipois[1]) * exp(-par.zipois[2])) + (n - n0) * log(1 - par.zipois[1]) + sum(dpois(x = non_zero, lambda = par.zipois[2], log = TRUE))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+#' @rdname nlogL
+#' @export
+nlogL_zinb <- function(data, par.zinb) {
+  if (par.zinb[2] <= 0 ||
+      par.zinb[3] < 0 ||
+      par.zinb[1] < 0 ||
+      par.zinb[1] > 1) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0*log(par.zinb[1] + (1 - par.zinb[1])*dnbinom(0, size = par.zinb[2], mu = par.zinb[3])) + (n-n0)*log(1-par.zinb[1])+sum(dnbinom(x = non_zero, size = par.zinb[2], mu = par.zinb[3], log = TRUE))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+
+
+#' @rdname nlogL
+#' @export
+nlogL_zipb <- function(data, par.zipb) {
+  if (par.zipb[2] < 0 ||
+      par.zipb[3] < 0 ||
+      par.zipb[4] <= 0 ||
+      par.zipb[1] < 0 ||
+      par.zipb[1] > 1) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0*log(par.zipb[1] + (1 - par.zipb[1])*dpb(0, par.zipb[2], par.zipb[3], par.zipb[4])) + (n-n0)*log(1-par.zipb[1])+sum(dpb(x = non_zero, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+
+#' @rdname nlogL
+#' @export
+nlogL_zipois2 <- function(data, par.zipois2) {
+  if (par.zipois2[1] < 0 ||
+      par.zipois2[1] > 1 ||
+      par.zipois2[2] < 0 ||
+      par.zipois2[2] > 1 ||
+      par.zipois2[1] + par.zipois2[2] > 1 ||
+      par.zipois2[3] <= 0 ||
+      par.zipois2[4] <= 0) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0 * log(par.zipois2[1] + par.zipois2[2] * exp(-par.zipois2[3]) + (1 - par.zipois2[1] - par.zipois2[2]) * exp(-par.zipois2[4])) + sum(log(par.zipois2[2] * dpois(x = non_zero, lambda = par.zipois2[3]) + (1 - par.zipois2[1] - par.zipois2[2]) * dpois(x = non_zero, lambda = par.zipois2[4])))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }

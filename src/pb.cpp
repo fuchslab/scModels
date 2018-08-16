@@ -20,14 +20,14 @@ double kummer_(double x, double a, double b) {
 }
 
 // density function
-double dmpb_(double x, double alpha, double beta, double c, const bool& log_p, bool& throw_warning) {
+double dpb_(double x, double alpha, double beta, double c, const bool& log_p, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
   if( !isInteger(x) || x < 0  || traits::is_infinite<REALSXP>(x) )
     return 0;
 
-  if(!validMpbParameters(alpha, beta, c)) {
+  if(!validPbParameters(alpha, beta, c)) {
     throw_warning = true;
     return R_NaN;
   }
@@ -58,11 +58,11 @@ double dmpb_(double x, double alpha, double beta, double c, const bool& log_p, b
 }
 
 // distribution function
-double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning) {
+double ppb_(double x, double alpha, double beta, double c, bool& throw_warning) {
   if( isInadmissible(x) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c) )
     return x+alpha+beta+c;
 
-  if(!validMpbParameters(alpha, beta, c)) {
+  if(!validPbParameters(alpha, beta, c)) {
     throw_warning = true;
     return R_NaN;
   }
@@ -73,24 +73,24 @@ double pmpb_(double x, double alpha, double beta, double c, bool& throw_warning)
     return 1;
   double res = 0;
   for(int i = 0; i <= x; i++) {
-    res += dmpb_(i, alpha, beta, c, false, throw_warning);
+    res += dpb_(i, alpha, beta, c, false, throw_warning);
   }
   return res;
 }
 
 // distribution function array
-double* pmpb_(double alpha, double beta, double c) {
+double* ppb_(double alpha, double beta, double c) {
   double *res = (double *)std::malloc(Q_LIMIT * sizeof(double));
   bool throw_warning = false;
-  res[0] = dmpb_(0, alpha, beta, c, false, throw_warning);
+  res[0] = dpb_(0, alpha, beta, c, false, throw_warning);
   for(int i = 1; i < Q_LIMIT; i++) {
-    res[i] = res[i-1] + dmpb_(i, alpha, beta, c, false, throw_warning);
+    res[i] = res[i-1] + dpb_(i, alpha, beta, c, false, throw_warning);
   }
   return res;
 }
 
 // quantiles for single parameters
-double qmpb_(double p, double *p_distr) {
+double qpb_(double p, double *p_distr) {
   if(isInadmissible(p))
     return NA_REAL;
   if(!validProbability(p) || isInadmissible(p_distr[0])){
@@ -113,7 +113,7 @@ double qmpb_(double p, double *p_distr) {
 }
 
 // quantiles for vectorised parameters
-double qmpb_(double p, double alpha, double beta, double c) {
+double qpb_(double p, double alpha, double beta, double c) {
   if(isInadmissible(p) || isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c))
     return NA_REAL;
   if(!validProbability(p)){
@@ -124,7 +124,7 @@ double qmpb_(double p, double alpha, double beta, double c) {
   if(p == 0.0)
     return 0.0;
 
-  double *p_distr = pmpb_(alpha, beta, c);
+  double *p_distr = ppb_(alpha, beta, c);
 
   if(p == 1.0 || p > p_distr[Q_LIMIT-1])
     return R_PosInf;
@@ -139,13 +139,13 @@ double qmpb_(double p, double alpha, double beta, double c) {
 }
 
 // random number generator
-double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
+double rpb_(double alpha, double beta, double c, bool& throw_warning) {
   if(isInadmissible(alpha) || isInadmissible(beta) || isInadmissible(c)) {
     throw_warning = true;
     return NA_REAL;
   }
 
-  if(!validMpbParameters(alpha, beta, c)) {
+  if(!validPbParameters(alpha, beta, c)) {
     throw_warning = true;
     return R_NaN;
   }
@@ -158,8 +158,8 @@ double rmpb_(double alpha, double beta, double c, bool& throw_warning) {
 
 //' Kummer's (confluent hypergeometric) function
 //'
-//' Kummer's (confluent hypergeometric) function of the first kind
-//' for numeric (non-complex) values and input parameters
+//' Kummer's function (also: confluent hypergeometric function of the first kind)
+//' for numeric (non-complex) values and input parameters.
 //' @param x numeric value or vector
 //' @param a,b numeric parameters of the Kummer function
 //' @name chf_1F1
@@ -180,7 +180,7 @@ NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b) {
 
 
 // [[Rcpp::export]]
-NumericVector cpp_dmpb(NumericVector& x, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& log_p = false) {
+NumericVector cpp_dpb(NumericVector& x, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& log_p = false) {
   if(std::min({x.length(), alpha.length(), beta.length(), c.length()}) < 1) {
     return NumericVector(0);
   }
@@ -190,7 +190,7 @@ NumericVector cpp_dmpb(NumericVector& x, NumericVector& alpha, NumericVector& be
   bool throw_warning = false;
 
   for(int i = 0; i < n; i++) {
-    p[i] = dmpb_(GETV(x, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), log_p, throw_warning);
+    p[i] = dpb_(GETV(x, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), log_p, throw_warning);
   }
 
   if(throw_warning)
@@ -202,7 +202,7 @@ NumericVector cpp_dmpb(NumericVector& x, NumericVector& alpha, NumericVector& be
 
 
 //[[Rcpp::export]]
-NumericVector cpp_pmpb(NumericVector& q, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
+NumericVector cpp_ppb(NumericVector& q, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
   if(std::min({ q.length(), alpha.length(), beta.length(), c.length() }) < 1) {
     return NumericVector(0);
   }
@@ -213,7 +213,7 @@ NumericVector cpp_pmpb(NumericVector& q, NumericVector& alpha, NumericVector& be
   bool throw_warning = false;
 
   for(int i = 0; i < n; i++) {
-    p[i] = pmpb_(GETV(q, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
+    p[i] = ppb_(GETV(q, i), GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
   }
 
   if(!lower_tail)
@@ -230,7 +230,7 @@ NumericVector cpp_pmpb(NumericVector& q, NumericVector& alpha, NumericVector& be
 
 
 // [[Rcpp::export]]
-NumericVector cpp_rmpb(const int& n, NumericVector& alpha, NumericVector& beta, NumericVector& c) {
+NumericVector cpp_rpb(const int& n, NumericVector& alpha, NumericVector& beta, NumericVector& c) {
   if(std::min({ alpha.length(), beta.length(), c.length() }) < 1) {
     warning("NAs produced");
     return NumericVector(n, NA_REAL);
@@ -240,7 +240,7 @@ NumericVector cpp_rmpb(const int& n, NumericVector& alpha, NumericVector& beta, 
   bool throw_warning = false;
 
   for(int i = 0; i < n; i++) {
-    x[i] = rmpb_(GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
+    x[i] = rpb_(GETV(alpha, i), GETV(beta, i), GETV(c, i), throw_warning);
   }
 
   if(throw_warning)
@@ -251,7 +251,7 @@ NumericVector cpp_rmpb(const int& n, NumericVector& alpha, NumericVector& beta, 
 
 
 // [[Rcpp::export]]
-NumericVector cpp_qmpb(NumericVector& p, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
+NumericVector cpp_qpb(NumericVector& p, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p) {
   if(std::min({ p.length(), alpha.length(), beta.length(), c.length() }) < 1) {
     return NumericVector(0);
   }
@@ -271,15 +271,15 @@ NumericVector cpp_qmpb(NumericVector& p, NumericVector& alpha, NumericVector& be
     if(isInadmissible(alpha[0]) || isInadmissible(beta[0]) || isInadmissible(c[0])) {
       return NumericVector(n, NA_REAL);
     } else {
-      double* p_distr = pmpb_(min(na_omit(alpha)), min(na_omit(beta)), min(na_omit(c)));
+      double* p_distr = ppb_(min(na_omit(alpha)), min(na_omit(beta)), min(na_omit(c)));
       for(int i = 0; i < n; i++) {
-        res[i] = qmpb_(GETV(p, i), p_distr);
+        res[i] = qpb_(GETV(p, i), p_distr);
       }
     }
   } else {
     // vectorised parameters
     for(int i = 0; i < n; i++) {
-      res[i] = qmpb_(GETV(p, i), GETV(alpha, i), GETV(beta, i), GETV(c, i));
+      res[i] = qpb_(GETV(p, i), GETV(alpha, i), GETV(beta, i), GETV(c, i));
     }
   }
   return res;
