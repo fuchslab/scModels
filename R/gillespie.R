@@ -27,7 +27,7 @@ gmRNA_basic <- function(n, r.trans, r.degr) {
 #' @rdname gmRNA
 #' @export
 gmRNA_switch <- function(n, r.act, r.deact, r.on, r.degr) {
-  cpp_gmRNA_switch(n, r.on, r.degr)
+  cpp_gmRNA_switch(n, r.act, r.deact, r.on, r.degr)
 }
 
 
