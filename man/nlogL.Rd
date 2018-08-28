@@ -12,6 +12,8 @@
 \alias{nlogL_zinb}
 \alias{nlogL_zipb}
 \alias{nlogL_zipois2}
+\alias{nlogL_zinb2}
+\alias{nlogL_zipb2}
 \title{Negative log Likelihood functions for Poisson, negative binomial and
 Poisson-beta distributions}
 \usage{
@@ -34,6 +36,10 @@ nlogL_zinb(data, par.zinb)
 nlogL_zipb(data, par.zipb)
 
 nlogL_zipois2(data, par.zipois2)
+
+nlogL_zinb2(data, par.zinb2)
+
+nlogL_zipb2(data, par.zipb2)
 }
 \arguments{
 \item{data}{Vector containing the discrete observations}
@@ -56,8 +62,8 @@ of the first, then all of the second distribution.}
 zero-inflated distribution parameters. The additional first
 entry is the inflation parameter for all cases.}
 
-\item{par.zipois2}{Parameters for the zero-inflated 2 population
-model.}
+\item{par.zipois2, par.zinb2, par.zipb2}{Parameters for the zero-inflated
+2 population model.}
 }
 \description{
 The negative log Likelihood functions for Poisson, negative binomial

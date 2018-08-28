@@ -35,8 +35,8 @@
 #' @param par.zipois,par.zinb,par.zipb Vector containing the respective
 #'     zero-inflated distribution parameters. The additional first
 #'     entry is the inflation parameter for all cases.
-#' @param par.zipois2 Parameters for the zero-inflated 2 population
-#'     model.
+#' @param par.zipois2,par.zinb2,par.zipb2 Parameters for the zero-inflated
+#'     2 population model.
 #'
 #' @keywords likelihood negative binomial poisson beta
 #'
@@ -247,6 +247,66 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
     nl <- n0 * log(par.zipois2[1] + par.zipois2[2] * exp(-par.zipois2[3]) + (1 - par.zipois2[1] - par.zipois2[2]) * exp(-par.zipois2[4])) + sum(log(par.zipois2[2] * dpois(x = non_zero, lambda = par.zipois2[3]) + (1 - par.zipois2[1] - par.zipois2[2]) * dpois(x = non_zero, lambda = par.zipois2[4])))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+
+#' @rdname nlogL
+#' @export
+nlogL_zinb2 <- function(data, par.zinb2) {
+  if (par.zinb2[1] < 0 ||
+      par.zinb2[1] > 1 ||
+      par.zinb2[2] < 0 ||
+      par.zinb2[2] > 1 ||
+      par.zinb2[1] + par.zinb2[2] > 1 ||
+      par.zinb2[3] <= 0 ||
+      par.zinb2[4] < 0 ||
+      par.zinb2[5] <= 0 ||
+      par.zinb2[6] < 0) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0 * log(par.zinb2[1] + par.zinb2[2]*dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4]) + (1 - par.zinb2[1] - par.zinb2[2])*dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6])) + sum(log(par.zinb2[2] * dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4]) + (1 - par.zinb2[1] - par.zinb2[2]) * dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6])))
+    nl <- -nl
+    if (is.infinite(nl))
+      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    else{
+      return(nl)
+    }
+  }
+}
+
+
+#' @rdname nlogL
+#' @export
+nlogL_zipb2 <- function(data, par.zipb2) {
+  if (par.zipb2[1] < 0 ||
+      par.zipb2[1] > 1 ||
+      par.zipb2[2] < 0 ||
+      par.zipb2[2] > 1 ||
+      par.zipb2[1] + par.zipb2[2] > 1 ||
+      par.zipb2[3] < 0 ||
+      par.zipb2[4] < 0 ||
+      par.zipb2[5] <= 0 ||
+      par.zipb2[6] < 0 ||
+      par.zipb2[7] < 0 ||
+      par.zipb2[8] <= 0) {
+    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else {
+    n <- length(data)
+    n0 <- length(which(data == 0))
+    non_zero <- data[which(data != 0)]
+    nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum(log(par.zipb2[2] * dpb(non_zero, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2]) * dpb(non_zero, par.zipb2[6], par.zipb2[7], par.zipb2[8])))
     nl <- -nl
     if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
