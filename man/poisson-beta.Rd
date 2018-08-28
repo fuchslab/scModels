@@ -19,6 +19,10 @@ rpb(n, alpha, beta, c = 1)
 \arguments{
 \item{x, q}{vector of (non-negative integer) quantiles}
 
+\item{p}{vector of probabilities}
+
+\item{n}{number of observations}
+
 \item{alpha, beta}{non-negative parameters of the beta distribution (shape1 and shape2)}
 
 \item{c}{numeric scaling parameter of the beta distribution. The standard beta is
@@ -28,10 +32,6 @@ scaled on (0,1) (default) and can be transformed to (0,c).}
 
 \item{lower.tail}{logical; if TRUE (default), probabilities are \eqn{P[X \le x]}
 otherwise, \eqn{P[X > x]}.}
-
-\item{p}{vector of probabilities}
-
-\item{n}{number of observations}
 }
 \description{
 Density, distribution function, quantile function and random generation for the
