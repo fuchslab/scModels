@@ -71,6 +71,17 @@ fit_params <- function(x, type, optim_contol = list()) {
     } else {
       t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x))
     }
+  } else if (type == "zipois2"){
+    optim_restarts <- list()
+    optim_times <- list()
+    for(i in 1:10) {
+      t <- system.time(o <- optim(par = runif(4), fn = nlogL_zipois2, data = x))
+      optim_restarts[[i]] <- o
+      optim_times[[i]] <- t
+    }
+    best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+    o <- optim_restarts[[best_optim]]
+    t <- optim_times[[best_optim]]
   } else {
     warning("Invalid distribution type.")
     return(NULL)
