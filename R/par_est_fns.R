@@ -94,23 +94,11 @@ fit_params <- function(x, type, optim_contol = list()) {
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
   } else if (type == "zipb2") {
-    k <- kmeans(x = x, centers = 2)
-    c1 <- x[which(k$cluster == 1)]
-    c2 <- x[which(k$cluster == 2)]
-    t1 <- tryCatch(
-      estimate_pb_optim_init(c1),
-      error = function(err) {
-        return(runif(3, 1, 100))
-      }
-    )
-    t2 <- tryCatch(
-      estimate_pb_optim_init(c2),
-      error = function(err) {
-        return(runif(3, 1, 100))
-      }
-    )
-    p <- length(c1)/length(x)
-    par <- c(get_0inf_parameter(x), p,t1, t2)
+    init_nlogl <- 1e9
+    while(init_nlogl > 1e7) {
+      par <- runif(8)
+      init_nlogl <- nlogL_zipb2(x, par)
+    }
     if(length(optim_contol)) {
       t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_contol))
     } else {
