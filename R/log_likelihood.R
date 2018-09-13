@@ -306,7 +306,7 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum(log(par.zipb2[2] * dpb(non_zero, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2]) * dpb(non_zero, par.zipb2[6], par.zipb2[7], par.zipb2[8])))
+    nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum.finite(log(par.zipb2[2] * dpb(non_zero, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2]) * dpb(non_zero, par.zipb2[6], par.zipb2[7], par.zipb2[8])))
     nl <- -nl
     if (is.infinite(nl))
       return(100000 + (rnorm(1, 10000, 20) ^ 2))
@@ -314,4 +314,9 @@ nlogL_zipb2 <- function(data, par.zipb2) {
       return(nl)
     }
   }
+}
+
+
+sum.finite <- function(x) {
+  return(sum(x[is.finite(x)]))
 }
