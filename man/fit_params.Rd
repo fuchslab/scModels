@@ -4,7 +4,7 @@
 \alias{fit_params}
 \title{Functions to fit distributions}
 \usage{
-fit_params(x, type, optim_contol = list())
+fit_params(x, type, optim_control = list(maxit = 1000))
 }
 \arguments{
 \item{x}{Vector of count data}
@@ -13,8 +13,8 @@ fit_params(x, type, optim_contol = list())
 against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
  "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")}
 
-\item{optim_contol}{list of options to override default settings in
-the optim function; only valid types: "pb", "pb2", "zipb", "zipb2".
+\item{optim_control}{list of options to override presets in
+the optim function; Set to list(maxit = 1000) by default.
 For more detials, please refer to the 'control' parameter in the
 standard 'optim' function in package 'stats'.}
 }

@@ -155,7 +155,7 @@ nlogL_pb2 <- function(data, par.pb2) {
   else {
     nl <- sum(
       (((floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.nb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
+        (exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
         +(exp((log(1-par.pb2[1])+dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7])) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
       )
     )
@@ -333,8 +333,8 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     non_zero <- data[which(data != 0)]
     nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum(
       (((floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
-        +(exp((log(1-par.zipb2[1]-par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8])) /100)*10^(-floor(log10(exp((log(par.pb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
+        (exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
+        +(exp((log(1-par.zipb2[1]-par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8])) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
       )
     )
 
