@@ -14,18 +14,18 @@
 #' @export
 fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   max_iter <- 20
+  x_mean = mean(x)
   ################################  base models  ######################################
   if (type == "pois") {
-    p <- mean(x)
-    t <- system.time(o <- optim(par = p, fn = nlogL_pois, data = x, method = "Brent", lower = p-100, upper = p+100, control = optim_control))
+    t <- system.time(o <- optim(par = x_mean, fn = nlogL_pois, data = x, method = "Brent", lower = p-100, upper = p+100, control = optim_control))
   }
   else if (type == "nb") {
     p <- c(1, 1)
     t <- system.time(o <- optim(par = p, fn = nlogL_nb, data = x, control = optim_control))
   }
   else if (type == "pb") {
-    p <- estimate_pb_optim_init_restarts(x)
-    t <- system.time(o <- optim(par = p, fn = nlogL_pb, data = x, control = optim_control))
+    par <- estimate_pb_optim_init_restarts(x)
+    t <- system.time(o <- optim(par = par, fn = nlogL_pb, data = x, control = optim_control))
   }
   ################################ Zero-inflated models ###############################
   ######################################################
@@ -37,7 +37,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
       optim_restarts[[i]] <- o
       optim_times[[i]] <- t
     }
-    t <- system.time(o <- optim(par = c(0, mean(x)), fn = nlogL_zipois, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = c(0, x_mean), fn = nlogL_zipois, data = x, control = optim_control))
     optim_restarts[[i+1]] <- o
     optim_times[[i+1]] <- t
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
@@ -70,7 +70,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
 
     par <- if (nl1 < nl2) p1 else p2
 
-    t <- system.time(o <- optim(par = p, fn = nlogL_zipb, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = par, fn = nlogL_zipb, data = x, control = optim_control))
   }
   ######################################################
   ################################ 2pop ###############################################
@@ -83,7 +83,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
       optim_restarts[[i]] <- o
       optim_times[[i]] <- t
     }
-    t <- system.time(o <- optim(par = c(1, mean(x), mean(x)), fn = nlogL_pois2, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = c(1, x_mean, x_mean), fn = nlogL_pois2, data = x, control = optim_control))
     optim_restarts[[i+1]] <- o
     optim_times[[i+1]] <- t
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
@@ -129,7 +129,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
       optim_restarts[[i]] <- o
       optim_times[[i]] <- t
     }
-    t <- system.time(o <- optim(par = c(0, 1, mean(x), mean(x)), fn = nlogL_zipois2, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = c(0, 1, x_mean, x_mean), fn = nlogL_zipois2, data = x, control = optim_control))
     optim_restarts[[i+1]] <- o
     optim_times[[i+1]] <- t
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
@@ -158,12 +158,12 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     t1<- estimate_pb_optim_init_restarts(x)
     p1 <- c(0, 1, t1, t1)
     nl1 <- nlogL_zipb2(x, p1)
-    p2 <- estimate_pb2_optim_init_kmeans(x)
+    p2 <- estimate_zipb2_optim_init_kmeans(x)
     nl2 <- nlogL_zipb2(x, p2)
 
     par <- if (nl1 < nl2) p1 else p2
 
-    t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = par, fn = nlogL_zipb2, data = x, control = optim_control))
   }
   ######################################################
   else {
