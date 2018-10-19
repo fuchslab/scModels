@@ -43,8 +43,8 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
-  ######################################################
   }
+  ######################################################
   else if (type == "zinb") {
     optim_restarts <- list()
     optim_times <- list()
@@ -60,8 +60,8 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
-  ######################################################
   }
+  ######################################################
   else if (type == "zipb") {
     p1 <- c(0, estimate_pb_optim_init_restarts(x))
     p2 <- c(get_0inf_parameter(x), estimate_pb_optim_init_restarts(x))
@@ -71,8 +71,8 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     par <- if (nl1 < nl2) p1 else p2
 
     t <- system.time(o <- optim(par = p, fn = nlogL_zipb, data = x, control = optim_control))
-  ######################################################
   }
+  ######################################################
   ################################ 2pop ###############################################
   ######################################################
   else if (type == "pois2") {
@@ -89,8 +89,8 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
-  ######################################################
   }
+  ######################################################
   else if (type == "nb2") {
     optim_restarts <- list()
     optim_times <- list()
@@ -107,6 +107,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
   }
+  ######################################################
   else if (type == "pb2") {
     t1<-estimate_pb_optim_init_restarts(x)
     p1 <- c(1, t1, t1)
@@ -135,6 +136,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
   }
+  ######################################################
   else if (type == "zinb2") {
     optim_restarts <- list()
     optim_times <- list()
@@ -151,6 +153,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
   }
+  ######################################################
   else if (type == "zipb2") {
     t1<- estimate_pb_optim_init_restarts(x)
     p1 <- c(0, 1, t1, t1)
@@ -162,6 +165,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
 
     t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_control))
   }
+  ######################################################
   else {
     warning("Invalid distribution type.")
     return(NULL)
