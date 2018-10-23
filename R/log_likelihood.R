@@ -45,11 +45,11 @@
 #' @export
 nlogL_pois <- function(data, par.pois) {
   if (par.pois <= 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dpois(x = data, lambda = par.pois, log = TRUE))
     if (is.infinite(nl))
-      return (100000 + (rnorm(1, 10000, 20) ^ 2))
+      return (nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
   }
@@ -60,11 +60,11 @@ nlogL_pois <- function(data, par.pois) {
 #' @export
 nlogL_nb <- function(data, par.nb) {
   if (par.nb[1] <= 0 || par.nb[2] < 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dnbinom(x = data, size = par.nb[1], mu = par.nb[2], log = TRUE))
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
   }
@@ -76,11 +76,11 @@ nlogL_nb <- function(data, par.nb) {
 nlogL_pb <- function(data, par.pb) {
   if (par.pb[1] < 0 ||
       par.pb[2] < 0 || par.pb[3] <= 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dpb(x = data, alpha = par.pb[1], beta = par.pb[2], c = par.pb[3], log = TRUE))
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
   }
@@ -93,7 +93,7 @@ nlogL_pois2 <- function(data, par.pois2) {
       par.pois2[3] <= 0 ||
       par.pois2[1] < 0 ||
       par.pois2[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     nl <- sum(
@@ -104,7 +104,7 @@ nlogL_pois2 <- function(data, par.pois2) {
     )
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -121,7 +121,7 @@ nlogL_nb2 <- function(data, par.nb2) {
       par.nb2[5] < 0 ||
       par.nb2[1] < 0 ||
       par.nb2[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     nl <- sum(
@@ -132,7 +132,7 @@ nlogL_nb2 <- function(data, par.nb2) {
     )
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
       return(nl)
   }
@@ -150,7 +150,7 @@ nlogL_pb2 <- function(data, par.pb2) {
       par.pb2[7] <= 0 ||
       par.pb2[1] < 0 ||
       par.pb2[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     nl <- sum(
@@ -161,7 +161,7 @@ nlogL_pb2 <- function(data, par.pb2) {
     )
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -176,16 +176,29 @@ nlogL_zipois <- function(data, par.zipois) {
   if (par.zipois[2] <= 0 ||
       par.zipois[1] < 0 ||
       par.zipois[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0 * log(par.zipois[1] + (1 - par.zipois[1]) * exp(-par.zipois[2])) + (n - n0) * log(1 - par.zipois[1]) + sum(dpois(x = non_zero, lambda = par.zipois[2], log = TRUE))
+    if(n0 == 0) {
+      t1 = 0
+    }
+    else{
+      l <- log(par.zipois[1] + (1 - par.zipois[1]) * exp(-par.zipois[2]))
+      if(is.nan(l)){
+        t1 = -par.zipois[2]
+      }
+      else
+      {
+        t1 <- l
+      }
+    }
+    nl <- n0 * t1 + (n - n0) * log(1 - par.zipois[1]) + sum(dpois(x = non_zero, lambda = par.zipois[2], log = TRUE))
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -199,16 +212,29 @@ nlogL_zinb <- function(data, par.zinb) {
       par.zinb[3] < 0 ||
       par.zinb[1] < 0 ||
       par.zinb[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0*log(par.zinb[1] + (1 - par.zinb[1])*dnbinom(0, size = par.zinb[2], mu = par.zinb[3])) + (n-n0)*log(1-par.zinb[1])+sum(dnbinom(x = non_zero, size = par.zinb[2], mu = par.zinb[3], log = TRUE))
+    if(n0 == 0) {
+      t1 = 0
+    }
+    else{
+      l <- log(par.zinb[1] + (1 - par.zinb[1])*dnbinom(0, size = par.zinb[2], mu = par.zinb[3]))
+      if(is.nan(l)){
+        t1 = -par.zipois[2]
+      }
+      else
+      {
+        t1 <- l
+      }
+    }
+    nl <- n0 * t1 + (n-n0)*log(1-par.zinb[1])+sum(dnbinom(x = non_zero, size = par.zinb[2], mu = par.zinb[3], log = TRUE))
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -225,16 +251,29 @@ nlogL_zipb <- function(data, par.zipb) {
       par.zipb[4] <= 0 ||
       par.zipb[1] < 0 ||
       par.zipb[1] > 1) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0*log(par.zipb[1] + (1 - par.zipb[1])*dpb(0, par.zipb[2], par.zipb[3], par.zipb[4])) + (n-n0)*log(1-par.zipb[1])+sum(dpb(x = non_zero, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE))
+    if(n0 == 0) {
+      t1 = 0
+    }
+    else{
+      l <- log(par.zipb[1] + (1 - par.zipb[1])*dpb(0, par.zipb[2], par.zipb[3], par.zipb[4]))
+      if(is.nan(l)){
+        t1 = -par.zipois[2]
+      }
+      else
+      {
+        t1 <- l
+      }
+    }
+    nl <- n0 * t1 + (n-n0)*log(1-par.zipb[1])+sum(dpb(x = non_zero, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE))
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -252,7 +291,7 @@ nlogL_zipois2 <- function(data, par.zipois2) {
       par.zipois2[1] + par.zipois2[2] > 1 ||
       par.zipois2[3] <= 0 ||
       par.zipois2[4] <= 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
@@ -267,7 +306,7 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     )
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -288,7 +327,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
       par.zinb2[4] < 0 ||
       par.zinb2[5] <= 0 ||
       par.zinb2[6] < 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
@@ -302,7 +341,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     )
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
@@ -325,7 +364,7 @@ nlogL_zipb2 <- function(data, par.zipb2) {
       par.zipb2[6] < 0 ||
       par.zipb2[7] < 0 ||
       par.zipb2[8] <= 0) {
-    return(100000 + (rnorm(1, 10000, 20) ^ 2))
+    return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else {
     n <- length(data)
@@ -340,9 +379,11 @@ nlogL_zipb2 <- function(data, par.zipb2) {
 
     nl <- -nl
     if (is.infinite(nl))
-      return(100000 + (rnorm(1, 10000, 20) ^ 2))
+      return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
       return(nl)
     }
   }
 }
+
+nl_inf <- 1e+100

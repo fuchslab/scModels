@@ -17,7 +17,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   x_mean = mean(x)
   ################################  base models  ######################################
   if (type == "pois") {
-    t <- system.time(o <- optim(par = x_mean, fn = nlogL_pois, data = x, method = "Brent", lower = p-100, upper = p+100, control = optim_control))
+    t <- system.time(o <- optim(par = x_mean, fn = nlogL_pois, data = x, method = "Brent", lower = x_mean-100, upper = x_mean+100, control = optim_control))
   }
   else if (type == "nb") {
     p <- c(1, 1)
