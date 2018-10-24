@@ -185,13 +185,17 @@ nlogL_zipois <- function(data, par.zipois) {
     if(n0 == 0) {
       t1 = 0
     }
-    else{
+    else {
       l <- log(par.zipois[1] + (1 - par.zipois[1]) * exp(-par.zipois[2]))
+
+      # This can happen when the inflation parameter is 0 and the probability
+      # of a 0 is very low. For an explanation, see this:
+      #>>>> > exp(-1259)
+      #>>>> [1] 0
       if(is.nan(l)){
         t1 = -par.zipois[2]
       }
-      else
-      {
+      else {
         t1 <- l
       }
     }
@@ -221,13 +225,16 @@ nlogL_zinb <- function(data, par.zinb) {
     if(n0 == 0) {
       t1 = 0
     }
-    else{
+    else {
       l <- log(par.zinb[1] + (1 - par.zinb[1])*dnbinom(0, size = par.zinb[2], mu = par.zinb[3]))
+
+      # Motivated by conclusions from zipois, but the same scenario
+      # occurs in less cases here. The nestorowa dataset had convergent fits
+      # for all cases without this condition.
       if(is.nan(l)){
-        t1 = -par.zipois[2]
+        t1 = dnbinom(0, size = par.zinb[2], mu = par.zinb[3], log = TRUE)
       }
-      else
-      {
+      else {
         t1 <- l
       }
     }
@@ -263,10 +270,12 @@ nlogL_zipb <- function(data, par.zipb) {
     else{
       l <- log(par.zipb[1] + (1 - par.zipb[1])*dpb(0, par.zipb[2], par.zipb[3], par.zipb[4]))
       if(is.nan(l)){
-        t1 = -par.zipois[2]
+
+        # Going by the change from zipois to zinb [more parameters => better fit?],
+        # maybe even lesser cases happen here. Inference not tested.
+        t1 = dpb(0, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE)
       }
-      else
-      {
+      else {
         t1 <- l
       }
     }

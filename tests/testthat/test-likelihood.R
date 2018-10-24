@@ -12,7 +12,7 @@ test_that("Consistency of Poisson likelihoods", {
 test_that("Consistency of Negative-Binomial likelihoods", {
   p <- c(7, 13)
   rand_nb <- rnbinom(100, size = p[1], mu = p[2])
-  nl_nb <- nlogL_pois(rand_pois, p)
+  nl_nb <- nlogL_nb(rand_nb, p)
   expect_equal(nl_nb, nlogL_zinb(rand_nb, c(0, p)))
   expect_equal(nl_nb, nlogL_nb2(rand_nb, c(1, p, 11, 19)))
   # expect_equal(nl_nb, nlogL_nb2(rand_nb, c(0, 11, 19, p)))
