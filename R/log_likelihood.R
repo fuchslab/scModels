@@ -95,6 +95,10 @@ nlogL_pois2 <- function(data, par.pois2) {
       par.pois2[1] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
+  else if (par.pois2[1] == 0) {
+    new.par.pois2 <- c(1, par.pois2[c(3, 2)])
+    return(nlogL_pois2(data, new.par.pois2))
+  }
   else {
     nl <- sum(
       (((floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))*100)*log(10) +log(
@@ -122,6 +126,10 @@ nlogL_nb2 <- function(data, par.nb2) {
       par.nb2[1] < 0 ||
       par.nb2[1] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else if (par.nb2[1] == 0) {
+    new.par.nb2 <- c(1, par.nb2[c(4, 5, 2, 3)])
+    return(nlogL_nb2(data, new.par.nb2))
   }
   else {
     nl <- sum(
@@ -151,6 +159,10 @@ nlogL_pb2 <- function(data, par.pb2) {
       par.pb2[1] < 0 ||
       par.pb2[1] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else if (par.pb2[1] == 0) {
+    new.par.pb2 <- c(1, par.pb2[c(5:7, 2:4)])
+    return(nlogL_pb2(data, new.par.pb2))
   }
   else {
     nl <- sum(
@@ -302,6 +314,10 @@ nlogL_zipois2 <- function(data, par.zipois2) {
       par.zipois2[4] <= 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
+  else if (par.zipois2[2] == 0) {
+    new.par.zipois2 <- c(0, 1, par.zipois2[c(4, 3)])
+    return(nlogL_zipois2(data, new.par.zipois2))
+  }
   else {
     n <- length(data)
     n0 <- length(which(data == 0))
@@ -337,6 +353,10 @@ nlogL_zinb2 <- function(data, par.zinb2) {
       par.zinb2[5] <= 0 ||
       par.zinb2[6] < 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else if (par.zinb2[2] == 0) {
+    new.par.zinb2 <- c(0, 1, par.zinb2[c(5, 6, 3, 4)])
+    return(nlogL_zinb2(data, new.par.zinb2))
   }
   else {
     n <- length(data)
@@ -374,6 +394,10 @@ nlogL_zipb2 <- function(data, par.zipb2) {
       par.zipb2[7] < 0 ||
       par.zipb2[8] <= 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+  }
+  else if (par.zipb2[2] == 0) {
+    new.par.zipb2 <- c(0, 1, par.zipb2[c(6:8, 3:5)])
+    return(nlogL_zipb2(data, new.par.zipb2))
   }
   else {
     n <- length(data)
