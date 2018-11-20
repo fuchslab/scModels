@@ -315,7 +315,7 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else if (par.zipois2[2] == 0) {
-    new.par.zipois2 <- c(0, 1, par.zipois2[c(4, 3)])
+    new.par.zipois2 <- c(par.zipois2[1], 1- par.zipois2[1], par.zipois2[c(4, 3)])
     return(nlogL_zipois2(data, new.par.zipois2))
   }
   else {
@@ -355,7 +355,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else if (par.zinb2[2] == 0) {
-    new.par.zinb2 <- c(0, 1, par.zinb2[c(5, 6, 3, 4)])
+    new.par.zinb2 <- c(par.zinb2[1], 1 - par.zinb2[1], par.zinb2[c(5, 6, 3, 4)])
     return(nlogL_zinb2(data, new.par.zinb2))
   }
   else {
@@ -365,7 +365,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     nl <- n0 * log(par.zinb2[1] + par.zinb2[2]*dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4]) + (1 - par.zinb2[1] - par.zinb2[2])*dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6])) + sum(
       (((floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))*100)*log(10) +log(
         (exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))^100
-        +(exp((log(1-par.zinb2[1]-par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))^100
+        +(exp((log(1-(par.zinb2[1]+par.zinb2[2]))+dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))^100
       )
     )
     nl <- -nl
@@ -396,7 +396,7 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else if (par.zipb2[2] == 0) {
-    new.par.zipb2 <- c(0, 1, par.zipb2[c(6:8, 3:5)])
+    new.par.zipb2 <- c(par.zipb2[1], 1 - par.zipb2[1], par.zipb2[c(6:8, 3:5)])
     return(nlogL_zipb2(data, new.par.zipb2))
   }
   else {
@@ -406,7 +406,7 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum(
       (((floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))*100)*log(10) +log(
         (exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
-        +(exp((log(1-par.zipb2[1]-par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log=TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
+        +(exp((log(1-(par.zipb2[1]+par.zipb2[2]))+dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log=TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
       )
     )
 
