@@ -2,22 +2,48 @@
 #define N_TERMS(x) (x / 1000 + 1) * 2000
 using namespace Rcpp;
 
+// kummer fn: Taylor series method
+double kummer_taylor(double x, double a, double b) {
+  mpfr::mpreal aj = 1;
+  mpfr::mpreal sj = aj;
+  mpfr::mpreal tol = 1e-6, err = 1.0, j = 0.0;
+  mpfr::mpreal aj1 = 0.0, sj1 = 0.0;
+  mpfr::mpreal x_mp = mpfr::mpreal(x), a_mp = mpfr::mpreal(a), b_mp = mpfr::mpreal(b);
+  while (err > tol) {
+    aj1 = aj*(a+j)*x/((b+j)*(j+1));
+    sj1 = sj + aj1;
+    aj = aj1;
+    sj = sj1;
+    err = mpfr::abs(aj1);
+    j = j+1;
+  }
+  return mpfr::log(sj).toDouble();
+}
+
+
+// Exponential transformation of the kummer fn for -ve x
+// kummer_(x=-c, a=alpha+x, b=beta+alpha+x)
+// since positive x is easier to compute
+// M(a,b,x) = exp(x)M(b-a,b,-x)
+double kummer_exp(double x, double a, double b) {
+  return x + kummer_taylor(-x, b-a, b);
+}
+
+
 // kummer series using mpfr
 // returns only logarithmic values
 double kummer_(double x, double a, double b) {
   if(!validKummerParameters(a, b)) {
     return R_NaN;
   }
-  mpfr::mpreal val = 1.0;
-  mpfr::mpreal last_term = 1.0;
-  mpfr::mpreal x_mp = mpfr::mpreal(-x), a_mp = mpfr::mpreal(b-a), b_mp = mpfr::mpreal(b);
-  for(int i = 0; i < N_TERMS(-x); i++) {
-    last_term = (last_term * (a_mp + i) * x_mp) / ((b_mp + i) * (i + 1));
-    val += last_term;
+  if(x < 0) {
+    return(kummer_exp(x, a, b));
   }
-  val = x + mpfr::log(val);
-  return val.toDouble();
+  else {
+    return(kummer_taylor(x, a, b));
+  }
 }
+
 
 // density function
 double dpb_(double x, double alpha, double beta, double c, const bool& log_p, bool& throw_warning) {
