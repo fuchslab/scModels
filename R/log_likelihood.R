@@ -86,6 +86,27 @@ nlogL_pb <- function(data, par.pb) {
   }
 }
 
+sum_2pop_terms <- function(t1, t2) {
+  b1 <- (t1)/log(10) -300
+  b3 <- (t2)/log(10) -300
+  b13 <- pmax(b1,b3)
+  b2 <- (t1)/log(10) +300
+  b4 <- (t2)/log(10) +300
+  b24 <- pmin(b2,b4)
+  b <- rowMeans(matrix(c(b1*is.finite(b1),b2*is.finite(b2),b3*is.finite(b3),b4*is.finite(b4)),ncol = 4, byrow= FALSE), na.rm = TRUE )
+
+  t1_b <- (t1 / log(10)-b)
+  t2_b <- (t2 / log(10)-b)
+
+  t_b_check_1<- (t2_b - t1_b > 600)
+  t_b_check_2<- (t1_b - t2_b > 600)
+
+
+  nl <- sum( b[!t_b_check_1 & !t_b_check_2]*log(10) + log( 10 ^(t1[!t_b_check_1 & ! t_b_check_2] / log(10)-b[!t_b_check_1 & !t_b_check_2]) + 10 ^(t2[ !t_b_check_1 & !t_b_check_2] / log(10)-b[!t_b_check_1 & !t_b_check_2])))+
+    sum( (t2[t_b_check_1]  )) + sum( (t1[t_b_check_2]  ))
+  return(-nl)
+}
+
 #' @rdname nlogL
 #' @export
 nlogL_pois2 <- function(data, par.pois2) {
@@ -100,13 +121,9 @@ nlogL_pois2 <- function(data, par.pois2) {
     return(nlogL_pois2(data, new.par.pois2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))^100
-        +(exp((log(1-par.pois2[1])+dpois(x = data, lambda = par.pois2[3], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)
+    t2 <- log(1-par.pois2[1])+dpois(x = data, lambda = par.pois2[3], log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
@@ -132,13 +149,9 @@ nlogL_nb2 <- function(data, par.nb2) {
     return(nlogL_nb2(data, new.par.nb2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)*10^(-floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))^100
-        +(exp((log(1-par.nb2[1])+dnbinom(x = data, size = par.nb2[4], mu = par.nb2[5], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.nb2[1]) + dnbinom(x = data,size = par.nb2[2],mu = par.nb2[3],log = TRUE)
+    t2 <- log(1-par.nb2[1]) + dnbinom(x = data,size = par.nb2[4],mu = par.nb2[5],log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
@@ -165,13 +178,9 @@ nlogL_pb2 <- function(data, par.pb2) {
     return(nlogL_pb2(data, new.par.pb2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
-        +(exp((log(1-par.pb2[1])+dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7], log=TRUE)) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.pb2[1]) + dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log = TRUE)
+    t2 <- log(1-par.pb2[1]) + dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7], log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
