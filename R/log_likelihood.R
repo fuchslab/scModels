@@ -86,6 +86,27 @@ nlogL_pb <- function(data, par.pb) {
   }
 }
 
+sum_2pop_terms <- function(t1, t2) {
+  b1 <- (t1)/log(10) -300
+  b3 <- (t2)/log(10) -300
+  b13 <- pmax(b1,b3)
+  b2 <- (t1)/log(10) +300
+  b4 <- (t2)/log(10) +300
+  b24 <- pmin(b2,b4)
+  b <- rowMeans(matrix(c(b1*is.finite(b1),b2*is.finite(b2),b3*is.finite(b3),b4*is.finite(b4)),ncol = 4, byrow= FALSE), na.rm = TRUE )
+
+  t1_b <- (t1 / log(10)-b)
+  t2_b <- (t2 / log(10)-b)
+
+  t_b_check_1<- (t2_b - t1_b > 600)
+  t_b_check_2<- (t1_b - t2_b > 600)
+
+
+  nl <- sum( b[!t_b_check_1 & !t_b_check_2]*log(10) + log( 10 ^(t1[!t_b_check_1 & ! t_b_check_2] / log(10)-b[!t_b_check_1 & !t_b_check_2]) + 10 ^(t2[ !t_b_check_1 & !t_b_check_2] / log(10)-b[!t_b_check_1 & !t_b_check_2])))+
+    sum( (t2[t_b_check_1]  )) + sum( (t1[t_b_check_2]  ))
+  return(-nl)
+}
+
 #' @rdname nlogL
 #' @export
 nlogL_pois2 <- function(data, par.pois2) {
@@ -100,13 +121,9 @@ nlogL_pois2 <- function(data, par.pois2) {
     return(nlogL_pois2(data, new.par.pois2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))^100
-        +(exp((log(1-par.pois2[1])+dpois(x = data, lambda = par.pois2[3], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.pois2[1])+dpois(x = data, lambda = par.pois2[2], log = TRUE)
+    t2 <- log(1-par.pois2[1])+dpois(x = data, lambda = par.pois2[3], log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
@@ -132,13 +149,9 @@ nlogL_nb2 <- function(data, par.nb2) {
     return(nlogL_nb2(data, new.par.nb2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)*10^(-floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))^100
-        +(exp((log(1-par.nb2[1])+dnbinom(x = data, size = par.nb2[4], mu = par.nb2[5], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.nb2[1])+dnbinom(x = data, size = par.nb2[2], mu = par.nb2[3],log = TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.nb2[1]) + dnbinom(x = data,size = par.nb2[2],mu = par.nb2[3],log = TRUE)
+    t2 <- log(1-par.nb2[1]) + dnbinom(x = data,size = par.nb2[4],mu = par.nb2[5],log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
@@ -165,13 +178,9 @@ nlogL_pb2 <- function(data, par.pb2) {
     return(nlogL_pb2(data, new.par.pb2))
   }
   else {
-    nl <- sum(
-      (((floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
-        +(exp((log(1-par.pb2[1])+dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7], log=TRUE)) /100)*10^(-floor(log10(exp((log(par.pb2[1])+dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log =TRUE)) /100)))))^100
-      )
-    )
-    nl <- -nl
+    t1 <- log(par.pb2[1]) + dpb(x = data, alpha = par.pb2[2], beta = par.pb2[3], c = par.pb2[4], log = TRUE)
+    t2 <- log(1-par.pb2[1]) + dpb(x = data, alpha = par.pb2[5], beta = par.pb2[6], c = par.pb2[7], log = TRUE)
+    nl <- sum_2pop_terms(t1, t2)
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else{
@@ -323,12 +332,15 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
 
-    nl <- n0 * log(par.zipois2[1] + par.zipois2[2] * exp(-par.zipois2[3]) + (1 - par.zipois2[1] - par.zipois2[2]) * exp(-par.zipois2[4])) +sum(
-      (((floor(log10(exp((log(par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)) /100)))))^100
-        +(exp((log(1-par.zipois2[1]-par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[4], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)) /100)))))^100
-      )
-    )
+    t1 <- log(par.zipois2[2])+dpois(x = 0, lambda = par.zipois2[3], log = TRUE)
+    t2 <- log(1-(par.zipois2[1]+par.zipois2[2]))+dpois(x = 0, lambda = par.zipois2[4], log = TRUE)
+    nl_zero <- -sum_2pop_terms(t1, t2)
+
+    t1 <- log(par.zipois2[2])+dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)
+    t2 <- log(1-(par.zipois2[1]+par.zipois2[2]))+dpois(x = non_zero, lambda = par.zipois2[4], log = TRUE)
+    nl_non_zero <- -sum_2pop_terms(t1, t2)
+
+    nl <- n0 * log(par.zipois2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -362,12 +374,16 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0 * log(par.zinb2[1] + par.zinb2[2]*dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4]) + (1 - par.zinb2[1] - par.zinb2[2])*dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6])) + sum(
-      (((floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))^100
-        +(exp((log(1-(par.zinb2[1]+par.zinb2[2]))+dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)) /100)*10^(-floor(log10(exp((log(par.zinb2[2])+dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4],log = TRUE)) /100)))))^100
-      )
-    )
+
+    t1 <- log(par.zinb2[2]) + dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
+    t2 <- log(1 - (par.zinb2[1] + par.zinb2[2])) + dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
+    nl_zero <- -sum_2pop_terms(t1, t2)
+
+    t1 <- log(par.zinb2[2]) + dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
+    t2 <- log(1 - (par.zinb2[1] + par.zinb2[2])) + dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
+    nl_non_zero <- -sum_2pop_terms(t1, t2)
+
+    nl <- n0 * log(par.zinb2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -403,13 +419,16 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     n <- length(data)
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
-    nl <- n0 * log(par.zipb2[1] + par.zipb2[2]*dpb(0, par.zipb2[3], par.zipb2[4], par.zipb2[5]) + (1 - par.zipb2[1] - par.zipb2[2])*dpb(0, par.zipb2[6], par.zipb2[7], par.zipb2[8])) + sum(
-      (((floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))*100)*log(10) +log(
-        (exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
-        +(exp((log(1-(par.zipb2[1]+par.zipb2[2]))+dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log=TRUE)) /100)*10^(-floor(log10(exp((log(par.zipb2[2])+dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log =TRUE)) /100)))))^100
-      )
-    )
 
+    t1 <- log(par.zipb2[2]) + dpb(x = 0, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log = TRUE)
+    t2 <- log(1 - (par.zipb2[1] + par.zipb2[2])) + dpb(x = 0, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log = TRUE)
+    nl_zero <- -sum_2pop_terms(t1, t2)
+
+    t1 <- log(par.zipb2[2]) + dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log = TRUE)
+    t2 <- log(1 - (par.zipb2[1] + par.zipb2[2])) + dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log = TRUE)
+    nl_non_zero <- -sum_2pop_terms(t1, t2)
+
+    nl <- n0 * log(par.zipb2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
