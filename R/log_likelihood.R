@@ -340,7 +340,11 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     t2 <- log(1-(par.zipois2[1]+par.zipois2[2]))+dpois(x = non_zero, lambda = par.zipois2[4], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
 
-    nl <- n0 * log(par.zipois2[1] + exp(nl_zero ) ) + nl_non_zero
+    # reduce expression when no zero-inflation
+    if(par.zipois2[1] == 0)
+      nl <- n0 * nl_zero + nl_non_zero
+    else
+      nl <- n0 * log(par.zipois2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -383,7 +387,10 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     t2 <- log(1 - (par.zinb2[1] + par.zinb2[2])) + dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
 
-    nl <- n0 * log(par.zinb2[1] + exp(nl_zero ) ) + nl_non_zero
+    if(par.zinb2[1] == 0)
+      nl <- n0 * nl_zero + nl_non_zero
+    else
+      nl <- n0 * log(par.zinb2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -428,7 +435,10 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     t2 <- log(1 - (par.zipb2[1] + par.zipb2[2])) + dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
 
-    nl <- n0 * log(par.zipb2[1] + exp(nl_zero ) ) + nl_non_zero
+    if(par.zipb2[1] == 0)
+      nl <- n0 * nl_zero + nl_non_zero
+    else
+      nl <- n0 * log(par.zipb2[1] + exp(nl_zero ) ) + nl_non_zero
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
