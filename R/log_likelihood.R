@@ -37,11 +37,14 @@
 #'     entry is the inflation parameter for all cases.
 #' @param par.zipois2,par.zinb2,par.zipb2 Parameters for the zero-inflated
 #'     2 population model.
+#' @param use.bpsc logical; Set TRUE to perform computations for the
+#'     poisson-beta model using the BPSC package. Default is FALSE
 #'
 #' @keywords likelihood negative binomial poisson beta
 #'
 #' @name nlogL
 #' @importFrom stats dpois dnbinom rnorm
+#' @importFrom BPSC pBPi
 #' @export
 nlogL_pois <- function(data, par.pois) {
   if (par.pois <= 0) {
@@ -73,12 +76,15 @@ nlogL_nb <- function(data, par.nb) {
 
 #' @rdname nlogL
 #' @export
-nlogL_pb <- function(data, par.pb) {
+nlogL_pb <- function(data, par.pb, use.bpsc = FALSE) {
   if (par.pb[1] < 0 ||
       par.pb[2] < 0 || par.pb[3] <= 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    nl <- -sum(dpb(x = data, alpha = par.pb[1], beta = par.pb[2], c = par.pb[3], log = TRUE))
+    if(use.bpsc)
+      nl <- -sum(log(pBPi(x1 = data-1, x2 = data, alp = par.pb[1], bet = par.pb[2], lam1 = par.pb[3])))
+    else
+      nl <- -sum(dpb(x = data, alpha = par.pb[1], beta = par.pb[2], c = par.pb[3], log = TRUE))
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else

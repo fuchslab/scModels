@@ -21,7 +21,7 @@ nlogL_pois(data, par.pois)
 
 nlogL_nb(data, par.nb)
 
-nlogL_pb(data, par.pb)
+nlogL_pb(data, par.pb, use.bpsc = FALSE)
 
 nlogL_pois2(data, par.pois2)
 
@@ -52,6 +52,9 @@ parameter of the negative binomial distribution}
 
 \item{par.pb}{Vector of length 3, containing the alpha, beta
 and c parameter of the Poisson-beta distribution}
+
+\item{use.bpsc}{logical; Set TRUE to perform computations for the
+poisson-beta model using the BPSC package. Default is FALSE}
 
 \item{par.pois2, par.nb2, par.pb2}{Vector containing the parameters
 of the two mixing distributions. First entry represents the

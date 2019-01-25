@@ -4,7 +4,7 @@
 \alias{fit_params}
 \title{Functions to fit distributions}
 \usage{
-fit_params(x, type, optim_control = list(maxit = 1000))
+fit_params(x, type, optim_control = list(maxit = 1000), use.bpsc = FALSE)
 }
 \arguments{
 \item{x}{Vector of count data}
@@ -17,6 +17,9 @@ against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
 the optim function; Set to list(maxit = 1000) by default.
 For more detials, please refer to the 'control' parameter in the
 standard 'optim' function in package 'stats'.}
+
+\item{use.bpsc}{logical; Set TRUE to perform computations for the
+poisson-beta model using the BPSC package. Default is FALSE}
 }
 \description{
 Functions to fit distributions

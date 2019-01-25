@@ -8,11 +8,13 @@
 #'     the optim function; Set to list(maxit = 1000) by default.
 #'     For more detials, please refer to the 'control' parameter in the
 #'     standard 'optim' function in package 'stats'.
+#' @param use.bpsc logical; Set TRUE to perform computations for the
+#'     poisson-beta model using the BPSC package. Default is FALSE
 #' @keywords parameter estimation
 #' @name fit_params
 #' @importFrom stats kmeans optim runif
 #' @export
-fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
+fit_params <- function(x, type, optim_control = list(maxit = 1000), use.bpsc = FALSE) {
   max_iter <- 20
   x_mean = mean(x)
   ################################  base models  ######################################
@@ -25,7 +27,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   }
   else if (type == "pb") {
     par <- estimate_pb_optim_init_restarts(x)
-    t <- system.time(o <- optim(par = par, fn = nlogL_pb, data = x, control = optim_control))
+    t <- system.time(o <- optim(par = par, fn = nlogL_pb, data = x, control = optim_control, use.bpsc = use.bpsc))
   }
   ################################ Zero-inflated models ###############################
   ######################################################
