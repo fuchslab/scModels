@@ -14,4 +14,4 @@ before_install:
     - if [ $TRAVIS_OS_NAME = linux ]; then sudo apt-get -qq update; sudo apt-get install -qy libmpfr-dev; else brew outdated mpfr || brew upgrade mpfr; fi
 script:
     - R CMD build .
-    - R CMD check *.tar.gz
+    - R CMD check --as-cran *.tar.gz
