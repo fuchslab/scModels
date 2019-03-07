@@ -9,7 +9,6 @@
 #'
 
 #' @param n number of observations
-#' @param r.trans transcription rate (Basic Model)
 #' @param r.degr mRNA degradation rate (all models)
 #' @param r.act DNA activation rate (Switching Model)
 #' @param r.deact DNA deactivation rate (Switching Model)
@@ -19,8 +18,8 @@
 #' @name gmRNA
 #' @rdname gmRNA
 #' @export
-gmRNA_basic <- function(n, r.trans, r.degr) {
-  cpp_gmRNA_basic(n, r.trans, r.degr)
+gmRNA_basic <- function(n, r.on, r.degr) {
+  cpp_gmRNA_basic(n, r.on, r.degr)
 }
 
 
