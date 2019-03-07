@@ -6,7 +6,7 @@ title: "scModels"
 [![License](http://img.shields.io/badge/license-GPL%20%28%3E=%202%29-brightgreen.svg?style=flat)](http://www.gnu.org/licenses/gpl-2.0.html)
 
 
-scModels is an R package for the poisson-beta distribution. At its current stage, the package has implementations for the density, distribution function, quantile function and random number generation. The package depends on the MPFR/GMP libraries which need to be installed separately.
+scModels is an R package for distribution fitting of discrete count distributions. Included are the Poisson, the negative binomial and most importantly a new immplementation of the Poisson-beta distribution (density, distribution function, quantile function and random number generation). The package depends on the MPFR/GMP libraries which need to be installed separately.
 
 
 
