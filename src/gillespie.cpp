@@ -13,7 +13,7 @@ NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr) {
   }
   NumericVector res((int)n);
 
-  double t0 = 0, x0 = 0, tmax = 200;
+  double t0 = 0, x0 = 0, tmax = 20/r_degr;
   double x, tx;
   double lambda1, lambda2, lambdax;
   double tau, tau_stern, u;
@@ -57,7 +57,7 @@ NumericVector cpp_gmRNA_switch(double n, double r_act, double r_deact, double r_
   }
 
   NumericVector res((int)n);
-  double t0 = 0, tmax = 200, tx;
+  double t0 = 0, tmax = 20/r_degr, tx;
   int k;
   std::array<double, 3> x0{ {1, 0, 0} };
   std::array<double, 3>x;
@@ -126,7 +126,7 @@ NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r
   }
   NumericVector res((int)n);
 
-  double t0 = 0, x0 = 0, tmax = 200;
+  double t0 = 0, x0 = 0, tmax = 20/r_degr;
   double x, tx;
   double lambda1, lambda2, lambdax;
   double tau, tau_stern, u;
