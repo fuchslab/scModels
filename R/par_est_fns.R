@@ -114,11 +114,11 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     nl1 <- nlogL_pb2(x, p1)
     p2 <- estimate_pb2_optim_init_kmeans(x)
     nl2 <- nlogL_pb2(x, p2)
-    if(is.na(nl2))
+    if(is.na(nl2)) {
       par <- p1
-    else
+    } else {
       par <- if (nl1 < nl2) p1 else p2
-
+    }
     t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_control))
   }
   ################################ zi2  ###############################################
