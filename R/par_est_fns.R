@@ -196,7 +196,7 @@ estimate_pb_optim_init <- function(x, iter = 200) {
     x1 <- r1 * r2 - 2 * r1 * r3 + r2 * r3
     x2 <- r1 - 2 * r2 + r3
     alpha <- 2 * r1 * (r3 - r2) / x1
-    if(alpha < 0)
+    if(alpha < 0 || is.infinite(alpha) || is.na(alpha))
       alpha <- runif(1)
     cm <- c(alpha, 0, max(d1))
     cm[2] <- (function(a, c, m) a * c / m - a)(cm[1], cm[3], mean(d1))
