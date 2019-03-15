@@ -12,13 +12,13 @@
 #'
 #' @details
 #' Functions nlogL_pois, nlogL_nb, nlogL_pb compute the negative
-#' log-likelihood of poisson, negative binomial and the poisson-beta
-#' distributions against the data.
+#' log-likelihood of Poisson, negative binomial and the Poisson-beta
+#' distributions given the data.
 #' Functions nlogL_pois2, nlogL_nb2 and nlogL_pb2 compute the negative
-#' log-likelihood values for a bimodal mixture distribution whereas
+#' log-likelihood values for a two population mixture of distributions whereas
 #' nlogL_zipois, nlogL_zinb, nlogL_zipb compute the same for the
 #' zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2
-#' and nlogL_zipb2 are for bimodal distributions with zero-inflation.
+#' and nlogL_zipb2 are for two population mixtures with zero-inflation.
 
 
 #' @param data Vector containing the discrete observations
@@ -36,9 +36,9 @@
 #'     zero-inflated distribution parameters. The additional first
 #'     entry is the inflation parameter for all cases.
 #' @param par.zipois2,par.zinb2,par.zipb2 Parameters for the zero-inflated
-#'     2 population model.
+#'     two population model.
 #'
-#' @keywords likelihood negative binomial poisson beta
+#' @keywords likelihood negative binomial Poisson-beta
 #'
 #' @name nlogL
 #' @importFrom stats dpois dnbinom rnorm

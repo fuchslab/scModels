@@ -1,12 +1,12 @@
-#' Functions to fit distributions
+#' Functions to estimate parameters of probability distributions by fitting the distributions using optim()
 #'
-#' @param x Vector of count data
-#' @param type keyword for the distribution the data is to be fitted
+#' @param x Vector containing the discrete observations
+#' @param type keyword for the probability distribution the data is to be fitted
 #'     against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
 #'      "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")
 #' @param optim_control list of options to override presets in
 #'     the optim function; Set to list(maxit = 1000) by default.
-#'     For more detials, please refer to the 'control' parameter in the
+#'     For more details, please refer to the 'control' parameter in the
 #'     standard 'optim' function in package 'stats'.
 #' @keywords parameter estimation
 #' @name fit_params
