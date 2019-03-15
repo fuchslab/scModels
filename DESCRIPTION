@@ -1,7 +1,7 @@
 Package: scModels
 Title: Poisson-Beta Distribution
 Version: 0.18
-Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut], Christiane Fuchs [aut]
+Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
@@ -22,9 +22,8 @@ License: GPL (>= 3)
 Depends:
     R (>= 3.1.0)
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
 VignetteBuilder: knitr
 LinkingTo: Rcpp
 Imports: Rcpp
-

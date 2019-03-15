@@ -12,6 +12,6 @@ chf_1F1(x, a, b)
 \item{a, b}{numeric parameters of the Kummer function}
 }
 \description{
-Kummer's (confluent hypergeometric) function of the first kind
-for numeric (non-complex) values and input parameters
+Kummer's function (also: confluent hypergeometric function of the first kind)
+for numeric (non-complex) values and input parameters.
 }
