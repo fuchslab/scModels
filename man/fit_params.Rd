@@ -9,11 +9,11 @@ fit_params(x, type, optim_control = list(maxit = 1000))
 \arguments{
 \item{x}{Vector containing the discrete observations}
 
-\item{type}{keyword for the probability distribution the data is to be fitted
+\item{type}{Keyword for the probability distribution the data is to be fitted
 against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
  "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")}
 
-\item{optim_control}{list of options to override presets in
+\item{optim_control}{List of options to override presets in
 the optim function; Set to list(maxit = 1000) by default.
 For more details, please refer to the 'control' parameter in the
 standard 'optim' function in package 'stats'.}
