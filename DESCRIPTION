@@ -15,7 +15,7 @@ Description: This is an R package accompanying the paper "Probability distributi
   bursting mRNA generating process, respectively. Finally likelihood functions for one 
   population and two population mixtures - with and without zero-inflations - allow distribution
   fittings of the Poisson, negative binomial and the Poisson-beta distribution.
-License: GPL (>= 2)
+License: file LICENSE
 Depends:
     R (>= 3.1.0)
 LazyData: true
