@@ -2,24 +2,24 @@
 % Please edit documentation in R/par_est_fns.R
 \name{fit_params}
 \alias{fit_params}
-\title{Functions to fit distributions}
+\title{Functions to estimate parameters of probability distributions by fitting the distributions using optim()}
 \usage{
 fit_params(x, type, optim_control = list(maxit = 1000))
 }
 \arguments{
-\item{x}{Vector of count data}
+\item{x}{Vector containing the discrete observations}
 
-\item{type}{keyword for the distribution the data is to be fitted
+\item{type}{Keyword for the probability distribution the data is to be fitted
 against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
  "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")}
 
-\item{optim_control}{list of options to override presets in
+\item{optim_control}{List of options to override presets in
 the optim function; Set to list(maxit = 1000) by default.
-For more detials, please refer to the 'control' parameter in the
+For more details, please refer to the 'control' parameter in the
 standard 'optim' function in package 'stats'.}
 }
 \description{
-Functions to fit distributions
+Functions to estimate parameters of probability distributions by fitting the distributions using optim()
 }
 \keyword{estimation}
 \keyword{parameter}
