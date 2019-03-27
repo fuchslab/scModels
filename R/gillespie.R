@@ -8,19 +8,18 @@
 #' bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
 #'
 
-#' @param n number of observations
-#' @param r.trans transcription rate (Basic Model)
+#' @param n Number of observations
 #' @param r.degr mRNA degradation rate (all models)
 #' @param r.act DNA activation rate (Switching Model)
 #' @param r.deact DNA deactivation rate (Switching Model)
-#' @param r.on transcription rate during gene activation (Switching model)
-#' @param r.burst bursty transcription rate (Bursting model)
-#' @param s.burst mean burst size (Bursting Model)
+#' @param r.on Transcription rate during gene activation (Switching model)
+#' @param r.burst Bursty transcription rate (Bursting model)
+#' @param s.burst Mean burst size (Bursting Model)
 #' @name gmRNA
 #' @rdname gmRNA
 #' @export
-gmRNA_basic <- function(n, r.trans, r.degr) {
-  cpp_gmRNA_basic(n, r.trans, r.degr)
+gmRNA_basic <- function(n, r.on, r.degr) {
+  cpp_gmRNA_basic(n, r.on, r.degr)
 }
 
 

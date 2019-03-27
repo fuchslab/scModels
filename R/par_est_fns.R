@@ -1,12 +1,12 @@
-#' Functions to fit distributions
+#' Functions to estimate parameters of probability distributions by fitting the distributions using optim()
 #'
-#' @param x Vector of count data
-#' @param type keyword for the distribution the data is to be fitted
+#' @param x Vector containing the discrete observations
+#' @param type Keyword for the probability distribution the data is to be fitted
 #'     against. Possible values are ("pois", "nb", "pb", "pois2", "nb2",
 #'      "pb2", "zipois", "zinb", "zipb", "zipois2", "zinb2", "zipb2")
-#' @param optim_control list of options to override presets in
+#' @param optim_control List of options to override presets in
 #'     the optim function; Set to list(maxit = 1000) by default.
-#'     For more detials, please refer to the 'control' parameter in the
+#'     For more details, please refer to the 'control' parameter in the
 #'     standard 'optim' function in package 'stats'.
 #' @param use.bpsc logical; Set TRUE to perform computations for the
 #'     poisson-beta model using the BPSC package. Default is FALSE
@@ -116,11 +116,11 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000), use.bpsc = F
     nl1 <- nlogL_pb2(x, p1)
     p2 <- estimate_pb2_optim_init_kmeans(x)
     nl2 <- nlogL_pb2(x, p2)
-    if(is.na(nl2))
+    if(is.na(nl2)) {
       par <- p1
-    else
+    } else {
       par <- if (nl1 < nl2) p1 else p2
-
+    }
     t <- system.time(o <- optim(par = par, fn = nlogL_pb2, data = x, control = optim_control))
   }
   ################################ zi2  ###############################################
@@ -164,11 +164,11 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000), use.bpsc = F
     nl1 <- nlogL_zipb2(x, p1)
     p2 <- estimate_zipb2_optim_init_kmeans(x)
     nl2 <- nlogL_zipb2(x, p2)
-    if(is.na(nl2))
+    if(is.na(nl2)) {
       par <- p1
-    else
+    } else {
       par <- if (nl1 < nl2) p1 else p2
-
+    }
     t <- system.time(o <- optim(par = par, fn = nlogL_zipb2, data = x, control = optim_control))
   }
   ######################################################
@@ -198,7 +198,7 @@ estimate_pb_optim_init <- function(x, iter = 200) {
     x1 <- r1 * r2 - 2 * r1 * r3 + r2 * r3
     x2 <- r1 - 2 * r2 + r3
     alpha <- 2 * r1 * (r3 - r2) / x1
-    if(alpha < 0)
+    if(alpha < 0 || is.infinite(alpha) || is.na(alpha))
       alpha <- runif(1)
     cm <- c(alpha, 0, max(d1))
     cm[2] <- (function(a, c, m) a * c / m - a)(cm[1], cm[3], mean(d1))

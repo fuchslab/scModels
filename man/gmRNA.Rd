@@ -7,16 +7,16 @@
 \alias{gmRNA_burst}
 \title{Gillespie algorithm for mRNA generating processes}
 \usage{
-gmRNA_basic(n, r.trans, r.degr)
+gmRNA_basic(n, r.on, r.degr)
 
 gmRNA_switch(n, r.act, r.deact, r.on, r.degr)
 
 gmRNA_burst(n, r.burst, s.burst, r.degr)
 }
 \arguments{
-\item{n}{number of observations}
+\item{n}{Number of observations}
 
-\item{r.trans}{transcription rate (Basic Model)}
+\item{r.on}{Transcription rate during gene activation (Switching model)}
 
 \item{r.degr}{mRNA degradation rate (all models)}
 
@@ -24,11 +24,9 @@ gmRNA_burst(n, r.burst, s.burst, r.degr)
 
 \item{r.deact}{DNA deactivation rate (Switching Model)}
 
-\item{r.on}{transcription rate during gene activation (Switching model)}
+\item{r.burst}{Bursty transcription rate (Bursting model)}
 
-\item{r.burst}{bursty transcription rate (Bursting model)}
-
-\item{s.burst}{mean burst size (Bursting Model)}
+\item{s.burst}{Mean burst size (Bursting Model)}
 }
 \description{
 Gillespie algorithms allow synthetic data simulation via three different

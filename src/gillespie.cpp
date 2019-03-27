@@ -13,7 +13,7 @@ NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr) {
   }
   NumericVector res((int)n);
 
-  double t0 = 0, x0 = 0, tmax = 200;
+  double t0 = 0, x0 = 0, tmax = 20/r_degr;
   double x, tx;
   double lambda1, lambda2, lambdax;
   double tau, tau_stern, u;
@@ -22,17 +22,18 @@ NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr) {
   for(int i = 0; i < n; i++) {
     x = x0;
     tx = t0;
+    // step 1
+    lambda1 = r_on;
+    lambda2 = r_degr * x;
+    lambdax = lambda1 + lambda2;
+
+    // step 2
+    NumericVector tau_vec = rexp(1, lambdax);
+    tau = tau_vec[0];
+    tau_stern = min(NumericVector::create(tau, tmax - tx));
+    tx += tau_stern;
+
     while(tx < tmax) {
-      // step 1
-      lambda1 = r_on;
-      lambda2 = r_degr * x;
-      lambdax = lambda1 + lambda2;
-
-      // step 2
-      NumericVector tau_vec = rexp(1, lambdax);
-      tau = tau_vec[0];
-      tau_stern = min(NumericVector::create(tau, tmax - tx));
-
       // step 3
       NumericVector u_vec = runif(1);
       u = u_vec[0];
@@ -41,7 +42,15 @@ NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr) {
       // step 4
       x = (k == 1) ? x+1 : x-1;
 
-      // step 5
+      // step 5 includes step 1
+      lambda1 = r_on;
+      lambda2 = r_degr * x;
+      lambdax = lambda1 + lambda2;
+
+      // step 6
+      NumericVector tau_vec = rexp(1, lambdax);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
       tx += tau_stern;
     }
     res[i] = x;
@@ -57,7 +66,7 @@ NumericVector cpp_gmRNA_switch(double n, double r_act, double r_deact, double r_
   }
 
   NumericVector res((int)n);
-  double t0 = 0, tmax = 200, tx;
+  double t0 = 0, tmax = 20/r_degr, tx;
   int k;
   std::array<double, 3> x0{ {1, 0, 0} };
   std::array<double, 3>x;
@@ -67,19 +76,20 @@ NumericVector cpp_gmRNA_switch(double n, double r_act, double r_deact, double r_
   for(int i = 0; i < n; i++) {
     tx = t0;
     x = x0;
+    // step 1
+    r_act1 = r_act * x[0];
+    r_act2 = r_deact * x[1];
+    r_act3 = r_on * x[1];
+    r_act4 = r_degr * x[2];
+    r_actx = r_act1 + r_act2 + r_act3 + r_act4;
+
+    // step 2
+    NumericVector tau_vec = rexp(1, r_actx);
+    tau = tau_vec[0];
+    tau_stern = min(NumericVector::create(tau, tmax - tx));
+    tx += tau_stern;
+
     while(tx < tmax) {
-      // step 1
-      r_act1 = r_act * x[0];
-      r_act2 = r_deact * x[1];
-      r_act3 = r_on * x[1];
-      r_act4 = r_degr * x[2];
-      r_actx = r_act1 + r_act2 + r_act3 + r_act4;
-
-      // step 2
-      NumericVector tau_vec = rexp(1, r_actx);
-      tau = tau_vec[0];
-      tau_stern = min(NumericVector::create(tau, tmax - tx));
-
       // step 3
       NumericVector u_vec = runif(1);
       u = u_vec[0];
@@ -111,6 +121,16 @@ NumericVector cpp_gmRNA_switch(double n, double r_act, double r_deact, double r_
       }
 
       // step 5
+      r_act1 = r_act * x[0];
+      r_act2 = r_deact * x[1];
+      r_act3 = r_on * x[1];
+      r_act4 = r_degr * x[2];
+      r_actx = r_act1 + r_act2 + r_act3 + r_act4;
+
+      // step 6
+      NumericVector tau_vec = rexp(1, r_actx);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
       tx += tau_stern;
     }
     res[i] = x[2];
@@ -126,7 +146,7 @@ NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r
   }
   NumericVector res((int)n);
 
-  double t0 = 0, x0 = 0, tmax = 200;
+  double t0 = 0, x0 = 0, tmax = 20/r_degr;
   double x, tx;
   double lambda1, lambda2, lambdax;
   double tau, tau_stern, u;
@@ -135,17 +155,18 @@ NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r
   for(int i = 0; i < n; i++) {
     x = x0;
     tx = t0;
+    // step 1
+    lambda1 = r_burst;
+    lambda2 = r_degr * x;
+    lambdax = lambda1 + lambda2;
+
+    // step 2
+    NumericVector tau_vec = rexp(1, lambdax);
+    tau = tau_vec[0];
+    tau_stern = min(NumericVector::create(tau, tmax - tx));
+    tx += tau_stern;
+
     while(tx < tmax) {
-      // step 1
-      lambda1 = r_burst;
-      lambda2 = r_degr * x;
-      lambdax = lambda1 + lambda2;
-
-      // step 2
-      NumericVector tau_vec = rexp(1, lambdax);
-      tau = tau_vec[0];
-      tau_stern = min(NumericVector::create(tau, tmax - tx));
-
       // step 3
       NumericVector u_vec = runif(1);
       u = u_vec[0];
@@ -164,6 +185,14 @@ NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r
       }
 
       // step 5
+      lambda1 = r_burst;
+      lambda2 = r_degr * x;
+      lambdax = lambda1 + lambda2;
+
+      // step 6
+      NumericVector tau_vec = rexp(1, lambdax);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
       tx += tau_stern;
     }
     res[i] = x;

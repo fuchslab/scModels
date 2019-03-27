@@ -5,9 +5,22 @@
 
 using namespace Rcpp;
 
+// cpp_gmRNA_basic
+NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr);
+RcppExport SEXP _scModels_cpp_gmRNA_basic(SEXP nSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type r_on(r_onSEXP);
+    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_gmRNA_basic(n, r_on, r_degr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // cpp_gmRNA_switch
 NumericVector cpp_gmRNA_switch(double n, double r_act, double r_deact, double r_on, double r_degr);
-RcppExport SEXP scModels_cpp_gmRNA_switch(SEXP nSEXP, SEXP r_actSEXP, SEXP r_deactSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
+RcppExport SEXP _scModels_cpp_gmRNA_switch(SEXP nSEXP, SEXP r_actSEXP, SEXP r_deactSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,7 +35,7 @@ END_RCPP
 }
 // cpp_gmRNA_burst
 NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r_degr);
-RcppExport SEXP scModels_cpp_gmRNA_burst(SEXP nSEXP, SEXP r_burstSEXP, SEXP s_burstSEXP, SEXP r_degrSEXP) {
+RcppExport SEXP _scModels_cpp_gmRNA_burst(SEXP nSEXP, SEXP r_burstSEXP, SEXP s_burstSEXP, SEXP r_degrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -34,22 +47,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// cpp_gmRNA_basic
-NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr);
-RcppExport SEXP scModels_cpp_gmRNA_basic(SEXP nSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type n(nSEXP);
-    Rcpp::traits::input_parameter< double >::type r_on(r_onSEXP);
-    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
-    rcpp_result_gen = Rcpp::wrap(cpp_gmRNA_basic(n, r_on, r_degr));
-    return rcpp_result_gen;
-END_RCPP
-}
 // chf_1F1
 NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b);
-RcppExport SEXP scModels_chf_1F1(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {
+RcppExport SEXP _scModels_chf_1F1(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -62,7 +62,7 @@ END_RCPP
 }
 // cpp_dpb
 NumericVector cpp_dpb(NumericVector& x, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& log_p);
-RcppExport SEXP scModels_cpp_dpb(SEXP xSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP log_pSEXP) {
+RcppExport SEXP _scModels_cpp_dpb(SEXP xSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -77,7 +77,7 @@ END_RCPP
 }
 // cpp_ppb
 NumericVector cpp_ppb(NumericVector& q, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p);
-RcppExport SEXP scModels_cpp_ppb(SEXP qSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+RcppExport SEXP _scModels_cpp_ppb(SEXP qSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -93,7 +93,7 @@ END_RCPP
 }
 // cpp_rpb
 NumericVector cpp_rpb(const int& n, NumericVector& alpha, NumericVector& beta, NumericVector& c);
-RcppExport SEXP scModels_cpp_rpb(SEXP nSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP) {
+RcppExport SEXP _scModels_cpp_rpb(SEXP nSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -107,7 +107,7 @@ END_RCPP
 }
 // cpp_qpb
 NumericVector cpp_qpb(NumericVector& p, NumericVector& alpha, NumericVector& beta, NumericVector& c, const bool& lower_tail, const bool& log_p);
-RcppExport SEXP scModels_cpp_qpb(SEXP pSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
+RcppExport SEXP _scModels_cpp_qpb(SEXP pSEXP, SEXP alphaSEXP, SEXP betaSEXP, SEXP cSEXP, SEXP lower_tailSEXP, SEXP log_pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
