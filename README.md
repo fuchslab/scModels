@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/fuchslab/scModels.svg?branch=master)](https://travis-ci.com/fuchslab/scModels)
 
-scModels is an R package accompanying the paper "Probability distributions for single cell mRNA counts" by Lisa Amrhein, Harsha Kumar and Christiane Fuchs
+scModels is an R package accompanying the paper "Probability distributions for single cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs
 for distribution fitting of discrete count distributions. Included are the Poisson, the negative binomial and most importantly a new immplementation of the Poisson-beta distribution (density, distribution and quantile function and random number generation) together with a needed new implementation of Kummer's function (also: confluent hypergeometric function of the first kind). Three implemented Gillespie algorithms allow synthetic data simulation via the basic, switching and bursting mRNA generating process, respectively. Finally likelihood functions for one population and two population mixtures - with and without zero-inflations - allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. The package depends on the MPFR/GMP libraries which need to be installed separately (see description below).
 
 
