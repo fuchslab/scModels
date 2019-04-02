@@ -15,6 +15,3 @@ addons:
     packages: libmpfr-dev
   homebrew:
     packages: mpfr
-script:
-    - R CMD build .
-    - R CMD check --as-cran *.tar.gz
