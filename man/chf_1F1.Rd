@@ -7,9 +7,9 @@
 chf_1F1(x, a, b)
 }
 \arguments{
-\item{x}{Numeric value or vector}
+\item{x}{numeric value or vector}
 
-\item{a, b}{Numeric parameters of the Kummer function}
+\item{a, b}{numeric parameters of the Kummer function}
 }
 \description{
 Kummer's function (also: confluent hypergeometric function of the first kind)

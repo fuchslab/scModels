@@ -1,6 +1,6 @@
 Package: scModels
 Title: Poisson-Beta Distribution
-Version: 0.18
+Version: 1.0.0
 Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
