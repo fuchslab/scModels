@@ -1,14 +1,14 @@
 Package: scModels
 Title: Poisson-Beta Distribution
 Version: 1.0.0
-Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut, cre], Christiane Fuchs [aut]
+Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut], Christiane Fuchs [aut]
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
   person("Kumar", "Harsha", email="kumar.harsha@tum.de", role="aut"),
   person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"))
 License: file LICENSE
-Description: scModels is an R package accompanying the paper "Probability distributions for single 
+Description: This is an R package accompanying the paper "Probability distributions for single 
   cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs for distribution fitting 
   of discrete count distributions. Included are the Poisson, the negative binomial and most importantly 
   a new implementation of the Poisson-beta distribution (density, distribution and quantile function and 
@@ -18,13 +18,12 @@ Description: scModels is an R package accompanying the paper "Probability distri
   likelihood functions for one population and two population mixtures - with and without zero-inflations - 
   allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. 
   The package depends on the MPFR/GMP libraries which need to be installed separately 
-  (see description on https://github.com/fuchslab/scModels).
+  (see description at <https://github.com/fuchslab/scModels>).
 Depends:
     R (>= 3.1.0)
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
-VignetteBuilder: knitr
 LinkingTo: Rcpp
 Imports: Rcpp
 Encoding: UTF-8
