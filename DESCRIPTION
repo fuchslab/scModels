@@ -18,7 +18,7 @@ Description: This R package provides functions for distribution fitting
   allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. 
   The package depends on the MPFR/GMP libraries which need to be installed separately 
   (see description at <https://github.com/fuchslab/scModels>). 
-  scModel is accompanying the paper "Probability distributions for single   cell mRNA counts" 
+  scModel is accompanying the paper "Probability distributions for single cell mRNA counts" 
   by Lisa Amrhein, Kumar Harsha and Christiane Fuchs. 
 Depends:
     R (>= 3.1.0)
