@@ -6,7 +6,8 @@ Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
   person("Kumar", "Harsha", email="kumar.harsha@tum.de", role="aut"),
-  person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"))
+  person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"),
+  person("Pavel", "Holoborodko", email="pavel@holoborodko.com", role="cph"))
 License: file LICENSE
 Description: This is an R package accompanying the paper "Probability distributions for single 
   cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs for distribution fitting 
