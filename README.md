@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/fuchslab/scModels.svg?branch=master)](https://travis-ci.com/fuchslab/scModels)
 
 scModels is an R package accompanying the paper "Probability distributions for single cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs
-for distribution fitting of discrete count distributions. Included are the Poisson, the negative binomial and most importantly a new immplementation of the Poisson-beta distribution (density, distribution and quantile function and random number generation) together with a needed new implementation of Kummer's function (also: confluent hypergeometric function of the first kind). Three implemented Gillespie algorithms allow synthetic data simulation via the basic, switching and bursting mRNA generating process, respectively. Finally likelihood functions for one population and two population mixtures - with and without zero-inflations - allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. The package depends on the MPFR/GMP libraries which need to be installed separately (see description below).
+for distribution fitting of discrete count distributions. Included are the Poisson, the negative binomial and most importantly a new implementation of the Poisson-beta distribution (density, distribution and quantile function and random number generation) together with a needed new implementation of Kummer's function (also: confluent hypergeometric function of the first kind). Three implemented Gillespie algorithms allow synthetic data simulation via the basic, switching and bursting mRNA generating process, respectively. Finally likelihood functions for one population and two population mixtures - with and without zero-inflations - allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. The package depends on the MPFR/GMP libraries which need to be installed separately (see description below).
 
 
 Installing MPFR
@@ -34,7 +34,7 @@ Installation on Windows requires building MPFR with the recommended toolchain fo
 
 Pre-compiled libraries have been put together by Prof. Brian Ripley and are available on his [webpage](http://www.stats.ox.ac.uk/pub/Rtools/). The files are under [goodies/multilib](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/) directory. This includes a 'local' tree, named as [local323.zip](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip) at the time this manual was prepared, that contains the headers and static libraries for MPFR amongst others.
 
-The following instructions are vaild for Windows 8 and above.
+The following instructions are valid for Windows 8 and above.
 
 1. The local323.zip has to be extracted at a convenient place. The C: drive is the location for the screenshots used in this manual.
 2. The location of the library needs to be added to the environment variables of the system. There are two ways to get to the list of environment variables:

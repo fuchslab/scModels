@@ -191,6 +191,9 @@ double rpb_(double alpha, double beta, double c, bool& throw_warning) {
 //' @name chf_1F1
 //' @rdname chf_1F1
 //' @export
+//' @examples
+//' x <- chf_1F1(-100:100, 5, 7)
+//' plot(-100:100, x, type='l')
 // [[Rcpp::export]]
 NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b) {
     if(min(NumericVector::create(x.length(), a.length(), b.length())) < 1) {
