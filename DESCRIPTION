@@ -1,7 +1,6 @@
 Package: scModels
 Title: Poisson-Beta Distribution
 Version: 1.0.0
-Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut], Christiane Fuchs [aut]
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
@@ -18,7 +17,7 @@ Description: This is an R package accompanying the paper "Probability distributi
   simulation via the basic, switching and bursting mRNA generating process, respectively. Finally 
   likelihood functions for one population and two population mixtures - with and without zero-inflations - 
   allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. 
-  The package depends on the MPFR/GMP libraries which need to be installed separately 
+  The package depends on the 'MPFR' libraries which need to be installed separately 
   (see description at <https://github.com/fuchslab/scModels>).
 Depends:
     R (>= 3.1.0)
