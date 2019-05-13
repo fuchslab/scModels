@@ -7,11 +7,15 @@
 chf_1F1(x, a, b)
 }
 \arguments{
-\item{x}{Numeric value or vector}
+\item{x}{numeric value or vector}
 
-\item{a, b}{Numeric parameters of the Kummer function}
+\item{a, b}{numeric parameters of the Kummer function}
 }
 \description{
 Kummer's function (also: confluent hypergeometric function of the first kind)
 for numeric (non-complex) values and input parameters.
+}
+\examples{
+x <- chf_1F1(-100:100, 5, 7)
+plot(-100:100, x, type='l')
 }

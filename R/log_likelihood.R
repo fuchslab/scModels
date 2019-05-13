@@ -46,6 +46,10 @@
 #' @importFrom stats dpois dnbinom rnorm
 #' @importFrom BPSC pBPi
 #' @export
+#' @examples
+#' x <- rpois(100, 11)
+#' nl1 <- nlogL_pois(x, 11)
+#' nl2 <- nlogL_pois(x, 13)
 nlogL_pois <- function(data, par.pois) {
   if (par.pois <= 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -61,6 +65,9 @@ nlogL_pois <- function(data, par.pois) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' x <- rnbinom(100, size = 13, mu = 9)
+#' nl <- nlogL_nb(x, c(13, 9))
 nlogL_nb <- function(data, par.nb) {
   if (par.nb[1] <= 0 || par.nb[2] < 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -76,6 +83,9 @@ nlogL_nb <- function(data, par.nb) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' x <- rpb(n = 1000, alpha=5, beta= 3, c=20)
+#' nl <- nlogL_pb(x, c(5, 3, 20))
 nlogL_pb <- function(data, par.pb, use.bpsc = FALSE) {
   if (par.pb[1] < 0 ||
       par.pb[2] < 0 || par.pb[3] <= 0) {
@@ -115,6 +125,12 @@ sum_2pop_terms <- function(t1, t2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+#' x <- s*rpois(100, 7) + (1-s)*rpois(100, 13)
+#' nl1 <- nlogL_pois2(x, c(0.7, 13, 7))
+#' nl2 <- nlogL_pois2(x, c(0.3, 7, 13))
+#' ## both values should be same: 296.9517
 nlogL_pois2 <- function(data, par.pois2) {
   if (par.pois2[2] <= 0 ||
       par.pois2[3] <= 0 ||
@@ -141,6 +157,10 @@ nlogL_pois2 <- function(data, par.pois2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+#' x <-s*rnbinom(100, size = 13, mu = 9) + (1-s)*rnbinom(100, size = 17, mu = 29)
+#' nl <- nlogL_nb2(x, c(0.7, 17, 29, 13, 9))
 nlogL_nb2 <- function(data, par.nb2) {
   if (par.nb2[2] <= 0 ||
       par.nb2[3] < 0 ||
@@ -168,6 +188,10 @@ nlogL_nb2 <- function(data, par.nb2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+#' x <- s*rpb(100, 5, 3, 20) + (1-s)*rpb(100, 7, 13, 53)
+#' nl <- nlogL_pb2(x, c(0.7, 7, 13, 53, 5, 3, 20))
 nlogL_pb2 <- function(data, par.pb2) {
   if (par.pb2[2] < 0 ||
       par.pb2[3] < 0 ||
@@ -199,6 +223,9 @@ nlogL_pb2 <- function(data, par.pb2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' x <- c(rep(0, 10), rpois(90, 7))
+#' nl <- nlogL_zipois(x, c(0.1, 7))
 nlogL_zipois <- function(data, par.zipois) {
   if (par.zipois[2] <= 0 ||
       par.zipois[1] < 0 ||
@@ -238,6 +265,9 @@ nlogL_zipois <- function(data, par.zipois) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' x <- c(rep(0,10), rnbinom(90, size = 13, mu = 9))
+#' nl <- nlogL_zinb(x, c(0.1, 13, 9))
 nlogL_zinb <- function(data, par.zinb) {
   if (par.zinb[2] <= 0 ||
       par.zinb[3] < 0 ||
@@ -279,6 +309,9 @@ nlogL_zinb <- function(data, par.zinb) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' x <- c(rep(0, 10), rpb(n = 90, alpha=5, beta= 3, c=20))
+#' nl <- nlogL_zipb(x, c(0.1, 5, 3, 20))
 nlogL_zipb <- function(data, par.zipb) {
   if (par.zipb[2] < 0 ||
       par.zipb[3] < 0 ||
@@ -319,6 +352,10 @@ nlogL_zipb <- function(data, par.zipb) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
+#' x <- c(rep(0, 10), s*rpois(90, 7) + (1-s)*rpois(90, 13))
+#' nl1 <- nlogL_zipois2(x, c(0.1, 0.63, 13, 7))
 nlogL_zipois2 <- function(data, par.zipois2) {
   if (par.zipois2[1] < 0 ||
       par.zipois2[1] > 1 ||
@@ -364,6 +401,10 @@ nlogL_zipois2 <- function(data, par.zipois2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
+#' x <- c(rep(0, 10), s*rnbinom(90, size = 13, mu = 9) + (1-s)*rnbinom(90, size = 17, mu = 29))
+#' nl <- nlogL_zinb2(x, c(0.1, 0.63, 17, 29, 13, 9))
 nlogL_zinb2 <- function(data, par.zinb2) {
   if (par.zinb2[1] < 0 ||
       par.zinb2[1] > 1 ||
@@ -410,6 +451,10 @@ nlogL_zinb2 <- function(data, par.zinb2) {
 
 #' @rdname nlogL
 #' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
+#' x <- c(rep(0,10), s*rpb(90, 5, 3, 20) + (1-s)*rpb(90, 7, 13, 53))
+#' nl <- nlogL_zipb2(x, c(0.1, 0.63, 7, 13, 53, 5, 3, 20))
 nlogL_zipb2 <- function(data, par.zipb2) {
   if (par.zipb2[1] < 0 ||
       par.zipb2[1] > 1 ||
