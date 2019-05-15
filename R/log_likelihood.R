@@ -91,10 +91,18 @@ nlogL_pb <- function(data, par.pb, use.bpsc = FALSE) {
       par.pb[2] < 0 || par.pb[3] <= 0) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    if(use.bpsc)
-      nl <- -sum(log(pBPi(x1 = data-1, x2 = data, alp = par.pb[1], bet = par.pb[2], lam1 = par.pb[3])))
-    else
+    if(use.bpsc) {
+      r <- c()
+      for (i in data) {
+        r <- c(r, pBPi(x1 = i-1, x2 = i, alp = par.pb[1], bet = par.pb[2], lam1 = par.pb[3]))
+      }
+      suppressWarnings(t <- log(r))
+      f <- t*is.finite(t)
+      nl <- -sum(f, na.rm = TRUE)
+    }
+    else {
       nl <- -sum(dpb(x = data, alpha = par.pb[1], beta = par.pb[2], c = par.pb[3], log = TRUE))
+    }
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
