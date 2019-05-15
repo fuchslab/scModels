@@ -8,8 +8,7 @@ Authors@R: c(
   person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"),
   person("Pavel", "Holoborodko", email="pavel@holoborodko.com", role="cph"))
 License: file LICENSE
-Description: This is an R package accompanying the paper "Probability distributions for single 
-  cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs for distribution fitting 
+Description: This R package provides functions for distribution fitting 
   of discrete count distributions. Included are the Poisson, the negative binomial and most importantly 
   a new implementation of the Poisson-beta distribution (density, distribution and quantile function and 
   random number generation) together with a needed new implementation of Kummer's function (also: confluent 
@@ -19,6 +18,8 @@ Description: This is an R package accompanying the paper "Probability distributi
   allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. 
   The package depends on the 'MPFR' libraries which need to be installed separately 
   (see description at <https://github.com/fuchslab/scModels>).
+  scModels is accompanying the paper "Probability distributions for single cell mRNA counts" 
+  by Lisa Amrhein, Kumar Harsha and Christiane Fuchs. 
 Depends:
     R (>= 3.1.0)
 LazyData: true
