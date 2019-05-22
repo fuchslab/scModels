@@ -8,7 +8,7 @@
 \alias{rpb}
 \title{Poisson-beta Distribution}
 \usage{
-dpb(x, alpha, beta, c = 1, log = FALSE)
+dpb(x, alpha, beta, c = 1, log = FALSE, use.bpsc = FALSE)
 
 ppb(q, alpha, beta, c = 1, lower.tail = TRUE, log.p = FALSE)
 
@@ -25,6 +25,8 @@ rpb(n, alpha, beta, c = 1)
 scaled on (0,1) (default) and can be transformed to (0,c).}
 
 \item{log, log.p}{Logical; if TRUE, probabilities p are given as log(p)}
+
+\item{use.bpsc}{Logical; if TRUE, use the density function provided by the BPSC package}
 
 \item{lower.tail}{Logical; if TRUE (default), probabilities are \eqn{P[X \le x]}
 otherwise, \eqn{P[X > x]}.}

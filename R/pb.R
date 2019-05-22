@@ -17,17 +17,35 @@
 #' @param log,log.p  Logical; if TRUE, probabilities p are given as log(p)
 #' @param lower.tail  Logical; if TRUE (default), probabilities are \eqn{P[X \le x]}
 #'                        otherwise, \eqn{P[X > x]}.
+#' @param use.bpsc Logical; if TRUE, use the density function provided by the BPSC package
 #' @keywords Poisson-beta distribution
 #' @name Poisson-beta
 #' @useDynLib scModels
 #' @importFrom Rcpp evalCpp sourceCpp
+#' @importFrom BPSC pBP
 #' @export
 #' @examples
 #'  X <- dpb(x=0:200, alpha=5, beta=3, c=20)
 #'  plot(0:200, X, type='l')
 #'  Y <- dpb(0:10, seq(10.0,11.0,by=0.1), seq(30.0,31.0,by=0.1), seq(10.2,11.2,by=0.1))
-dpb <- function(x, alpha, beta, c = 1, log = FALSE) {
-  cpp_dpb(x, alpha, beta, c, log)
+dpb <- function(x, alpha, beta, c = 1, log = FALSE, use.bpsc = FALSE) {
+  if (use.bpsc) {
+    d <- c()
+    for(i in x) {
+      d <- c(d, pBP(x = i, alp = alpha, bet = beta, lam1 = c))
+    }
+    ld <- log(d)
+    ld[is.infinite(ld)] <- 0
+    if (log) {
+      ld
+    }
+    else {
+      d
+    }
+  }
+  else{
+    cpp_dpb(x, alpha, beta, c, log)
+  }
 }
 
 
