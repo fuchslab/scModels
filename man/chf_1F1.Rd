@@ -15,3 +15,7 @@ chf_1F1(x, a, b)
 Kummer's function (also: confluent hypergeometric function of the first kind)
 for numeric (non-complex) values and input parameters.
 }
+\examples{
+x <- chf_1F1(-100:100, 5, 7)
+plot(-100:100, x, type='l')
+}

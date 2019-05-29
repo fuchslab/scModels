@@ -15,3 +15,5 @@
 ## R CMD check results
 There were no ERRORs, WARNING or NOTEs.
 Status: OK
+
+All suggestions from the last submission review have been fixed.

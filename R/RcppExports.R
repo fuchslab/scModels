@@ -22,6 +22,9 @@ cpp_gmRNA_burst <- function(n, r_burst, s_burst, r_degr) {
 #' @name chf_1F1
 #' @rdname chf_1F1
 #' @export
+#' @examples
+#' x <- chf_1F1(-100:100, 5, 7)
+#' plot(-100:100, x, type='l')
 chf_1F1 <- function(x, a, b) {
     .Call('_scModels_chf_1F1', PACKAGE = 'scModels', x, a, b)
 }
