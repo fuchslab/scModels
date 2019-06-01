@@ -1,5 +1,5 @@
 Package: scModels
-Title: Poisson-Beta Distribution
+Title: Fitting discrete distribution models to count data
 Version: 1.0.0
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
