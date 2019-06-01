@@ -19,7 +19,7 @@ Description: This R package provides functions for fitting discrete distribution
   The variants include one population and two population mixtures, both with and without
   zero-inflation. The package depends on the 'MPFR' libraries which need to be installed separately 
   (see description at <https://github.com/fuchslab/scModels>).
-  This package is supplement to the paper "Probability distributions for single cell mRNA counts" 
+  This package is supplement to the paper "A mechanistic model for the negative binomial distribution of single-cell mRNA counts" 
   by Lisa Amrhein, Kumar Harsha and Christiane Fuchs.
 Depends:
     R (>= 3.1.0)
