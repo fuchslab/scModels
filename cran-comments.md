@@ -16,4 +16,6 @@
 There were no ERRORs, WARNING or NOTEs.
 Status: OK
 
-All suggestions from the last submission review have been fixed.
+## Resubmission
+This is a resubmission. 
+All suggestions from the last submission review have been fixed. For more information see News.md
