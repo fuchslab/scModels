@@ -15,3 +15,7 @@
 ## R CMD check results
 There were no ERRORs, WARNING or NOTEs.
 Status: OK
+
+## Resubmission
+This is a resubmission. 
+All suggestions from the last submission review have been fixed. For more information see News.md

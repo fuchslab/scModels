@@ -1,7 +1,6 @@
 Package: scModels
-Title: Poisson-Beta Distribution
+Title: Fitting discrete distribution models to count data
 Version: 1.0.0
-Author: Lisa Amrhein [aut, cre], Kumar Harsha [aut], Christiane Fuchs [aut]
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
@@ -9,18 +8,19 @@ Authors@R: c(
   person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"),
   person("Pavel", "Holoborodko", email="pavel@holoborodko.com", role="cph"))
 License: file LICENSE
-Description: This R package provides functions for distribution fitting 
-  of discrete count distributions. Included are the Poisson, the negative binomial and most importantly 
-  a new implementation of the Poisson-beta distribution (density, distribution and quantile function and 
-  random number generation) together with a needed new implementation of Kummer's function (also: confluent 
-  hypergeometric function of the first kind). Three implemented Gillespie algorithms allow synthetic data 
-  simulation via the basic, switching and bursting mRNA generating process, respectively. Finally 
-  likelihood functions for one population and two population mixtures - with and without zero-inflations - 
-  allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. 
-  The package depends on the MPFR/GMP libraries which need to be installed separately 
-  (see description at <https://github.com/fuchslab/scModels>). 
-  scModel is accompanying the paper "Probability distributions for single cell mRNA counts" 
-  by Lisa Amrhein, Kumar Harsha and Christiane Fuchs. 
+Description: This R package provides functions for fitting discrete distribution models to count data.
+  Included are the Poisson, the negative binomial and, most importantly,
+  a new implementation of the Poisson-beta distribution (density, distribution and quantile
+  functions, and random number generator) together with a needed new implementation of
+  Kummer's function (also: confluent hypergeometric function of the first kind). Three
+  different implementations of the Gillespie algorithm allow data simulation based on the
+  basic, switching or bursting mRNA generating processes. Moreover, likelihood functions for
+  four variants of each of the three aforementioned distributions are also available.
+  The variants include one population and two population mixtures, both with and without
+  zero-inflation. The package depends on the 'MPFR' libraries which need to be installed separately 
+  (see description at <https://github.com/fuchslab/scModels>).
+  This package is supplement to the paper "A mechanistic model for the negative binomial distribution of single-cell mRNA counts" 
+  by Lisa Amrhein, Kumar Harsha and Christiane Fuchs(2019) <doi:10.1101/657619> available on bioRxiv.
 Depends:
     R (>= 3.1.0)
 LazyData: true
