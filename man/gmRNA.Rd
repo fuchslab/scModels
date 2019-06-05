@@ -36,3 +36,11 @@ switching process considers additionally gene activation and deactivation,
 with mRNA transcription only happening in active gene states; the
 bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
 }
+\examples{
+x <- gmRNA_basic(100, 0.75, 0.001)
+plot(density(x))
+x <- gmRNA_switch(100, 0.23, 0.15, 0.75, 0.001)
+plot(density(x))
+x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
+plot(density(x))
+}

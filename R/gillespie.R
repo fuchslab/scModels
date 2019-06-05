@@ -18,7 +18,7 @@
 #' @name gmRNA
 #' @rdname gmRNA
 #' @export
-#' @example
+#' @examples
 #' x <- gmRNA_basic(100, 0.75, 0.001)
 #' plot(density(x))
 gmRNA_basic <- function(n, r.on, r.degr) {
@@ -28,7 +28,7 @@ gmRNA_basic <- function(n, r.on, r.degr) {
 
 #' @rdname gmRNA
 #' @export
-#' @example
+#' @examples
 #' x <- gmRNA_switch(100, 0.23, 0.15, 0.75, 0.001)
 #' plot(density(x))
 gmRNA_switch <- function(n, r.act, r.deact, r.on, r.degr) {
@@ -38,7 +38,7 @@ gmRNA_switch <- function(n, r.act, r.deact, r.on, r.degr) {
 
 #' @rdname gmRNA
 #' @export
-#' @example
+#' @examples
 #' x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
 #' plot(density(x))
 gmRNA_burst <- function(n, r.burst, s.burst, r.degr) {

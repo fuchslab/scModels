@@ -21,5 +21,12 @@ standard 'optim' function in package 'stats'.}
 \description{
 Functions to estimate parameters of probability distributions by fitting the distributions using optim()
 }
+\examples{
+x1 <- rnbinom(100, size = 13, mu = 9)
+p1 <- fit_params(x1, "nb")
+s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+x2 <- s*x1 + (1-s)*rnbinom(100, size = 15, mu = 53)
+p2 <- fit_params(x2, "nb2")
+}
 \keyword{estimation}
 \keyword{parameter}

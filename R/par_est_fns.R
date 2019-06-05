@@ -17,7 +17,7 @@
 #' p1 <- fit_params(x1, "nb")
 #' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
 #' x2 <- s*x1 + (1-s)*rnbinom(100, size = 15, mu = 53)
-#' p2 <- fit_params(x2, "nb2)
+#' p2 <- fit_params(x2, "nb2")
 fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   max_iter <- 20
   x_mean = mean(x)
