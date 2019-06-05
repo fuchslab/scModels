@@ -1,5 +1,5 @@
 Package: scModels
-Title: Fitting Discrete Distribution Models To Count Data
+Title: Fitting Discrete Distribution Models to Count Data
 Version: 1.0.0
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
