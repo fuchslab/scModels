@@ -1,6 +1,7 @@
 Package: scModels
 Title: Fitting Discrete Distribution Models to Count Data
-Version: 1.0.0
+Version: 1.0.1
+DateNote: Previous CRAN version 1.0.0 on 2019-06-13
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
@@ -17,15 +18,20 @@ Description: Provides functions for fitting discrete distribution models to coun
   basic, switching or bursting mRNA generating processes. Moreover, likelihood functions for
   four variants of each of the three aforementioned distributions are also available.
   The variants include one population and two population mixtures, both with and without
-  zero-inflation. The package depends on the 'MPFR' libraries which need to be installed separately 
+  zero-inflation. The package depends on the 'MPFR' libraries (<https://www.mpfr.org/>) which need to be installed separately 
   (see description at <https://github.com/fuchslab/scModels>).
   This package is supplement to the paper "A mechanistic model for the negative binomial distribution of single-cell mRNA counts" 
   by Lisa Amrhein, Kumar Harsha and Christiane Fuchs (2019) <doi:10.1101/657619> available on bioRxiv.
 Depends:
-    R (>= 3.1.0)
+  R (>= 3.1.0)
 LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
 LinkingTo: Rcpp
 Imports: Rcpp
 Encoding: UTF-8
+SystemRequirements:
+  gmp (>= 4.2.3),
+  mpfr (>= 3.0.0)
+SystemRequirementsNote: 'MPFR' (MP Floating-Point Reliable Library, <http://mpfr.org/>) and
+  'GMP' (GNU Multiple Precision library,<http://gmplib.org/>)

@@ -61,3 +61,31 @@ The package comes with a comprehensive test suite. In order to run the tests, th
 ```r
 devtools::test("/path/to/scModels/")
 ```
+
+---
+references:
+-  id: fouLHLPZ2007
+   type: article-journal
+   author:
+   - family: Fousse 
+     given: Laurent
+   - family: Hanrot
+     given: Guillaume
+   - family: 'Lef\`{e}vre'
+     given: 'Vincent  and'
+   - family: 'P\`{e}lissier'
+     given: Patrick
+   - family: Zimmermann
+     given: Paul
+   title: MPFR: A multiple-precision binary floating-point library with correct rounding
+   year: 2007
+   journal: ACM Trans. Math. Softw.
+   volume: 33
+   number: 2
+   issn: 0098-3500
+   pages: 13
+   URL: 'http://doi.acm.org/10.1145/1236463.1236468'
+   DOI: 10.1145/1236463.1236468
+   publisher: ACM
+   address: New York, NY, USA
+---

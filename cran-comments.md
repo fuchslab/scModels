@@ -16,6 +16,5 @@
 There were no ERRORs, WARNING or NOTEs.
 Status: OK
 
-## Resubmission
-This is a resubmission. 
-All suggestions from the last submission review have been fixed. For more information see News.md
+## Update
+This is an update fixing warnings generated for deprecated functions in mpfr. 
