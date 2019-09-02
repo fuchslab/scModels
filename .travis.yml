@@ -1,5 +1,4 @@
 sudo: required
-dist: trusty
 language: r
 r_binary_packages:
     - Rcpp

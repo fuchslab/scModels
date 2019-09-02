@@ -1,6 +1,6 @@
 ## Test environments
 * Linux
-  - R 3.2.3
+  - R 3.6.1
   - apt packages: build-essential, libmpfr-dev, libblas-dev, liblapack-dev
 * Windows
   - R 3.4.1, R 3.5.2
@@ -9,7 +9,7 @@
   - R 3.5.3
   - brew packages: mpfr
 * Travis-CI
-  - R 3.5.2 (Linux)
+  - R 3.5.2, libmpfr-dev_3.1.2-1 (Linux)
   - R 3.5.3 (OS X)
 
 ## R CMD check results

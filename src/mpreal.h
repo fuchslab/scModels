@@ -2198,8 +2198,11 @@ inline const mpreal sqrt(const int v, mp_rnd_t rnd_mode)
 inline const mpreal root(const mpreal& x, unsigned long int k, mp_rnd_t r = mpreal::get_default_rnd())
 {
     mpreal y(0, mpfr_get_prec(x.mpfr_srcptr()));
-    //mpfr_root(y.mpfr_ptr(), x.mpfr_srcptr(), k, r);
+#if MPFR_VERSION_MAJOR >= 4
     mpfr_rootn_ui(y.mpfr_ptr(), x.mpfr_ptr(), k, r);
+#else
+    mpfr_root(y.mpfr_ptr(), x.mpfr_srcptr(), k, r);
+#endif
     return y;
 }
 
@@ -2644,7 +2647,11 @@ inline const mpreal random(unsigned int seed = 0)
 inline const mpreal grandom (gmp_randstate_t& state, mp_rnd_t rnd_mode = mpreal::get_default_rnd())
 {
     mpreal x;
+#if MPFR_VERSION_MAJOR >= 4
     mpfr_nrandom(x.mpfr_ptr(), state, rnd_mode);
+#else
+    mpfr_grandom(x.mpfr_ptr(), NULL, state, rnd_mode);
+#endif
     return x;
 }
 
