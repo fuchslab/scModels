@@ -2,6 +2,9 @@
 
 * Add configure script to set mpfr library prefix
 
+# scModels 1.0.2
+* Added Poisson-inverse Gaussian model as "pig" model and all conected models to the package
+
 # scModels 1.0.1
 
 * Fixed mpfr warnings

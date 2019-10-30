@@ -2,22 +2,22 @@
 #' Poisson-beta distributions
 #'
 #' The negative log Likelihood functions for Poisson, negative binomial
-#' and Poisson-beta distributions. Mixing two distributions of the same
-#' kind and/or adding zero-inflation allows to take characteristics
-#' of real data into account.
+#' Poisson-inverse Gaussian and Poisson-beta distributions. Mixing two
+#' distributions of the same #' kind and/or adding zero-inflation allows
+#' to take characteristics #' of real data into account.
 #' Additionally, one population and two population mixtures - with and
 #' without zero-inflations - allow distribution fittings of the Poisson,
-#'  negative binomial and the Poisson-beta distribution.
+#' negative binomial, Poisson-inverse Gaussian and the Poisson-beta distribution.
 #'
 #'
 #' @details
-#' Functions nlogL_pois, nlogL_nb, nlogL_pb compute the negative
-#' log-likelihood of Poisson, negative binomial and the Poisson-beta
-#' distributions given the data.
-#' Functions nlogL_pois2, nlogL_nb2 and nlogL_pb2 compute the negative
+#' Functions nlogL_pois, nlogL_nb, nlogL_pig, nlogL_pb compute the negative
+#' log-likelihood of Poisson, negative binomial, Poisson-inverse Gaussian and
+#' the Poisson-beta distributions given the data.
+#' Functions nlogL_pois2, nlogL_nb2, nlogL_pig2 and nlogL_pb2 compute the negative
 #' log-likelihood values for a two population mixture of distributions whereas
-#' nlogL_zipois, nlogL_zinb, nlogL_zipb compute the same for the
-#' zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2
+#' nlogL_zipois, nlogL_zinb, nlogL_zipig, nlogL_zipb compute the same for the
+#' zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2, nlogL_zipig2
 #' and nlogL_zipb2 are for two population mixtures with zero-inflation.
 
 
@@ -26,22 +26,24 @@
 #'     of the Poisson distribution
 #' @param par.nb Vector of length 2, containing the size and the mu
 #'     parameter of the negative binomial distribution
+#' @param par.pig Vector of length 2, containing the mu and the sigma
+#'   parameter of the Poisson-inverse Gaussian distribution
 #' @param par.pb Vector of length 3, containing the alpha, beta
 #'     and c parameter of the Poisson-beta distribution
-#' @param par.pois2,par.nb2,par.pb2 Vector containing the parameters
+#' @param par.pois2,par.nb2,par.pig2,par.pb2 Vector containing the parameters
 #'     of the two mixing distributions. First entry represents the
 #'     fraction of the first distribution, followed by all parameters
 #'     of the first, then all of the second distribution.
-#' @param par.zipois,par.zinb,par.zipb Vector containing the respective
+#' @param par.zipois,par.zinb,par.zipig,par.zipb Vector containing the respective
 #'     zero-inflated distribution parameters. The additional first
 #'     entry is the inflation parameter for all cases.
-#' @param par.zipois2,par.zinb2,par.zipb2 Parameters for the zero-inflated
+#' @param par.zipois2,par.zinb2,par.zipig2,par.zipb2 Parameters for the zero-inflated
 #'     two population model.
 #'
 #' @keywords likelihood negative binomial Poisson-beta
 #'
 #' @name nlogL
-#' @importFrom stats dpois dnbinom rnorm
+#' @importFrom stats dpois dnbinom rnorm gamlss
 #' @export
 #' @examples
 #' x <- rpois(100, 11)

@@ -1,7 +1,7 @@
 Package: scModels
 Title: Fitting Discrete Distribution Models to Count Data
-Version: 1.0.1
-DateNote: Previous CRAN version 1.0.0 on 2019-06-13
+Version: 1.0.2
+DateNote: Previous CRAN version 1.0.1 on 2019-09-03
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
@@ -10,7 +10,7 @@ Authors@R: c(
   person("Pavel", "Holoborodko", email="pavel@holoborodko.com", role="ctb", comment="Author and copyright holder of 'mpreal.h'"))
 License: GPL-3
 Description: Provides functions for fitting discrete distribution models to count data.
-  Included are the Poisson, the negative binomial and, most importantly,
+  Included are the Poisson, the negative binomial, the Poisson-inverse gaussian and, most importantly,
   a new implementation of the Poisson-beta distribution (density, distribution and quantile
   functions, and random number generator) together with a needed new implementation of
   Kummer's function (also: confluent hypergeometric function of the first kind). Three
@@ -28,7 +28,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
 LinkingTo: Rcpp
-Imports: Rcpp
+Imports: Rcpp, gamlss
 Encoding: UTF-8
 SystemRequirements:
   gmp (>= 4.2.3),
