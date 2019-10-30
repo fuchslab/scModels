@@ -4,15 +4,19 @@
 \alias{nlogL}
 \alias{nlogL_pois}
 \alias{nlogL_nb}
+\alias{nlogL_pig}
 \alias{nlogL_pb}
 \alias{nlogL_pois2}
 \alias{nlogL_nb2}
+\alias{nlogL_pig2}
 \alias{nlogL_pb2}
 \alias{nlogL_zipois}
 \alias{nlogL_zinb}
+\alias{nlogL_zipig}
 \alias{nlogL_zipb}
 \alias{nlogL_zipois2}
 \alias{nlogL_zinb2}
+\alias{nlogL_zipig2}
 \alias{nlogL_zipb2}
 \title{Negative log Likelihood functions for Poisson, negative binomial and
 Poisson-beta distributions}
@@ -21,11 +25,15 @@ nlogL_pois(data, par.pois)
 
 nlogL_nb(data, par.nb)
 
+nlogL_pig(data, par.pig)
+
 nlogL_pb(data, par.pb)
 
 nlogL_pois2(data, par.pois2)
 
 nlogL_nb2(data, par.nb2)
+
+nlogL_pig2(data, par.pig2)
 
 nlogL_pb2(data, par.pb2)
 
@@ -33,11 +41,15 @@ nlogL_zipois(data, par.zipois)
 
 nlogL_zinb(data, par.zinb)
 
+nlogL_zipig(data, par.zipig)
+
 nlogL_zipb(data, par.zipb)
 
 nlogL_zipois2(data, par.zipois2)
 
 nlogL_zinb2(data, par.zinb2)
+
+nlogL_zipig2(data, par.zipig2)
 
 nlogL_zipb2(data, par.zipb2)
 }
@@ -50,38 +62,41 @@ of the Poisson distribution}
 \item{par.nb}{Vector of length 2, containing the size and the mu
 parameter of the negative binomial distribution}
 
+\item{par.pig}{Vector of length 2, containing the mu and the sigma
+parameter of the Poisson-inverse Gaussian distribution}
+
 \item{par.pb}{Vector of length 3, containing the alpha, beta
 and c parameter of the Poisson-beta distribution}
 
-\item{par.pois2, par.nb2, par.pb2}{Vector containing the parameters
+\item{par.pois2, par.nb2, par.pig2, par.pb2}{Vector containing the parameters
 of the two mixing distributions. First entry represents the
 fraction of the first distribution, followed by all parameters
 of the first, then all of the second distribution.}
 
-\item{par.zipois, par.zinb, par.zipb}{Vector containing the respective
+\item{par.zipois, par.zinb, par.zipig, par.zipb}{Vector containing the respective
 zero-inflated distribution parameters. The additional first
 entry is the inflation parameter for all cases.}
 
-\item{par.zipois2, par.zinb2, par.zipb2}{Parameters for the zero-inflated
+\item{par.zipois2, par.zinb2, par.zipig2, par.zipb2}{Parameters for the zero-inflated
 two population model.}
 }
 \description{
 The negative log Likelihood functions for Poisson, negative binomial
-and Poisson-beta distributions. Mixing two distributions of the same
-kind and/or adding zero-inflation allows to take characteristics
-of real data into account.
+Poisson-inverse Gaussian and Poisson-beta distributions. Mixing two
+distributions of the same #' kind and/or adding zero-inflation allows
+to take characteristics #' of real data into account.
 Additionally, one population and two population mixtures - with and
 without zero-inflations - allow distribution fittings of the Poisson,
- negative binomial and the Poisson-beta distribution.
+negative binomial, Poisson-inverse Gaussian and the Poisson-beta distribution.
 }
 \details{
-Functions nlogL_pois, nlogL_nb, nlogL_pb compute the negative
-log-likelihood of Poisson, negative binomial and the Poisson-beta
-distributions given the data.
-Functions nlogL_pois2, nlogL_nb2 and nlogL_pb2 compute the negative
+Functions nlogL_pois, nlogL_nb, nlogL_pig, nlogL_pb compute the negative
+log-likelihood of Poisson, negative binomial, Poisson-inverse Gaussian and
+the Poisson-beta distributions given the data.
+Functions nlogL_pois2, nlogL_nb2, nlogL_pig2 and nlogL_pb2 compute the negative
 log-likelihood values for a two population mixture of distributions whereas
-nlogL_zipois, nlogL_zinb, nlogL_zipb compute the same for the
-zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2
+nlogL_zipois, nlogL_zinb, nlogL_zipig, nlogL_zipb compute the same for the
+zero-inflated distributions. Furthermore, nlogL_zipois2, nlogL_zinb2, nlogL_zipig2
 and nlogL_zipb2 are for two population mixtures with zero-inflation.
 }
 \examples{
@@ -90,6 +105,8 @@ nl1 <- nlogL_pois(x, 11)
 nl2 <- nlogL_pois(x, 13)
 x <- rnbinom(100, size = 13, mu = 9)
 nl <- nlogL_nb(x, c(13, 9))
+x <- rPIG(100, mu = 5, sigma = 0.2)
+nl <- nlogL_pig(x, c(13, 9))
 x <- rpb(n = 1000, alpha=5, beta= 3, c=20)
 nl <- nlogL_pb(x, c(5, 3, 20))
 s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
@@ -101,12 +118,17 @@ s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
 x <-s*rnbinom(100, size = 13, mu = 9) + (1-s)*rnbinom(100, size = 17, mu = 29)
 nl <- nlogL_nb2(x, c(0.7, 17, 29, 13, 9))
 s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+x <-s*rPIG(100, mu = 5, sigma = 0.2) + (1-s)*rPIG(100, mu = 20, sigma = 2)
+nl <- nlogL_pig2(x, c(0.7, 20, 2, 5, 0.2))
+s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
 x <- s*rpb(100, 5, 3, 20) + (1-s)*rpb(100, 7, 13, 53)
 nl <- nlogL_pb2(x, c(0.7, 7, 13, 53, 5, 3, 20))
 x <- c(rep(0, 10), rpois(90, 7))
 nl <- nlogL_zipois(x, c(0.1, 7))
 x <- c(rep(0,10), rnbinom(90, size = 13, mu = 9))
 nl <- nlogL_zinb(x, c(0.1, 13, 9))
+x <- c(rep(0,10), rPIG(90, mu = 13, sigma = 2))
+nl <- nlogL_zipig(x, c(0.1, 13, 2))
 x <- c(rep(0, 10), rpb(n = 90, alpha=5, beta= 3, c=20))
 nl <- nlogL_zipb(x, c(0.1, 5, 3, 20))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
@@ -115,6 +137,9 @@ nl1 <- nlogL_zipois2(x, c(0.1, 0.63, 13, 7))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
 x <- c(rep(0, 10), s*rnbinom(90, size = 13, mu = 9) + (1-s)*rnbinom(90, size = 17, mu = 29))
 nl <- nlogL_zinb2(x, c(0.1, 0.63, 17, 29, 13, 9))
+s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
+x <- c(rep(0, 10), s*rPIG(90, mu = 13, sigma = 0.2) + (1-s)*rPIG(90, size = 17, mu = 2))
+nl <- nlogL_zipig2(x, c(0.1, 0.63, 17, 2, 13, 0.2))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
 x <- c(rep(0,10), s*rpb(90, 5, 3, 20) + (1-s)*rpb(90, 7, 13, 53))
 nl <- nlogL_zipb2(x, c(0.1, 0.63, 7, 13, 53, 5, 3, 20))

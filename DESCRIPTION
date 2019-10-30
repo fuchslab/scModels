@@ -28,7 +28,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
 LinkingTo: Rcpp
-Imports: Rcpp, gamlss
+Imports: Rcpp, gamlss.dist
 Encoding: UTF-8
 SystemRequirements:
   gmp (>= 4.2.3),

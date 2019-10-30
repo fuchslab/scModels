@@ -11,6 +11,7 @@
 #' @keywords parameter estimation
 #' @name fit_params
 #' @importFrom stats kmeans optim runif
+#' @importFrom gamlss.dist dPIG dZIPIG rPIG rZIPIG
 #' @export
 #' @examples
 #' x1 <- rnbinom(100, size = 13, mu = 9)

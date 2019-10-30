@@ -43,7 +43,8 @@
 #' @keywords likelihood negative binomial Poisson-beta
 #'
 #' @name nlogL
-#' @importFrom stats dpois dnbinom rnorm gamlss
+#' @importFrom stats dpois dnbinom rnorm
+#' @importFrom gamlss.dist dPIG dZIPIG rPIG rZIPIG
 #' @export
 #' @examples
 #' x <- rpois(100, 11)
