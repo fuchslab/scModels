@@ -29,6 +29,10 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     p <- c(1, 1)
     t <- system.time(o <- optim(par = p, fn = nlogL_nb, data = x, control = optim_control))
   }
+  else if (type == "pig") {
+      p <- c(1, 1)
+      t <- system.time(o <- optim(par = p, fn = nlogL_pig, data = x, control = optim_control))
+  }
   else if (type == "pb") {
     par <- estimate_pb_optim_init_restarts(x)
     t <- system.time(o <- optim(par = par, fn = nlogL_pb, data = x, control = optim_control))
@@ -66,6 +70,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
+  }
+  ######################################################
+  else if (type == "zipig") {
+      optim_restarts <- list()
+      optim_times <- list()
+      for(i in 1:max_iter) {
+          t <- system.time(o <- optim(par = runif(3), fn = nlogL_zipig, data = x, control = optim_control))
+          optim_restarts[[i]] <- o
+          optim_times[[i]] <- t
+      }
+      p <- c(0.000001, fit_params(x, "pig")$par)
+      t <- system.time(o <- optim(par = p, fn = nlogL_zipig, data = x, control = optim_control))
+      optim_restarts[[i+1]] <- o
+      optim_times[[i+1]] <- t
+      best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+      o <- optim_restarts[[best_optim]]
+      t <- optim_times[[best_optim]]
   }
   ######################################################
   else if (type == "zipb") {
@@ -114,6 +135,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     t <- optim_times[[best_optim]]
   }
   ######################################################
+  else if (type == "pig2") {
+      optim_restarts <- list()
+      optim_times <- list()
+      for(i in 1:max_iter) {
+          t <- system.time(o <- optim(par = runif(5), fn = nlogL_pig2, data = x, control = optim_control))
+          optim_restarts[[i]] <- o
+          optim_times[[i]] <- t
+      }
+      t1 <- fit_params(x, "pig")$par
+      t <- system.time(o <- optim(par = c(1, t1, t1), fn = nlogL_pig2, data = x, control = optim_control))
+      optim_restarts[[i+1]] <- o
+      optim_times[[i+1]] <- t
+      best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+      o <- optim_restarts[[best_optim]]
+      t <- optim_times[[best_optim]]
+  }
+  ######################################################
   else if (type == "pb2") {
     t1<-estimate_pb_optim_init_restarts(x)
     p1 <- c(1, t1, t1)
@@ -160,6 +198,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
     o <- optim_restarts[[best_optim]]
     t <- optim_times[[best_optim]]
+  }
+  ######################################################
+  else if (type == "zipig2") {
+      optim_restarts <- list()
+      optim_times <- list()
+      for(i in 1:max_iter) {
+          t <- system.time(o <- optim(par = c(runif(2)/2, runif(4)), fn = nlogL_zipig2, data = x, control = optim_control))
+          optim_restarts[[i]] <- o
+          optim_times[[i]] <- t
+      }
+      t1 <- fit_params(x, "pig")$par
+      t <- system.time(o <- optim(par = c(0.0001, 0.0098, t1, t1), fn = nlogL_zipig2, data = x, control = optim_control))
+      optim_restarts[[i+1]] <- o
+      optim_times[[i+1]] <- t
+      best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+      o <- optim_restarts[[best_optim]]
+      t <- optim_times[[best_optim]]
   }
   ######################################################
   else if (type == "zipb2") {

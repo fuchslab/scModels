@@ -77,6 +77,25 @@ nlogL_nb <- function(data, par.nb) {
   }
 }
 
+#' @rdname nlogL
+#' @export
+#' @examples
+#' x <- rPIG(100, mu = 5, sigma = 0.2)
+#' nl <- nlogL_pig(x, c(13, 9))
+
+
+nlogL_pig <- function(data, par.pig) {
+    if (par.pig[1] <= 0 || par.pig[2] < 0) {
+        return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+    } else {
+        nl <- -sum(dPIG(x = data, mu = par.pig[1], sigma = par.pig[2], log = TRUE))
+        if (is.infinite(nl))
+            return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+        else
+            return(nl)
+    }
+}
+
 
 #' @rdname nlogL
 #' @export
@@ -179,6 +198,36 @@ nlogL_nb2 <- function(data, par.nb2) {
   }
 }
 
+
+#' @rdname nlogL
+#' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
+#' x <-s*rPIG(100, mu = 5, sigma = 0.2) + (1-s)*rPIG(100, mu = 20, sigma = 2)
+#' nl <- nlogL_pig2(x, c(0.7, 20, 2, 5, 0.2))
+nlogL_pig2 <- function(data, par.pig2) {
+    if (par.pig2[2] < 0 ||
+        par.pig2[3] < 0 ||
+        par.pig2[4] < 0 ||
+        par.pig2[5] < 0 ||
+        par.pig2[1] < 0 ||
+        par.pig2[1] > 1) {
+        return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+    }
+    else if (par.pig2[1] == 0) {
+        new.par.pig2 <- c(1, par.pig2[c(4, 5, 2, 3)])
+        return(nlogL_pig2(data, new.par.pig2))
+    }
+    else {
+        t1 <- log(par.pig2[1]) + dPIG(x = data,mu = par.pig2[2],sigma = par.pig2[3],log = TRUE)
+        t2 <- log(1-par.pig2[1]) + dPIG(x = data,mu = par.pig2[4],sigma = par.pig2[5],log = TRUE)
+        nl <- sum_2pop_terms(t1, t2)
+        if (is.infinite(nl))
+            return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+        else
+            return(nl)
+    }
+}
 
 #' @rdname nlogL
 #' @export
@@ -299,6 +348,25 @@ nlogL_zinb <- function(data, par.zinb) {
   }
 }
 
+#' @rdname nlogL
+#' @export
+#' @examples
+#' x <- c(rep(0,10), rPIG(90, mu = 13, sigma = 2))
+#' nl <- nlogL_zipig(x, c(0.1, 13, 2))
+nlogL_zipig <- function(data, par.zipig) {
+    if (par.zipig[2] < 0 ||
+        par.zipig[3] < 0 ||
+        par.zipig[1] < 0 ||
+        par.zipig[1] > 1) {
+        return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+    } else {
+        nl <- -sum(dZIPIG(data, mu = par.zipig[2], sigma = par.zipig[3], nu = par.zipig[1], log = TRUE))
+        if (is.infinite(nl))
+            return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+        else
+            return(nl)
+    }
+}
 
 
 #' @rdname nlogL
@@ -441,7 +509,53 @@ nlogL_zinb2 <- function(data, par.zinb2) {
   }
 }
 
+#' @rdname nlogL
+#' @export
+#' @examples
+#' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
+#' x <- c(rep(0, 10), s*rPIG(90, mu = 13, sigma = 0.2) + (1-s)*rPIG(90, size = 17, mu = 2))
+#' nl <- nlogL_zipig2(x, c(0.1, 0.63, 17, 2, 13, 0.2))
+nlogL_zipig2 <- function(data, par.zipig2) {
+    if (par.zipig2[1] < 0 ||
+        par.zipig2[1] > 1 ||
+        par.zipig2[2] < 0 ||
+        par.zipig2[2] > 1 ||
+        par.zipig2[1] + par.zipig2[2] > 1 ||
+        par.zipig2[3] < 0 ||
+        par.zipig2[4] < 0 ||
+        par.zipig2[5] < 0 ||
+        par.zipig2[6] < 0) {
+        return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+    }
+    else if (par.zipig2[2] == 0) {
+        new.par.zipig2 <- c(par.zipig2[1], 1 - par.zipig2[1], par.zipig2[c(5, 6, 3, 4)])
+        return(nlogL_zipig2(data, new.par.zipig2))
+    }
+    else {
+        n <- length(data)
+        n0 <- length(which(data == 0))
+        non_zero <- data[which(data != 0)]
 
+        t1 <- log(par.zipig2[2]) + dPIG(x = 0, mu = par.zipig2[3], sigma = par.zipig2[4], log = TRUE)
+        t2 <- log(1 - (par.zipig2[1] + par.zipig2[2])) + dPIG(x = 0, mu = par.zipig2[5], sigma = par.zipig2[6], log = TRUE)
+        nl_zero <- -sum_2pop_terms(t1, t2)
+
+        t1 <- log(par.zipig2[2]) + dPIG(x = non_zero, mu = par.zipig2[3], sigma = par.zipig2[4], log = TRUE)
+        t2 <- log(1 - (par.zipig2[1] + par.zipig2[2])) + dPIG(x = non_zero, mu = par.zipig2[5], sigma = par.zipig2[6], log = TRUE)
+        nl_non_zero <- -sum_2pop_terms(t1, t2)
+
+        if(par.zipig2[1] == 0)
+            nl <- n0 * nl_zero + nl_non_zero
+        else
+            nl <- n0 * log(par.zipig2[1] + exp(nl_zero ) ) + nl_non_zero
+        nl <- -nl
+        if (is.infinite(nl))
+            return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
+        else{
+            return(nl)
+        }
+    }
+}
 
 #' @rdname nlogL
 #' @export
