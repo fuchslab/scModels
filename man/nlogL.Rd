@@ -83,10 +83,10 @@ two population model.}
 \description{
 The negative log Likelihood functions for Poisson, negative binomial
 Poisson-inverse Gaussian and Poisson-beta distributions. Mixing two
-distributions of the same #' kind and/or adding zero-inflation allows
-to take characteristics #' of real data into account.
+distributions of the same kind and/or adding zero-inflation allows
+to take characteristics of real data into account.
 Additionally, one population and two population mixtures - with and
-without zero-inflations - allow distribution fittings of the Poisson,
+without zero-inflation - allow distribution fitting of the Poisson,
 negative binomial, Poisson-inverse Gaussian and the Poisson-beta distribution.
 }
 \details{
@@ -105,7 +105,7 @@ nl1 <- nlogL_pois(x, 11)
 nl2 <- nlogL_pois(x, 13)
 x <- rnbinom(100, size = 13, mu = 9)
 nl <- nlogL_nb(x, c(13, 9))
-x <- rPIG(100, mu = 5, sigma = 0.2)
+x <- gamlss.dist::rPIG(100, mu = 5, sigma = 0.2)
 nl <- nlogL_pig(x, c(13, 9))
 x <- rpb(n = 1000, alpha=5, beta= 3, c=20)
 nl <- nlogL_pb(x, c(5, 3, 20))
@@ -118,7 +118,7 @@ s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
 x <-s*rnbinom(100, size = 13, mu = 9) + (1-s)*rnbinom(100, size = 17, mu = 29)
 nl <- nlogL_nb2(x, c(0.7, 17, 29, 13, 9))
 s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
-x <-s*rPIG(100, mu = 5, sigma = 0.2) + (1-s)*rPIG(100, mu = 20, sigma = 2)
+x <-s*gamlss.dist::rPIG(100, mu = 5, sigma = 0.2) + (1-s)*gamlss.dist::rPIG(100, mu = 20, sigma = 2)
 nl <- nlogL_pig2(x, c(0.7, 20, 2, 5, 0.2))
 s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
 x <- s*rpb(100, 5, 3, 20) + (1-s)*rpb(100, 7, 13, 53)
@@ -127,7 +127,7 @@ x <- c(rep(0, 10), rpois(90, 7))
 nl <- nlogL_zipois(x, c(0.1, 7))
 x <- c(rep(0,10), rnbinom(90, size = 13, mu = 9))
 nl <- nlogL_zinb(x, c(0.1, 13, 9))
-x <- c(rep(0,10), rPIG(90, mu = 13, sigma = 2))
+x <- c(rep(0,10), gamlss.dist::rPIG(90, mu = 13, sigma = 2))
 nl <- nlogL_zipig(x, c(0.1, 13, 2))
 x <- c(rep(0, 10), rpb(n = 90, alpha=5, beta= 3, c=20))
 nl <- nlogL_zipb(x, c(0.1, 5, 3, 20))
@@ -138,7 +138,7 @@ s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
 x <- c(rep(0, 10), s*rnbinom(90, size = 13, mu = 9) + (1-s)*rnbinom(90, size = 17, mu = 29))
 nl <- nlogL_zinb2(x, c(0.1, 0.63, 17, 29, 13, 9))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
-x <- c(rep(0, 10), s*rPIG(90, mu = 13, sigma = 0.2) + (1-s)*rPIG(90, size = 17, mu = 2))
+x <- c(rep(0, 10), s*gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) + (1-s)*gamlss.dist::rPIG(90, mu = 17, sigma = 2))
 nl <- nlogL_zipig2(x, c(0.1, 0.63, 17, 2, 13, 0.2))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
 x <- c(rep(0,10), s*rpb(90, 5, 3, 20) + (1-s)*rpb(90, 7, 13, 53))

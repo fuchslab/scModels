@@ -3,10 +3,10 @@
 #'
 #' The negative log Likelihood functions for Poisson, negative binomial
 #' Poisson-inverse Gaussian and Poisson-beta distributions. Mixing two
-#' distributions of the same #' kind and/or adding zero-inflation allows
-#' to take characteristics #' of real data into account.
+#' distributions of the same kind and/or adding zero-inflation allows
+#' to take characteristics of real data into account.
 #' Additionally, one population and two population mixtures - with and
-#' without zero-inflations - allow distribution fittings of the Poisson,
+#' without zero-inflation - allow distribution fitting of the Poisson,
 #' negative binomial, Poisson-inverse Gaussian and the Poisson-beta distribution.
 #'
 #'
@@ -522,7 +522,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3,0.7))
-#' x <- c(rep(0, 10), s*gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) + (1-s)*gamlss.dist::rPIG(90, size = 17, mu = 2))
+#' x <- c(rep(0, 10), s*gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) + (1-s)*gamlss.dist::rPIG(90, mu = 17, sigma = 2))
 #' nl <- nlogL_zipig2(x, c(0.1, 0.63, 17, 2, 13, 0.2))
 nlogL_zipig2 <- function(data, par.zipig2) {
     if (par.zipig2[1] < 0 ||
