@@ -13,15 +13,18 @@ cpp_gmRNA_burst <- function(n, r_burst, s_burst, r_degr) {
     .Call('_scModels_cpp_gmRNA_burst', PACKAGE = 'scModels', n, r_burst, s_burst, r_degr)
 }
 
-#' Kummer's (confluent hypergeometric) function
+#' Kummer's (confluent hypergeometric) function in log-scale
 #'
 #' Kummer's function (also: confluent hypergeometric function of the first kind)
-#' for numeric (non-complex) values and input parameters.
+#' for numeric (non-complex) values and input parameters in log-scale.
 #' @param x numeric value or vector
 #' @param a,b numeric parameters of the Kummer function
 #' @name chf_1F1
 #' @rdname chf_1F1
 #' @export
+#' @details Note that the output is in log-scale. So the evaluated function is:
+#' \deqn{\log \left[\sum_{n=0}^\infty \frac{a^{(n)} x^n}{ b^(n) n!}\right]}{log [ \sum from n to \infty (a^(n) x^n)/ (b^(n) n!)]}
+#' where \eqn{a^{(n)}}{a^(n)} and \eqn{b^{(n)}}{b^(n)} describe the rising factorial.
 #' @examples
 #' x <- chf_1F1(-100:100, 5, 7)
 #' plot(-100:100, x, type='l')

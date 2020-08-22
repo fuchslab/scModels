@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{chf_1F1}
 \alias{chf_1F1}
-\title{Kummer's (confluent hypergeometric) function}
+\title{Kummer's (confluent hypergeometric) function in log-scale}
 \usage{
 chf_1F1(x, a, b)
 }
@@ -13,7 +13,12 @@ chf_1F1(x, a, b)
 }
 \description{
 Kummer's function (also: confluent hypergeometric function of the first kind)
-for numeric (non-complex) values and input parameters.
+for numeric (non-complex) values and input parameters in log-scale.
+}
+\details{
+Note that the output is in log-scale. So the evaluated function is:
+\deqn{\log \left[\sum_{n=0}^\infty \frac{a^{(n)} x^n}{ b^(n) n!}\right]}{log [ \sum from n to \infty (a^(n) x^n)/ (b^(n) n!)]}
+where \eqn{a^{(n)}}{a^(n)} and \eqn{b^{(n)}}{b^(n)} describe the rising factorial.
 }
 \examples{
 x <- chf_1F1(-100:100, 5, 7)

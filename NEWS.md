@@ -4,6 +4,7 @@
 
 # scModels 1.0.2
 * Added Poisson-inverse Gaussian model as "pig" model and all connected models to the package
+* Added better documentation for the chf_1F1 function. Forgot to mention before that it is the log version of the Kummer function.
 
 # scModels 1.0.1
 
