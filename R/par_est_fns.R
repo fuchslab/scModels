@@ -2,8 +2,8 @@
 #'
 #' @param x Vector containing the discrete observations
 #' @param type Keyword for the probability distribution the data is to be fitted
-#'     against. Possible values are ("pois", "nb", pig", "pb", "pois2", "nb2", "pig2"
-#'      "pb2", "zipois", "zinb", "zipg", zipb", "zipois2", "zinb2", "zipig2", zipb2")
+#'     against. Possible values are ("pois", "nb", "del", pig", "pb", "pois2", "nb2", "del2", "pig2"
+#'      "pb2", "zipois", "zinb", "zidel", "zipg", zipb", "zipois2", "zinb2", "zidel2", "zipig2", zipb2")
 #' @param optim_control List of options to override presets in
 #'     the optim function; Set to list(maxit = 1000) by default.
 #'     For more details, please refer to the 'control' parameter in the
@@ -11,13 +11,13 @@
 #' @keywords parameter estimation
 #' @name fit_params
 #' @importFrom stats kmeans optim runif
-#' @importFrom gamlss.dist dPIG dZIPIG rPIG rZIPIG
+#' @importFrom gamlss.dist dPIG dZIPIG rPIG rZIPIG dDEL rDEL
 #' @export
 #' @examples
 #' x1 <- rnbinom(100, size = 13, mu = 9)
 #' p1 <- fit_params(x1, "nb")
 #' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
-#' x2 <- s*x1 + (1-s)*rnbinom(100, size = 15, mu = 53)
+#' x2 <- s*x1 + (1-s) * rnbinom(100, size = 15, mu = 53)
 #' p2 <- fit_params(x2, "nb2")
 fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   max_iter <- 20
@@ -29,6 +29,10 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
   else if (type == "nb") {
     p <- c(1, 1)
     t <- system.time(o <- optim(par = p, fn = nlogL_nb, data = x, control = optim_control))
+  }
+  else if (type == "del") {
+    p <- c(1, 1)
+    t <- system.time(o <- optim(par = p, fn = nlogL_del, data = x, control = optim_control))
   }
   else if (type == "pig") {
       p <- c(1, 1)
@@ -66,6 +70,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     }
     p <- c(0, fit_params(x, "nb")$par)
     t <- system.time(o <- optim(par = p, fn = nlogL_zinb, data = x, control = optim_control))
+    optim_restarts[[i+1]] <- o
+    optim_times[[i+1]] <- t
+    best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+    o <- optim_restarts[[best_optim]]
+    t <- optim_times[[best_optim]]
+  }
+  ######################################################
+  else if (type == "zidel") {
+    optim_restarts <- list()
+    optim_times <- list()
+    for(i in 1:max_iter) {
+      t <- system.time(o <- optim(par = runif(4), fn = nlogL_zidel, data = x, control = optim_control))
+      optim_restarts[[i]] <- o
+      optim_times[[i]] <- t
+    }
+    p <- c(0.000001, fit_params(x, "del")$par)
+    t <- system.time(o <- optim(par = p, fn = nlogL_zidel, data = x, control = optim_control))
     optim_restarts[[i+1]] <- o
     optim_times[[i+1]] <- t
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
@@ -136,6 +157,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     t <- optim_times[[best_optim]]
   }
   ######################################################
+  else if (type == "del2") {
+    optim_restarts <- list()
+    optim_times <- list()
+    for(i in 1:max_iter) {
+      t <- system.time(o <- optim(par = runif(7), fn = nlogL_del2, data = x, control = optim_control))
+      optim_restarts[[i]] <- o
+      optim_times[[i]] <- t
+    }
+    t1 <- fit_params(x, "del")$par
+    t <- system.time(o <- optim(par = c(1, t1, t1), fn = nlogL_del2, data = x, control = optim_control))
+    optim_restarts[[i+1]] <- o
+    optim_times[[i+1]] <- t
+    best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+    o <- optim_restarts[[best_optim]]
+    t <- optim_times[[best_optim]]
+  }
+  ######################################################
   else if (type == "pig2") {
       optim_restarts <- list()
       optim_times <- list()
@@ -194,6 +232,23 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     }
     t1 <- fit_params(x, "nb")$par
     t <- system.time(o <- optim(par = c(0, 1, t1, t1), fn = nlogL_zinb2, data = x, control = optim_control))
+    optim_restarts[[i+1]] <- o
+    optim_times[[i+1]] <- t
+    best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
+    o <- optim_restarts[[best_optim]]
+    t <- optim_times[[best_optim]]
+  }
+  ######################################################
+  else if (type == "zidel2") {
+    optim_restarts <- list()
+    optim_times <- list()
+    for(i in 1:max_iter) {
+      t <- system.time(o <- optim(par = c(runif(2)/2, runif(6)), fn = nlogL_zidel2, data = x, control = optim_control))
+      optim_restarts[[i]] <- o
+      optim_times[[i]] <- t
+    }
+    t1 <- fit_params(x, "del")$par
+    t <- system.time(o <- optim(par = c(0.0001, 0.0098, t1, t1), fn = nlogL_zidel2, data = x, control = optim_control))
     optim_restarts[[i+1]] <- o
     optim_times[[i+1]] <- t
     best_optim <- which.min(unlist(lapply(optim_restarts, function(x) x$value)))
