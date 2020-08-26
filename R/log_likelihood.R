@@ -93,7 +93,7 @@ nlogL_del <- function(data, par.del) {
   if (par.del[1] <= 0 || par.del[2] < 0 || par.del[3] < 0 || par.del[3] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
-    nl <- -sum(dDEL(x = data, mu = par.del[1], sigma = par.del[2], sigma = par.del[3], log = TRUE))
+    nl <- -sum(dDEL(x = data, mu = par.del[1], sigma = par.del[2], nu = par.del[3], log = TRUE))
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
     else
@@ -618,7 +618,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0, 1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
-#' x <- c(rep(0, 10), s * rDEL(90, size = 13, mu = 9, nu = 0.5) + (1 - s) * rDEL(90, size = 17, mu = 29, nu = 0.1))
+#' x <- c(rep(0, 10), s * gamlss.dist::rDEL(90, size = 13, mu = 9, nu = 0.5) + (1 - s) * gamlss.dist::rDEL(90, size = 17, mu = 29, nu = 0.1))
 #' nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 17, 29))
 nlogL_zidel2 <- function(data, par.zidel2) {
   if (par.zidel2[1] < 0 ||
