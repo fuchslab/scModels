@@ -6,6 +6,7 @@
 #' switching process considers additionally gene activation and deactivation,
 #' with mRNA transcription only happening in active gene states; the
 #' bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
+#' The basic_burst model combines both the basic and the burst model.
 #'
 
 #' @param n Number of observations
@@ -45,3 +46,12 @@ gmRNA_burst <- function(n, r.burst, s.burst, r.degr) {
   cpp_gmRNA_burst(n, r.burst, s.burst, r.degr)
 }
 
+
+#' @rdname gmRNA
+#' @export
+#' @examples
+#' x <- gmRNA_basic_burst(10, 0.75, 0.15, 0.5, 0.001)
+#' plot(density(x))
+gmRNA_basic_burst <- function(n, r.on, r.burst, s.burst, r.degr) {
+    cpp_gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
+}

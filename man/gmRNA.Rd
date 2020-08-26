@@ -5,6 +5,7 @@
 \alias{gmRNA_basic}
 \alias{gmRNA_switch}
 \alias{gmRNA_burst}
+\alias{gmRNA_basic_burst}
 \title{Gillespie algorithm for mRNA generating processes}
 \usage{
 gmRNA_basic(n, r.on, r.degr)
@@ -12,6 +13,8 @@ gmRNA_basic(n, r.on, r.degr)
 gmRNA_switch(n, r.act, r.deact, r.on, r.degr)
 
 gmRNA_burst(n, r.burst, s.burst, r.degr)
+
+gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
 }
 \arguments{
 \item{n}{Number of observations}
@@ -35,6 +38,7 @@ simple death-birth model of mRNA transcription and degradation; the
 switching process considers additionally gene activation and deactivation,
 with mRNA transcription only happening in active gene states; the
 bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
+The basic_burst model combines both the basic and the burst model.
 }
 \examples{
 x <- gmRNA_basic(100, 0.75, 0.001)
@@ -42,5 +46,7 @@ plot(density(x))
 x <- gmRNA_switch(100, 0.23, 0.15, 0.75, 0.001)
 plot(density(x))
 x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
+plot(density(x))
+x <- gmRNA_basic_burst(10, 0.75, 0.15, 0.5, 0.001)
 plot(density(x))
 }

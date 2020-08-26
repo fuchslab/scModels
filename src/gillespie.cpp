@@ -199,3 +199,76 @@ NumericVector cpp_gmRNA_burst(double n, double r_burst, double s_burst, double r
   }
   return res;
 }
+
+// [[Rcpp::export]]
+NumericVector cpp_gmRNA_basic_burst(double n, double r_on, double r_burst, double s_burst, double r_degr) {
+  if(!isInteger(n)) {
+    return NumericVector(0);
+  }
+  NumericVector res((int)n);
+
+  double t0 = 0, x0 = 0, tmax = 20/r_degr;
+  double x, tx;
+  double lambda1, lambda2, lambda3, lambdax;
+  double tau, tau_stern, u;
+  int k;
+
+  for(int i = 0; i < n; i++) {
+    x = x0;
+    tx = t0;
+    // step 1
+    lambda1 = r_on;
+    lambda2 = r_burst;
+    lambda3 = r_degr * x;
+    lambdax = lambda1 + lambda2 + lambda3;
+
+    // step 2
+    NumericVector tau_vec = rexp(1, lambdax);
+    tau = tau_vec[0];
+    tau_stern = min(NumericVector::create(tau, tmax - tx));
+    tx += tau_stern;
+
+    while(tx < tmax) {
+      // step 3
+      NumericVector u_vec = runif(1);
+      u = u_vec[0];
+      if(u <= lambda1/lambdax)
+        k = 1;
+      else if(u <= (lambda1 + lambda2)/lambdax)
+        k = 2;
+      else k = 3;
+
+      // step 4
+      if(tau <= tau_stern) {
+        if(k == 1){
+          x = x+1;
+        } else if(k == 1) {
+          // burst
+          NumericVector r_vec = rgeom(1, 1/(1 + s_burst));
+          x = x + r_vec[0];
+        } else {
+          // degradation
+          x= x - 1;
+        }
+
+      }
+
+      // step 5 includes step 1
+      lambda1 = r_on;
+      lambda2 = r_burst;
+      lambda3 = r_degr * x;
+      lambdax = lambda1 + lambda2 + lambda3;
+
+      // step 6
+      NumericVector tau_vec = rexp(1, lambdax);
+      tau = tau_vec[0];
+      tau_stern = min(NumericVector::create(tau, tmax - tx));
+      tx += tau_stern;
+    }
+    res[i] = x;
+  }
+  return res;
+}
+
+
+

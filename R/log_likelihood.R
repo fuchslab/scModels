@@ -425,19 +425,19 @@ nlogL_zidel <- function(data, par.zidel) {
       t1 = 0
     }
     else {
-      l <- log(par.zidel[1] + (1 - par.zidel[1]) * dDEL(x = data, mu = par.del2[2], sigma = par.del2[3], nu = par.del2[4]))
+      l <- log(par.zidel[1] + (1 - par.zidel[1]) * dDEL(0, mu = par.zidel[2], sigma = par.zidel[3], nu = par.zidel[4]))
 
       # Motivated by conclusions from zipois, but the same scenario
       # occurs in less cases here. The nestorowa dataset had convergent fits
       # for all cases without this condition.
       if(is.nan(l)){
-        t1 = dDEL(x = 0, mu = par.del2[2], sigma = par.del2[3], nu = par.del2[4], log = TRUE)
+        t1 = dDEL(x = 0, mu = par.zidel[2], sigma = par.zidel[3], nu = par.zidel[4], log = TRUE)
         }
       else {
         t1 <- l
       }
     }
-    nl <- n0 * t1 + (n-n0)*log(1-par.zidel[1])+sum(dDEL(x = non_zero, mu = par.del2[2], sigma = par.del2[3], nu = par.del2[4], log = TRUE))
+    nl <- n0 * t1 + (n-n0)*log(1-par.zidel[1])+sum(dDEL(x = non_zero, mu = par.zidel[2], sigma = par.zidel[3], nu = par.zidel[4], log = TRUE))
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -618,14 +618,15 @@ nlogL_zinb2 <- function(data, par.zinb2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0, 1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
-#' x <- c(rep(0, 10), s * gamlss.dist::rDEL(90, size = 13, mu = 9, nu = 0.5) + (1 - s) * gamlss.dist::rDEL(90, size = 17, mu = 29, nu = 0.1))
+#' x <- c(rep(0, 10), s * gamlss.dist::rDEL(90, mu = 13, sigma = 9, nu = 0.5) +
+#'              (1 - s) * gamlss.dist::rDEL(90, mu = 17, sigma = 29, nu = 0.1))
 #' nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 17, 29))
 nlogL_zidel2 <- function(data, par.zidel2) {
   if (par.zidel2[1] < 0 ||
       par.zidel2[1] > 1 ||
       par.zidel2[2] < 0 ||
       par.zidel2[2] > 1 ||
-      par.zidel2[1] + par.zinb2[2] > 1 ||
+      par.zidel2[1] + par.zidel2[2] > 1 ||
       par.zidel2[3] < 0 ||
       par.zidel2[4] < 0 ||
       par.zidel2[5] < 0 ||
@@ -645,12 +646,12 @@ nlogL_zidel2 <- function(data, par.zidel2) {
     n0 <- length(which(data == 0))
     non_zero <- data[which(data != 0)]
 
-    t1 <- log(par.zidel2[2]) + dDEL(x = 0, mu = par.del2[3], sigma = par.del2[4], nu = par.del2[5], log = TRUE) #dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
-    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = 0, mu = par.del2[6], sigma = par.del2[7], nu = par.del2[8], log = TRUE) #dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
+    t1 <- log(par.zidel2[2]) + dDEL(x = 0, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = 0, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
+    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = 0, mu = par.zidel2[6], sigma = par.zidel2[7], nu = par.zidel2[8], log = TRUE) #dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_zero <- -sum_2pop_terms(t1, t2)
 
-    t1 <- log(par.zidel2[2]) + dDEL(x = non_zero, mu = par.del2[3], sigma = par.del2[4], nu = par.del2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
-    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = non_zero, mu = par.del2[3], sigma = par.del2[4], nu = par.del2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
+    t1 <- log(par.zidel2[2]) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
+    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
 
     if(par.zidel2[1] == 0)
@@ -670,7 +671,8 @@ nlogL_zidel2 <- function(data, par.zidel2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
-#' x <- c(rep(0, 10), s * gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) + (1-s) * gamlss.dist::rPIG(90, mu = 17, sigma = 2))
+#' x <- c(rep(0, 10), s * gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) +
+#'                (1-s) * gamlss.dist::rPIG(90, mu = 17, sigma = 2))
 #' nl <- nlogL_zipig2(x, c(0.1, 0.63, 13, 0.2, 17, 2))
 nlogL_zipig2 <- function(data, par.zipig2) {
     if (par.zipig2[1] < 0 ||

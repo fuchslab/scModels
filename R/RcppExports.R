@@ -13,6 +13,10 @@ cpp_gmRNA_burst <- function(n, r_burst, s_burst, r_degr) {
     .Call('_scModels_cpp_gmRNA_burst', PACKAGE = 'scModels', n, r_burst, s_burst, r_degr)
 }
 
+cpp_gmRNA_basic_burst <- function(n, r_on, r_burst, s_burst, r_degr) {
+    .Call('_scModels_cpp_gmRNA_basic_burst', PACKAGE = 'scModels', n, r_on, r_burst, s_burst, r_degr)
+}
+
 #' Kummer's (confluent hypergeometric) function in log-scale
 #'
 #' Kummer's function (also: confluent hypergeometric function of the first kind)
