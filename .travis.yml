@@ -9,6 +9,9 @@ cache: packages
 os:
     - linux
     - osx
+dist: xenial
+before_install:
+    - sudo apt-get install -qy libmpfr-dev
 addons:
   apt:
     packages: libmpfr-dev
