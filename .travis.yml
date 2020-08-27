@@ -1,5 +1,7 @@
 sudo: required
 language: r
+r:
+    - 3.6.3
 r_binary_packages:
     - Rcpp
     - devtools
@@ -9,6 +11,7 @@ cache: packages
 os:
     - linux
     - osx
+dist: xenial
 addons:
   apt:
     packages: libmpfr-dev
