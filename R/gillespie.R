@@ -55,3 +55,13 @@ gmRNA_burst <- function(n, r.burst, s.burst, r.degr) {
 gmRNA_basic_burst <- function(n, r.on, r.burst, s.burst, r.degr) {
     cpp_gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
 }
+
+#' @rdname gmRNA
+#' @export
+#' @examples
+#' x <- gmRNA_IGbasic(10, 2, 0.15, 0.001)
+#' plot(density(x))
+gmRNA_IGbasic <- function(n, mu.IG, lambda.IG, r.degr) {
+    cpp_gmRNA_IGbasic(n, mu.IG, lambda.IG, r.degr)
+}
+

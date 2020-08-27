@@ -62,6 +62,33 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// cpp_rInvGaus
+NumericVector cpp_rInvGaus(double n, double mu, double lambda);
+RcppExport SEXP _scModels_cpp_rInvGaus(SEXP nSEXP, SEXP muSEXP, SEXP lambdaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda(lambdaSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_rInvGaus(n, mu, lambda));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_gmRNA_IGbasic
+NumericVector cpp_gmRNA_IGbasic(double n, double mu_IG, double lambda_IG, double r_degr);
+RcppExport SEXP _scModels_cpp_gmRNA_IGbasic(SEXP nSEXP, SEXP mu_IGSEXP, SEXP lambda_IGSEXP, SEXP r_degrSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type mu_IG(mu_IGSEXP);
+    Rcpp::traits::input_parameter< double >::type lambda_IG(lambda_IGSEXP);
+    Rcpp::traits::input_parameter< double >::type r_degr(r_degrSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_gmRNA_IGbasic(n, mu_IG, lambda_IG, r_degr));
+    return rcpp_result_gen;
+END_RCPP
+}
 // chf_1F1
 NumericVector chf_1F1(NumericVector x, NumericVector a, NumericVector b);
 RcppExport SEXP _scModels_chf_1F1(SEXP xSEXP, SEXP aSEXP, SEXP bSEXP) {

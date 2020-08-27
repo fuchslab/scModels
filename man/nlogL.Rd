@@ -161,7 +161,7 @@ nl <- nlogL_zinb2(x, c(0.1, 0.63, 13, 9, 17, 29))
 s <- sample(x = c(0, 1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
 x <- c(rep(0, 10), s * gamlss.dist::rDEL(90, mu = 13, sigma = 9, nu = 0.5) +
              (1 - s) * gamlss.dist::rDEL(90, mu = 17, sigma = 29, nu = 0.1))
-nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 17, 29))
+nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 0.5, 17, 29, 0.1))
 s <- sample(x = c(0,1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
 x <- c(rep(0, 10), s * gamlss.dist::rPIG(90, mu = 13, sigma = 0.2) +
                (1-s) * gamlss.dist::rPIG(90, mu = 17, sigma = 2))

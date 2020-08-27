@@ -61,3 +61,24 @@ qpb <- function(p, alpha, beta, c = 1, lower.tail = TRUE, log.p = FALSE) {
 rpb <- function(n, alpha, beta, c = 1) {
     cpp_rpb(n, alpha, beta, c)
 }
+
+
+
+#' Inverse Gaussian Distribution
+#'
+#' random generation function for the inverse Gaussian distribution:
+#' Mu and lambda are the parameters of this distribution.
+#'
+#' @param n  Number of observations
+#' @param mu, lambda Non-negative parameters of the inverse Gaussian distribution (mean and shape)
+#' @keywords Inverse Gaussian distribution
+#' @name Inverse Gaussian
+#' @useDynLib scModels
+#' @importFrom Rcpp evalCpp sourceCpp
+#' @export
+#' @examples
+#'  RV <- rpb(n = 100, mu = 10, lambda = 2)
+
+rInvGaus <- function(n, mu, lambda) {
+    cpp_rInvGaus(n, mu_IG, lambda_IG)
+}

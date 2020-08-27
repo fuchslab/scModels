@@ -31,7 +31,7 @@ fit_params <- function(x, type, optim_control = list(maxit = 1000)) {
     t <- system.time(o <- optim(par = p, fn = nlogL_nb, data = x, control = optim_control))
   }
   else if (type == "del") {
-    p <- c(1, 1)
+    p <- c(1, 1, 0.5)
     t <- system.time(o <- optim(par = p, fn = nlogL_del, data = x, control = optim_control))
   }
   else if (type == "pig") {

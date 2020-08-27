@@ -6,6 +6,7 @@
 \alias{gmRNA_switch}
 \alias{gmRNA_burst}
 \alias{gmRNA_basic_burst}
+\alias{gmRNA_IGbasic}
 \title{Gillespie algorithm for mRNA generating processes}
 \usage{
 gmRNA_basic(n, r.on, r.degr)
@@ -15,6 +16,8 @@ gmRNA_switch(n, r.act, r.deact, r.on, r.degr)
 gmRNA_burst(n, r.burst, s.burst, r.degr)
 
 gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
+
+gmRNA_IGbasic(n, mu.IG, lambda.IG, r.degr)
 }
 \arguments{
 \item{n}{Number of observations}
@@ -48,5 +51,7 @@ plot(density(x))
 x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
 plot(density(x))
 x <- gmRNA_basic_burst(10, 0.75, 0.15, 0.5, 0.001)
+plot(density(x))
+x <- gmRNA_IGbasic(10, 2, 0.15, 0.001)
 plot(density(x))
 }
