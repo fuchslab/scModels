@@ -351,7 +351,9 @@ nlogL_zipois <- function(data, par.zipois) {
         t1 <- l
       }
     }
+    if(n != n0){
     nl <- n0 * t1 + (n - n0) * log(1 - par.zipois[1]) + sum(dpois(x = non_zero, lambda = par.zipois[2], log = TRUE))
+    } else {nl <- n0 * t1}
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -393,7 +395,9 @@ nlogL_zinb <- function(data, par.zinb) {
         t1 <- l
       }
     }
+    if(n != n0){
     nl <- n0 * t1 + (n-n0)*log(1-par.zinb[1])+sum(dnbinom(x = non_zero, size = par.zinb[2], mu = par.zinb[3], log = TRUE))
+    } else {nl <- n0 * t1}
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -437,7 +441,9 @@ nlogL_zidel <- function(data, par.zidel) {
         t1 <- l
       }
     }
-    nl <- n0 * t1 + (n-n0)*log(1-par.zidel[1])+sum(dDEL(x = non_zero, mu = par.zidel[2], sigma = par.zidel[3], nu = par.zidel[4], log = TRUE))
+    if(n != n0){
+    nl <- n0 * t1 + (n - n0) * log(1 - par.zidel[1]) + sum(dDEL(x = non_zero, mu = par.zidel[2], sigma = par.zidel[3], nu = par.zidel[4], log = TRUE))
+    } else {nl<- n0 * t1}
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -506,7 +512,10 @@ nlogL_zipb <- function(data, par.zipb) {
         t1 <- l
       }
     }
-    nl <- n0 * t1 + (n-n0)*log(1-par.zipb[1])+sum(dpb(x = non_zero, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE))
+    if(n != n0){
+       nl <- n0 * t1 + (n-n0)*log(1-par.zipb[1])+sum(dpb(x = non_zero, par.zipb[2], par.zipb[3], par.zipb[4], log = TRUE))
+    } else { nl <- n0 * t1}
+
     nl <- -nl
     if (is.infinite(nl))
       return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -546,9 +555,11 @@ nlogL_zipois2 <- function(data, par.zipois2) {
     t2 <- log(1-(par.zipois2[1] + par.zipois2[2]))+dpois(x = 0, lambda = par.zipois2[4], log = TRUE)
     nl_zero <- -sum_2pop_terms(t1, t2)
 
+    if(n != n0){
     t1 <- log(par.zipois2[2]) + dpois(x = non_zero, lambda = par.zipois2[3], log = TRUE)
     t2 <- log(1-(par.zipois2[1] + par.zipois2[2]))+dpois(x = non_zero, lambda = par.zipois2[4], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
+    } else {nl_non_zero <- 0}
 
     # reduce expression when no zero-inflation
     if(par.zipois2[1] == 0)
@@ -597,9 +608,11 @@ nlogL_zinb2 <- function(data, par.zinb2) {
     t2 <- log(1 - (par.zinb2[1] + par.zinb2[2])) + dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_zero <- -sum_2pop_terms(t1, t2)
 
+    if(n != n0){
     t1 <- log(par.zinb2[2]) + dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
     t2 <- log(1 - (par.zinb2[1] + par.zinb2[2])) + dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
+  } else {nl_non_zero <- 0}
 
     if(par.zinb2[1] == 0)
       nl <- n0 * nl_zero + nl_non_zero
@@ -620,7 +633,7 @@ nlogL_zinb2 <- function(data, par.zinb2) {
 #' s <- sample(x = c(0, 1), size = 90, replace = TRUE, prob = c(0.3, 0.7))
 #' x <- c(rep(0, 10), s * gamlss.dist::rDEL(90, mu = 13, sigma = 9, nu = 0.5) +
 #'              (1 - s) * gamlss.dist::rDEL(90, mu = 17, sigma = 29, nu = 0.1))
-#' nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 17, 29))
+#' nl <- nlogL_zidel2(x, c(0.1, 0.63, 13, 9, 0.5, 17, 29, 0.1))
 nlogL_zidel2 <- function(data, par.zidel2) {
   if (par.zidel2[1] < 0 ||
       par.zidel2[1] > 1 ||
@@ -650,9 +663,11 @@ nlogL_zidel2 <- function(data, par.zidel2) {
     t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = 0, mu = par.zidel2[6], sigma = par.zidel2[7], nu = par.zidel2[8], log = TRUE) #dnbinom(x = 0, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_zero <- -sum_2pop_terms(t1, t2)
 
+    if(n != n0){
     t1 <- log(par.zidel2[2]) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
     t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
+    } else {nl_non_zero <- 0}
 
     if(par.zidel2[1] == 0)
       nl <- n0 * nl_zero + nl_non_zero
@@ -699,9 +714,11 @@ nlogL_zipig2 <- function(data, par.zipig2) {
         t2 <- log(1 - (par.zipig2[1] + par.zipig2[2])) + dPIG(x = 0, mu = par.zipig2[5], sigma = par.zipig2[6], log = TRUE)
         nl_zero <- -sum_2pop_terms(t1, t2)
 
+        if(n != n0){
         t1 <- log(par.zipig2[2]) + dPIG(x = non_zero, mu = par.zipig2[3], sigma = par.zipig2[4], log = TRUE)
         t2 <- log(1 - (par.zipig2[1] + par.zipig2[2])) + dPIG(x = non_zero, mu = par.zipig2[5], sigma = par.zipig2[6], log = TRUE)
         nl_non_zero <- -sum_2pop_terms(t1, t2)
+        } else {nl_non_zero <- 0}
 
         if(par.zipig2[1] == 0)
             nl <- n0 * nl_zero + nl_non_zero
@@ -749,9 +766,11 @@ nlogL_zipb2 <- function(data, par.zipb2) {
     t2 <- log(1 - (par.zipb2[1] + par.zipb2[2])) + dpb(x = 0, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log = TRUE)
     nl_zero <- -sum_2pop_terms(t1, t2)
 
+    if(n != n0){
     t1 <- log(par.zipb2[2]) + dpb(x = non_zero, alpha = par.zipb2[3], beta = par.zipb2[4], c = par.zipb2[5], log = TRUE)
     t2 <- log(1 - (par.zipb2[1] + par.zipb2[2])) + dpb(x = non_zero, alpha = par.zipb2[6], beta = par.zipb2[7], c = par.zipb2[8], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
+    } else {nl_non_zero <- 0}
 
     if(par.zipb2[1] == 0)
       nl <- n0 * nl_zero + nl_non_zero
