@@ -10,14 +10,14 @@ rInvGaus(n, mu, lambda)
 \arguments{
 \item{n}{Number of observations}
 
-\item{mu, }{lambda Non-negative parameters of the inverse Gaussian distribution (mean and shape)}
+\item{mu, lambda}{Non-negative parameters of the inverse Gaussian distribution (mean and shape)}
 }
 \description{
 random generation function for the inverse Gaussian distribution:
 Mu and lambda are the parameters of this distribution.
 }
 \examples{
- RV <- rpb(n = 100, mu = 10, lambda = 2)
+ RV <- rInvGaus(n = 100, mu = 10, lambda = 2)
 }
 \keyword{Gaussian}
 \keyword{Inverse}

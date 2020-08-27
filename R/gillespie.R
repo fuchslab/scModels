@@ -7,6 +7,9 @@
 #' with mRNA transcription only happening in active gene states; the
 #' bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
 #' The basic_burst model combines both the basic and the burst model.
+#' The IGbasic model describes the basic model with non-constant transcription rates.
+#' Insetead ine ach step the transcription rate is drawn from an inverse Gaussian distribution with
+#' mean parameter mu.IG and shape parameter lambda.IG
 #'
 
 #' @param n Number of observations
@@ -16,6 +19,8 @@
 #' @param r.on Transcription rate during gene activation (Switching model)
 #' @param r.burst Bursty transcription rate (Bursting model)
 #' @param s.burst Mean burst size (Bursting Model)
+#' @param mu Mean parameter for the inverse Gaussian distribution (IG Basic mode)
+#' @param lambda Shape parameter for the inverse Gaussian distribution (IG Basic mode)
 #' @name gmRNA
 #' @rdname gmRNA
 #' @export
@@ -61,7 +66,7 @@ gmRNA_basic_burst <- function(n, r.on, r.burst, s.burst, r.degr) {
 #' @examples
 #' x <- gmRNA_IGbasic(10, 2, 0.15, 0.001)
 #' plot(density(x))
-gmRNA_IGbasic <- function(n, mu.IG, lambda.IG, r.degr) {
-    cpp_gmRNA_IGbasic(n, mu.IG, lambda.IG, r.degr)
+gmRNA_IGbasic <- function(n, mu, lambda, r.degr) {
+    cpp_gmRNA_IGbasic(n, mu, lambda, r.degr)
 }
 

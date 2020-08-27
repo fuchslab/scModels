@@ -294,7 +294,7 @@ NumericVector cpp_rInvGaus(double n, double mu, double lambda){
 }
 
 // [[Rcpp::export]]
-NumericVector cpp_gmRNA_IGbasic(double n, double mu_IG, double lambda_IG, double r_degr) {
+NumericVector cpp_gmRNA_IGbasic(double n, double mu, double lambda, double r_degr) {
   if(!isInteger(n)) {
     return NumericVector(0);
   }
@@ -311,7 +311,7 @@ NumericVector cpp_gmRNA_IGbasic(double n, double mu_IG, double lambda_IG, double
     x = x0;
     tx = t0;
     // step 1
-    lambda_draw = cpp_rInvGaus(1, mu_IG, lambda_IG);
+    lambda_draw = cpp_rInvGaus(1, mu, lambda);
     lambda1 = lambda_draw[0];
     lambda2 = r_degr * x;
     lambdax = lambda1 + lambda2;
@@ -332,7 +332,7 @@ NumericVector cpp_gmRNA_IGbasic(double n, double mu_IG, double lambda_IG, double
       x = (k == 1) ? x+1 : x-1;
 
       // step 5 includes step 1
-      lambda_draw = cpp_rInvGaus(1, mu_IG, lambda_IG);
+      lambda_draw = cpp_rInvGaus(1, mu, lambda);
       lambda1 = lambda_draw[0];
       lambda2 = r_degr * x;
       lambdax = lambda1 + lambda2;

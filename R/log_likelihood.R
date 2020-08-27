@@ -224,7 +224,8 @@ nlogL_nb2 <- function(data, par.nb2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
-#' x <- s*gamlss.dist::rDEL(100, mu = 5, sigma = 0.2, nu = 0.5) + (1-s)*gamlss.dist::rDEL(100, mu = 20, sigma = 2, nu = 0.1)
+#' x <- s * gamlss.dist::rDEL(100, mu = 5, sigma = 0.2, nu = 0.5) +
+#'      (1 - s) * gamlss.dist::rDEL(100, mu = 20, sigma = 2, nu = 0.1)
 #' nl <- nlogL_del2(x, c(0.7,5, 0.2, 20, 2))
 nlogL_del2 <- function(data, par.del2) {
   if (par.del2[2] < 0 ||
@@ -258,7 +259,8 @@ nlogL_del2 <- function(data, par.del2) {
 #' @export
 #' @examples
 #' s <- sample(x = c(0,1), size = 100, replace = TRUE, prob = c(0.3,0.7))
-#' x <- s*gamlss.dist::rPIG(100, mu = 5, sigma = 0.2) + (1-s)*gamlss.dist::rPIG(100, mu = 20, sigma = 2)
+#' x <- s * gamlss.dist::rPIG(100, mu = 5, sigma = 0.2) +
+#'      (1 - s) * gamlss.dist::rPIG(100, mu = 20, sigma = 2)
 #' nl <- nlogL_pig2(x, c(0.7, 5, 0.2, 20, 2))
 nlogL_pig2 <- function(data, par.pig2) {
     if (par.pig2[2] < 0 ||

@@ -21,8 +21,8 @@ cpp_rInvGaus <- function(n, mu, lambda) {
     .Call('_scModels_cpp_rInvGaus', PACKAGE = 'scModels', n, mu, lambda)
 }
 
-cpp_gmRNA_IGbasic <- function(n, mu_IG, lambda_IG, r_degr) {
-    .Call('_scModels_cpp_gmRNA_IGbasic', PACKAGE = 'scModels', n, mu_IG, lambda_IG, r_degr)
+cpp_gmRNA_IGbasic <- function(n, mu, lambda, r_degr) {
+    .Call('_scModels_cpp_gmRNA_IGbasic', PACKAGE = 'scModels', n, mu, lambda, r_degr)
 }
 
 #' Kummer's (confluent hypergeometric) function in log-scale

@@ -17,7 +17,7 @@ gmRNA_burst(n, r.burst, s.burst, r.degr)
 
 gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
 
-gmRNA_IGbasic(n, mu.IG, lambda.IG, r.degr)
+gmRNA_IGbasic(n, mu, lambda, r.degr)
 }
 \arguments{
 \item{n}{Number of observations}
@@ -33,6 +33,10 @@ gmRNA_IGbasic(n, mu.IG, lambda.IG, r.degr)
 \item{r.burst}{Bursty transcription rate (Bursting model)}
 
 \item{s.burst}{Mean burst size (Bursting Model)}
+
+\item{mu}{Mean parameter for the inverse Gaussian distribution (IG Basic mode)}
+
+\item{lambda}{Shape parameter for the inverse Gaussian distribution (IG Basic mode)}
 }
 \description{
 Gillespie algorithms allow synthetic data simulation via three different
@@ -42,6 +46,9 @@ switching process considers additionally gene activation and deactivation,
 with mRNA transcription only happening in active gene states; the
 bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
 The basic_burst model combines both the basic and the burst model.
+The IGbasic model describes the basic model with non-constant transcription rates.
+Insetead ine ach step the transcription rate is drawn from an inverse Gaussian distribution with
+mean parameter mu.IG and shape parameter lambda.IG
 }
 \examples{
 x <- gmRNA_basic(100, 0.75, 0.001)

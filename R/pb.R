@@ -70,15 +70,15 @@ rpb <- function(n, alpha, beta, c = 1) {
 #' Mu and lambda are the parameters of this distribution.
 #'
 #' @param n  Number of observations
-#' @param mu, lambda Non-negative parameters of the inverse Gaussian distribution (mean and shape)
+#' @param mu,lambda Non-negative parameters of the inverse Gaussian distribution (mean and shape)
 #' @keywords Inverse Gaussian distribution
 #' @name Inverse Gaussian
 #' @useDynLib scModels
 #' @importFrom Rcpp evalCpp sourceCpp
 #' @export
 #' @examples
-#'  RV <- rpb(n = 100, mu = 10, lambda = 2)
+#'  RV <- rInvGaus(n = 100, mu = 10, lambda = 2)
 
 rInvGaus <- function(n, mu, lambda) {
-    cpp_rInvGaus(n, mu_IG, lambda_IG)
+    cpp_rInvGaus(n, mu, lambda)
 }
