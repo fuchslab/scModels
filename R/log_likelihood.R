@@ -90,7 +90,7 @@ nlogL_nb <- function(data, par.nb) {
 
 
 nlogL_del <- function(data, par.del) {
-  if (par.del[1] <= 0 || par.del[2] < 0 || par.del[3] < 0 || par.del[3] > 1) {
+  if (par.del[1] <= 0 || par.del[2] <= 0 || par.del[3] <= 0 || par.del[3] >= 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   } else {
     nl <- -sum(dDEL(x = data, mu = par.del[1], sigma = par.del[2], nu = par.del[3], log = TRUE))
@@ -228,14 +228,14 @@ nlogL_nb2 <- function(data, par.nb2) {
 #'      (1 - s) * gamlss.dist::rDEL(100, mu = 20, sigma = 2, nu = 0.1)
 #' nl <- nlogL_del2(x, c(0.7,5, 0.2, 20, 2))
 nlogL_del2 <- function(data, par.del2) {
-  if (par.del2[2] < 0 ||
-      par.del2[3] < 0 ||
-      par.del2[4] < 0 ||
-      par.del2[4] > 1 ||
-      par.del2[5] < 0 ||
-      par.del2[6] < 0 ||
-      par.del2[7] < 0 ||
-      par.del2[7] > 1 ||
+  if (par.del2[2] <= 0 ||
+      par.del2[3] <= 0 ||
+      par.del2[4] <= 0 ||
+      par.del2[4] >= 1 ||
+      par.del2[5] <= 0 ||
+      par.del2[6] <= 0 ||
+      par.del2[7] <= 0 ||
+      par.del2[7] >= 1 ||
       par.del2[1] < 0 ||
       par.del2[1] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -415,10 +415,10 @@ nlogL_zinb <- function(data, par.zinb) {
 #' x <- c(rep(0,10), gamlss.dist::rDEL(90, mu = 13, sigma = 2, nu = 0.5))
 #' nl <- nlogL_zidel(x, c(0.1, 13, 2, 0.5))
 nlogL_zidel <- function(data, par.zidel) {
-  if (par.zidel[2] < 0 ||
-      par.zidel[3] < 0 ||
-      par.zidel[4] < 0 ||
-      par.zidel[4] > 1 ||
+  if (par.zidel[2] <= 0 ||
+      par.zidel[3] <= 0 ||
+      par.zidel[4] <= 0 ||
+      par.zidel[4] >= 1 ||
       par.zidel[1] < 0 ||
       par.zidel[1] > 1) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
@@ -642,14 +642,14 @@ nlogL_zidel2 <- function(data, par.zidel2) {
       par.zidel2[2] < 0 ||
       par.zidel2[2] > 1 ||
       par.zidel2[1] + par.zidel2[2] > 1 ||
-      par.zidel2[3] < 0 ||
-      par.zidel2[4] < 0 ||
-      par.zidel2[5] < 0 ||
-      par.zidel2[5] > 1 ||
-      par.zidel2[6] < 0 ||
-      par.zidel2[7] < 0 ||
-      par.zidel2[8] < 0 ||
-      par.zidel2[8] > 1 ) {
+      par.zidel2[3] <= 0 ||
+      par.zidel2[4] <= 0 ||
+      par.zidel2[5] <= 0 ||
+      par.zidel2[5] >= 1 ||
+      par.zidel2[6] <= 0 ||
+      par.zidel2[7] <= 0 ||
+      par.zidel2[8] <= 0 ||
+      par.zidel2[8] >= 1 ) {
     return(nl_inf + (rnorm(1, 10000, 20) ^ 2))
   }
   else if (par.zidel2[2] == 0) {
