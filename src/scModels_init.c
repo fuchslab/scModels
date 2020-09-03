@@ -18,7 +18,7 @@ extern SEXP _scModels_cpp_gmRNA_burst(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _scModels_cpp_gmRNA_basic(SEXP, SEXP, SEXP);
 extern SEXP _scModels_cpp_gmRNA_basic_burst(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _scModels_cpp_rInvGaus(SEXP, SEXP, SEXP);
-extern SEXP _scModels_cpp_gmRNA_IGbasic(SEXP, SEXP, SEXP, SEXP);
+
 
 static const R_CallMethodDef CallEntries[] = {
   {"_scModels_chf_1F1", (DL_FUNC) &_scModels_chf_1F1, 3},
@@ -31,7 +31,6 @@ static const R_CallMethodDef CallEntries[] = {
   {"_scModels_cpp_gmRNA_basic",       (DL_FUNC) &_scModels_cpp_gmRNA_basic,       3},
   {"_scModels_cpp_gmRNA_basic_burst",       (DL_FUNC) &_scModels_cpp_gmRNA_basic_burst,       5},
   {"_scModels_cpp_rInvGaus",    (DL_FUNC) &_scModels_cpp_rInvGaus,    3},
-  {"_scModels_cpp_gmRNA_IGbasic",       (DL_FUNC) &_scModels_cpp_gmRNA_IGbasic,       4},
   {NULL, NULL, 0}
 };
 

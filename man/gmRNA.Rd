@@ -6,7 +6,7 @@
 \alias{gmRNA_switch}
 \alias{gmRNA_burst}
 \alias{gmRNA_basic_burst}
-\alias{gmRNA_IGbasic}
+\alias{gmRNA_IGbasic_burst}
 \title{Gillespie algorithm for mRNA generating processes}
 \usage{
 gmRNA_basic(n, r.on, r.degr)
@@ -17,7 +17,7 @@ gmRNA_burst(n, r.burst, s.burst, r.degr)
 
 gmRNA_basic_burst(n, r.on, r.burst, s.burst, r.degr)
 
-gmRNA_IGbasic(n, mu, lambda, r.degr)
+gmRNA_IGbasic_burst(n, r.mu, r.burst, r.degr)
 }
 \arguments{
 \item{n}{Number of observations}
@@ -30,13 +30,11 @@ gmRNA_IGbasic(n, mu, lambda, r.degr)
 
 \item{r.deact}{DNA deactivation rate (Switching Model)}
 
-\item{r.burst}{Bursty transcription rate (Bursting model)}
+\item{r.burst}{Bursty transcription rate (Bursting model, Basic Burst model and IG Basic Burst model)}
 
-\item{s.burst}{Mean burst size (Bursting Model)}
+\item{s.burst}{Mean burst size (Bursting Model and  Basic Burst model)}
 
-\item{mu}{Mean parameter for the inverse Gaussian distribution (IG Basic mode)}
-
-\item{lambda}{Shape parameter for the inverse Gaussian distribution (IG Basic mode)}
+\item{r.mu}{Mean parameter for the inverse Gaussian distribution (IG Basic Burst model)}
 }
 \description{
 Gillespie algorithms allow synthetic data simulation via three different
@@ -46,9 +44,10 @@ switching process considers additionally gene activation and deactivation,
 with mRNA transcription only happening in active gene states; the
 bursting process, transcribes mRNA in bursts with geometrically distributed burst sizes.
 The basic_burst model combines both the basic and the burst model.
-The IGbasic model describes the basic model with non-constant transcription rates.
-Insetead ine ach step the transcription rate is drawn from an inverse Gaussian distribution with
-mean parameter mu.IG and shape parameter lambda.IG
+The IGbasic burst model describes the basic model with non-constant transcription rates, but
+transcription rates follow an inverse Gaussian distribution governed by one parameter, the mean parameter
+of the inverse Gaussian distribution. Additionally a burst transcription occures (with NB distributed
+burst sizes), the whole burst (rate and burst sizes) are determined by the rate parameter.
 }
 \examples{
 x <- gmRNA_basic(100, 0.75, 0.001)
@@ -59,6 +58,6 @@ x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
 plot(density(x))
 x <- gmRNA_basic_burst(10, 0.75, 0.15, 0.5, 0.001)
 plot(density(x))
-x <- gmRNA_IGbasic(10, 2, 0.15, 0.001)
+x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.001)
 plot(density(x))
 }
