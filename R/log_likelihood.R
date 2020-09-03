@@ -667,7 +667,7 @@ nlogL_zidel2 <- function(data, par.zidel2) {
 
     if(n != n0){
     t1 <- log(par.zidel2[2]) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[3], mu = par.zinb2[4], log = TRUE)
-    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = non_zero, mu = par.zidel2[3], sigma = par.zidel2[4], nu = par.zidel2[5], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
+    t2 <- log(1 - (par.zidel2[1] + par.zidel2[2])) + dDEL(x = non_zero, mu = par.zidel2[6], sigma = par.zidel2[7], nu = par.zidel2[8], log = TRUE) #dnbinom(x = non_zero, size = par.zinb2[5], mu = par.zinb2[6], log = TRUE)
     nl_non_zero <- -sum_2pop_terms(t1, t2)
     } else {nl_non_zero <- 0}
 
