@@ -58,6 +58,6 @@ x <- gmRNA_burst(10, 0.15, 0.75, 0.001)
 plot(density(x))
 x <- gmRNA_basic_burst(10, 0.75, 0.15, 0.5, 0.001)
 plot(density(x))
-x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.001)
+x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.1)
 plot(density(x))
 }

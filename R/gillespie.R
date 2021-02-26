@@ -73,7 +73,7 @@ gmRNA_basic_burst <- function(n, r.on, r.burst, s.burst, r.degr) {
 #' @rdname gmRNA
 #' @export
 #' @examples
-#' x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.001)
+#' x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.1)
 #' plot(density(x))
 gmRNA_IGbasic_burst <- function( n, r.mu, r.burst, r.degr) {
   res <- c()
