@@ -72,6 +72,7 @@ gmRNA_basic_burst <- function(n, r.on, r.burst, s.burst, r.degr) {
 
 #' @rdname gmRNA
 #' @export
+#' @importFrom stats rexp
 #' @examples
 #' x <- gmRNA_IGbasic_burst(10, 2, 0.5, 0.1)
 #' plot(density(x))
