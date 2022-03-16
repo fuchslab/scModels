@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // cpp_gmRNA_basic
 NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr);
 RcppExport SEXP _scModels_cpp_gmRNA_basic(SEXP nSEXP, SEXP r_onSEXP, SEXP r_degrSEXP) {

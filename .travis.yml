@@ -11,9 +11,12 @@ cache: packages
 os:
     - linux
     - osx
-dist: xenial
+osx_image: xcode13.2
 addons:
   apt:
     packages: libmpfr-dev
   homebrew:
     packages: mpfr
+jobs:
+  allow_failures:
+    - os: osx

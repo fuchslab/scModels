@@ -1,13 +1,25 @@
 Package: scModels
 Title: Fitting Discrete Distribution Models to Count Data
-Version: 1.0.2
-DateNote: Previous CRAN version 1.0.1 on 2019-09-03
+Version: 1.0.3
+DateNote: Previous CRAN version 1.0.2 on 2021-02-26
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
-  person("Lisa", "Amrhein", email="amrheinlisa@gmail.com", role=c("aut", "cre")),
-  person("Kumar", "Harsha", email="kumar.harsha@tum.de", role="aut"),
-  person("Christiane", "Fuchs", email="christiane.fuchs@helmholtz-muenchen.de", role="aut"),
-  person("Pavel", "Holoborodko", email="pavel@holoborodko.com", role="ctb", comment="Author and copyright holder of 'mpreal.h'"))
+  person("Lisa", "Amrhein",
+        email="amrheinlisa@gmail.com",
+        role=c("aut", "cre"),
+        comment=c(ORCID="0000-0002-0370-624X")),
+  person("Kumar", "Harsha",
+        email="kumar.harsha@tum.de",
+        role="aut",
+        comment=c(ORCID="0000-0002-3865-5286")),
+  person("Christiane", "Fuchs",
+        email="christiane.fuchs@helmholtz-muenchen.de",
+        role="aut",
+        comment=c(ORCID="0000-0003-3565-8315")),
+  person("Pavel", "Holoborodko",
+        email="pavel@holoborodko.com",
+        role="ctb",
+        comment="Author and copyright holder of 'mpreal.h'"))
 License: GPL-3
 Description: Provides functions for fitting discrete distribution models to count data.
   Included are the Poisson, the negative binomial, the Poisson-inverse gaussian and, most importantly,
@@ -24,7 +36,6 @@ Description: Provides functions for fitting discrete distribution models to coun
   by Lisa Amrhein, Kumar Harsha and Christiane Fuchs (2019) <doi:10.1101/657619> available on bioRxiv.
 Depends:
   R (>= 3.1.0)
-LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown, testthat
 LinkingTo: Rcpp
