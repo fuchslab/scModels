@@ -1,6 +1,9 @@
 # Todo
 * Add autoconf script to set user-built mpfr library
 
+# scModels 1.0.5 2026-02-04
+* Drop C++11 specification
+
 # scModels 1.0.4 2023-01-23
 * Fix warnings with sprintf
 * Update travis

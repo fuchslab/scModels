@@ -1,7 +1,7 @@
 Package: scModels
 Title: Fitting Discrete Distribution Models to Count Data
-Version: 1.0.4
-DateNote: Previous CRAN version 1.0.3 on 2022-03-17
+Version: 1.0.5
+DateNote: Previous CRAN version 1.0.4 on 2023-01-23
 Maintainer: Lisa Amrhein <amrheinlisa@gmail.com>
 Authors@R: c(
   person("Lisa", "Amrhein",

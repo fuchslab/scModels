@@ -12,13 +12,9 @@ r_binary_packages:
 cache: packages
 os:
     - linux
-    - osx
-osx_image: xcode14
 addons:
   apt:
     packages: libmpfr-dev
   homebrew:
     packages: mpfr
-jobs:
-  allow_failures:
-    - os: osx
+

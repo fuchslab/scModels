@@ -7,11 +7,10 @@
   - brew packages: mpfr
 * Travis-CI
   - Linux: libmpfr-dev
-  - OS X: mpfr
 
 ## R CMD check results
 There were no ERRORs, WARNING or NOTEs.
 Status: OK
 
 ## Update
-This is an update fixing warnings generated from using sprintf.
+This is an update dropping C++11 specification.

@@ -3,8 +3,6 @@
 #include "shared.h"
 using namespace Rcpp;
 
-// [[Rcpp::plugins(cpp11)]]
-
 
 // [[Rcpp::export]]
 NumericVector cpp_gmRNA_basic(double n, double r_on, double r_degr) {
