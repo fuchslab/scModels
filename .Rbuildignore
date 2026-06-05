@@ -6,3 +6,4 @@
 ^images$
 ^README.md$
 ^cran-comments.md$
+^\.github$
