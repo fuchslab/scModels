@@ -10,9 +10,9 @@ name: R
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "github-ci-setup" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "github-ci-setup" ]
 
 permissions:
   contents: read
