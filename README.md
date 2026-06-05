@@ -1,3 +1,7 @@
+scModels: Fitting Discrete Distribution Models to Count Data
+------------------------------------------------------------
+
+
 **scModels** is an R package accompanying the paper "A mechanistic model for the negative binomial distribution of single-cell mRNA counts" by Lisa Amrhein, Kumar Harsha and Christiane Fuchs
 for distribution fitting of discrete count distributions. Included are the Poisson, the negative binomial and most importantly a new implementation of the Poisson-beta distribution (density, distribution and quantile function and random number generation) together with a needed new implementation of Kummer's function (also: confluent hypergeometric function of the first kind). Three implemented Gillespie algorithms allow synthetic data simulation via the basic, switching and bursting mRNA generating process, respectively. Finally likelihood functions for one population and two population mixtures - with and without zero-inflations - allow distribution fittings of the Poisson, negative binomial and the Poisson-beta distribution. The package depends on the MPFR libraries which need to be installed separately (see description below).
 
@@ -28,7 +32,10 @@ Installing Homebrew is easy. The following command does it.
 ```
 
 #### On Windows
-Installation on Windows requires building MPFR with the recommended toolchain for R.
+
+The newer versions of RTools include the GMP and MPFR libraries.
+
+Installation on older versions of Windows might require building MPFR with the recommended toolchain for R.
 
 Pre-compiled libraries have been put together by Prof. Brian Ripley and are available on his [webpage](http://www.stats.ox.ac.uk/pub/Rtools/). The files are under [goodies/multilib](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/) directory. This includes a 'local' tree, named as [local323.zip](http://www.stats.ox.ac.uk/pub/Rtools/goodies/multilib/local323.zip) at the time this manual was prepared, that contains the headers and static libraries for MPFR amongst others.
 
